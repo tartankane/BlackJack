@@ -19,9 +19,7 @@ public class Card implements Comparable<Card> {
 	public int getCardId() {
 		return cardId;
 	}
-//	public void setCardId(int cardId) {
-//		this.cardId = cardId;
-//	}
+
 	public Rank getRank() {
 		return rank;
 	}
