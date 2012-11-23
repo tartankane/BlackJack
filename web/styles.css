@@ -90,8 +90,13 @@ width:100%;
   margin-top: 0px;
 }
 
-.row {
+.card {
 	text-align:center;
-
     height: 100px;
+}
+
+.msg {
+	text-align:center;
+visibility:hidden;
+    height: 50px;
 }

@@ -3,11 +3,14 @@
 				document.getElementById('dealercards').innerHTML = '';
 				document.getElementById('playercards').innerHTML = '';
 				document.getElementById('gamemessages').innerHTML = '';
-
+				
 				$.getJSON("startGame.do", {
 					//optional return value from client here
 				}, function(data) {
 	//				console.log(data);
+					
+					document.getElementById('credits').innerHTML = "Your Credits: " + data.playerCredits;
+					document.getElementById('bet').innerHTML = "Your Bet: " + data.playerBet;
 					
 					//display the initial dealer card to the placeholder div "dealercards"
 					for (var index1 in data.dealerCards) {
@@ -35,6 +38,13 @@
 					
 					var playerStandsButton = document.getElementById('playerstandsbutton');
 					playerStandsButton.style.visibility = 'visible';
+					
+					
+					var dealerMessage = document.getElementById('dealermessage');
+					dealerMessage.style.visibility = 'visible';
+					
+					var playerMessage = document.getElementById('playermessage');
+					playerMessage.style.visibility = 'visible';
 
 				});
 

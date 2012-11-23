@@ -11,42 +11,40 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @Scope("session")
-public class BjController {
+public class BlackJackController {
 
 	@Autowired
 	private BlackJackService blackJackService;
+	@Autowired
+	private Round round;
+//	private Round round = new Round();
 
-	private Round round = new Round();
-
-	@RequestMapping("/displayRound")
-	public ModelAndView RoundWeb() {
-
-		return new ModelAndView("displayRound");
+	
+	@RequestMapping("/blackJackTable")
+	public ModelAndView initializeTable() {
+		
+		blackJackService.initializeTable(round);
+		return new ModelAndView("displayTable", "round", round);
 	}
 
 	@RequestMapping("/startGame")
 	public @ResponseBody Round startGame() {
-		round = blackJackService.initializeRound();
+		
+		blackJackService.startRound(round);
 		return round;
 	}
 
 	@RequestMapping("/hitPlayer")
 	public @ResponseBody Round hitPlayer() {
 
-//		round = blackJackService.hitPlayer(round);
-		blackJackService.hitPlayer(round);
-
-		System.out.println(round.getPlayerCards().size() + " player cards and "
-				+ round.getDealerCards().size() + " dealer cards");
-		
+		blackJackService.hitPlayer(round);		
 		return round;
 	}
 	
 	@RequestMapping("/playerStands")
 	public @ResponseBody Round playerStands() {
 
-		blackJackService.playerStands(round);
-		
+		blackJackService.playerStands(round);	
 		return round;
 	}
 

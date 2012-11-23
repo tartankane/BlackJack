@@ -6,8 +6,6 @@ import java.util.Random;
 
 
 //Creates a deck of cards based on the fields of the enums Suit and Rank.
-//So to create a deck "stripped" of 2s to 5s, say, simply remove TWO(1), THREE(2), FOUR(3), FIVE(4) from the enum Rank.
-
 public class Deck {
 	private List<Card> cardsInDeck = new ArrayList<Card>();
 	
@@ -38,8 +36,7 @@ public class Deck {
 	
 	static int randomInRange(int min, int max) {
 		//Generates a random integer between min and max inclusive.
-		//For the full deck of cards, set min = 0 and max = 51
-		
+		//For the full deck of cards, set min = 0 and max = 51		
 		if (min > max) {
 			throw new IllegalArgumentException(
 					"Random number range is invalid.");
