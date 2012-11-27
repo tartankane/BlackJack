@@ -24,6 +24,8 @@ public class BlackJackServiceImpl implements BlackJackService {
 	/** 
 	 * Initialize the Round object so that it has the values that need to be seen at 
 	 * the client when the player "sits down at" the BlackJack table.
+	 * 
+	 * @param round - The round object represents the current state of the BlackJack game
 	 */
 	public void initializeTable(Round round) {
 		round.setPlayerCredits(initialPlayerCredits);
@@ -36,6 +38,8 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 * Remove the player's bet from the player's credits.
 	 * Deal two visible cards to the player. Deal one visible and one hidden card
 	 * to the dealer.
+	 * 
+	 * @param round - The round object represents the current state of the BlackJack game
 	 */
 	public void startRound(Round round) {
 		Card card;
@@ -72,6 +76,8 @@ public class BlackJackServiceImpl implements BlackJackService {
 	
 	/** 
 	 * Deal a single card to the player and check to see if the player has gone bust.
+	 * 
+	 * @param round - The round object represents the current state of the BlackJack game
 	 */
 	public void hitPlayer(Round round) {
 
@@ -80,11 +86,53 @@ public class BlackJackServiceImpl implements BlackJackService {
 		round.checkBustPlayer();
 	}
 
+	/** 
+	 * Double the player's bet. The player receives only a single card when doubling. Check if 
+	 * the player has gone bust. Deal cards to the dealer until the dealer either goes bust or 
+	 * stands. When the dealer stands, check who won.
+	 * 
+	 * @param round - The round object represents the current state of the BlackJack game
+	 */
+	public void playerDoubles(Round round) {
+		int doubleUp = 2;
+		Card card;
+		card = deck.dealRandomCard();
+		round.getPlayerCards().add(card);
+		 /* The player's credits have already been reduced by betSize. Reduce credits
+		 * again by betSize for a total reduction of 2 times betSize. */		 
+		round.setPlayerCredits(round.getPlayerCredits() - betSize);
+		round.setPlayerBet(doubleUp * betSize);
+		if ( round.checkBustPlayer() ) {
+			return;
+		}
+		
+//		// Deal cards to the dealer until the dealer either goes bust or stands
+//		while (!round.dealerMustStand()) {
+//			card = deck.dealRandomCard();
+//			round.getDealerCards().add(card);
+//			/* If the player has a BlackJack, then the dealer should not be dealt more than 
+//			 * two cards in total*/ 
+//			if (round.playerHasBlackJack()
+//					&& round.getDealerCards().size() == 2) {
+//				round.checkWhoWon();
+//				return;
+//			}
+//			if (round.checkBustDealer()) {
+//				return;
+//			}
+//		}
+//		// If the dealer has not gone bust, check who won.
+//		round.checkWhoWon();
+		
+		this.playerStands(round);
+	}
 	
 	/** 
 	 * When the player stands, first of all, check if the player has a winning blackjack. 
 	 * If not, deal cards to the dealer until the dealer either goes bust or stands. 
 	 * When the dealer stands, check who won.
+	 * 
+	 * @param round - The round object represents the current state of the BlackJack game
 	 */
 	public void playerStands(Round round) {
 
@@ -100,11 +148,13 @@ public class BlackJackServiceImpl implements BlackJackService {
 		while (!round.dealerMustStand()) {
 			Card card = deck.dealRandomCard();
 			round.getDealerCards().add(card);
-			// if (round.playerHasBlackJack() &&
-			// round.getDealerCards().size()==2){
-			// round.checkWhoWon();
-			// return;
-			// }
+			/* If the player has a BlackJack, then the dealer should not be dealt more than 
+			 * two cards in total*/ 
+			if (round.playerHasBlackJack()
+					&& round.getDealerCards().size() == 2) {
+				round.checkWhoWon();
+				return;
+			}
 			if (round.checkBustDealer()) {
 				return;
 			}

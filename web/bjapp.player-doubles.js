@@ -1,12 +1,12 @@
-function playerStands() {
+function playerDoubles() {
 	// On a very slow connection, prevent the player from pressing buttons
 	// repeatedly
 	document.getElementById('playerstandsbutton').disabled = true;
-	document.getElementById('hitplayerbutton').disabled = true;
 	document.getElementById('playerdoublesbutton').disabled = true;
+	document.getElementById('hitplayerbutton').disabled = true;
 
 	$.getJSON(
-			"playerStands.do",
+			"playerDoubles.do",
 			{
 			// optional return value from client here
 			},
@@ -15,22 +15,26 @@ function playerStands() {
 				// card that was
 				// visible from the start of the round.
 				// Fade in the other dealer cards.
-				var index, startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, cardImage;
+				var lastCardInArray, index, startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, cardImage;
+
+				// Display the player's final card
+				lastCardInArray = data.playerCards.length - 1;
+				cardImage = "images/"
+						+ data.playerCards[lastCardInArray].rank
+						+ data.playerCards[lastCardInArray].suit
+						+ ".png";
+				$('#playercards').append(
+						$('<img src= ' + cardImage + '>').fadeIn(2000));
+
 				// Do not update the display of dealer cards to the
-				// screen if the dealer is not dealt any additional
-				// cards after
-				// the player stands. This happens if the dealer has
-				// already lost the game. This means only one card will
-				// be in the
-				// dealer's hand because the blank card is only a dummy.
-				// This case arises when the player has BlackJack and
-				// the
-				// dealer does not have a starting card that is an Ace,
-				// 10 or picture card.
+				// screen if the player has a blackjack
+				// and the dealer's first visible card is a 2 to 9
+				// inclusive.
 				if (data.dealerCards.length > 1) {
 					// clear the dealer's card from the screen
 					document.getElementById('dealercards').innerHTML = '';
 
+					// Display the dealer's cards to the screen.
 					for (index = 0; index < data.dealerCards.length; index++) {
 						if (index === 0) {
 							cardImage = "images/"
@@ -79,8 +83,8 @@ function playerStands() {
 				// disabled to prevent
 				// the player from pressing buttons repeatedly
 				document.getElementById('playerstandsbutton').disabled = false;
-				document.getElementById('hitplayerbutton').disabled = false;
 				document.getElementById('playerdoublesbutton').disabled = false;
+				document.getElementById('hitplayerbutton').disabled = false;
 
 			});
 			

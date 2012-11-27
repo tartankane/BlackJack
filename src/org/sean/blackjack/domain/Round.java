@@ -58,10 +58,10 @@ public class Round {
 	 * @return boolean
 	 */
 	public boolean checkBustPlayer() {
-		int total = 0;
 		// The total value of cards allowed in the player's hand in
 		// a game of blackjack is 21.
 		int totalValueOfCardsAllowed = 21;
+		int total = 0;
 		for (Card card : playerCards) {
 			total = total + card.getRank().getCardValue();
 		}
@@ -101,6 +101,27 @@ public class Round {
 		return false;
 	}
 
+	// Is this necessary?
+	// public boolean dealerHasBlackJack() {
+	//
+	// int totalDealer = 0;
+	// int numberOfDealersAces = 0;
+	// for (Card card : dealerCards) {
+	// totalDealer = totalDealer + card.getRank().getCardValue();
+	// if ((card.getRank().getCardValue() == 1)) {
+	// numberOfDealersAces++;
+	// }
+	// }
+	// // An ace has a value of 1 in the enum "Rank". So a Blackjack will add
+	// // up to a value of 11
+	// if ((totalDealer == 11) && (dealerCards.size() == 2) &&
+	// (numberOfDealersAces == 1)) {
+	// return true;
+	// } else {
+	// return false;
+	// }
+	// }
+
 	/**
 	 * Check if the player has a blackjack, i.e. an Ace and a card with a value
 	 * of 10.
@@ -127,27 +148,6 @@ public class Round {
 			return false;
 		}
 	}
-
-	// IS this necessary?
-	// public boolean dealerHasBlackJack() {
-	//
-	// int totalDealer = 0;
-	// int numberOfDealersAces = 0;
-	// for (Card card : dealerCards) {
-	// totalDealer = totalDealer + card.getRank().getCardValue();
-	// if ((card.getRank().getCardValue() == 1)) {
-	// numberOfDealersAces++;
-	// }
-	// }
-	// // An ace has a value of 1 in the enum "Rank". So a Blackjack will add
-	// // up to a value of 11
-	// if ((totalDealer == 11) && (dealerCards.size() == 2) &&
-	// (numberOfDealersAces == 1)) {
-	// return true;
-	// } else {
-	// return false;
-	// }
-	// }
 
 	/**
 	 * Check the dealer's initial visible card to see if it is possible for the
@@ -267,6 +267,12 @@ public class Round {
 				this.setPlayerCredits(this.getPlayerCredits()
 						+ (2.5 * this.playerBet));
 
+				/*Check to see if the dealer has BlackJack (an Ace and a card of
+				/ value 10) but the player doesn't. If so, the dealer wins.  */			
+			} else if ( (totalDealer == 21) && (dealerCards.size() == 2) && (!this.isPlayerHasBlackJack()) )  {
+				this.setPlayerWon(false);
+				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK.toString());
+				
 			} else {
 				this.setPush(true);
 				this.setGameMessage(GameMessages.DRAW.toString());
@@ -295,8 +301,11 @@ public class Round {
 
 		if (totalPlayer < totalDealer) {
 			this.setPlayerWon(false);
+			if ( (totalDealer == 21) && (dealerCards.size() == 2) ) {
+				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK.toString());
+			} else {
 			this.setGameMessage(GameMessages.PLAYER_LOSES.toString());
-
+			}
 			// credits were already deducted from the player at the start of the
 			// round so no need to modify the player's credits.
 		}

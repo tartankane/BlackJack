@@ -15,6 +15,8 @@ public interface BlackJackService {
 
 	void hitPlayer(Round round);
 
+	void playerDoubles(Round round);
+	
 	void playerStands(Round round);
 
 }

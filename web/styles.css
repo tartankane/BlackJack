@@ -79,9 +79,10 @@ float:left;
 width:100%;
 }
 
-/* Invisible Button */
+/* Invisible Button Occupying No Space*/
 .btn { 
-  visibility:hidden;
+ /*  visibility:hidden; */
+  display: none;
 }
 
 .error {

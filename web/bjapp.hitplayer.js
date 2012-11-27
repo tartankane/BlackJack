@@ -1,4 +1,9 @@
 function hitPlayer() {
+	// On a very slow connection, prevent the player from pressing buttons
+	// repeatedly
+	document.getElementById('playerstandsbutton').disabled = true;
+	document.getElementById('playerdoublesbutton').disabled = true;
+	document.getElementById('hitplayerbutton').disabled = true;
 
 	$.getJSON(
 			"hitPlayer.do",
@@ -8,8 +13,8 @@ function hitPlayer() {
 			function(data) {
 				// When the player presses the "hitplayerbutton" button
 				// append a new card to the player card display
-				var startGameButton, hitPlayerButton, playerStandsButton, lastCardInArray, cardImage;
-				
+				var startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, lastCardInArray, cardImage;
+
 				lastCardInArray = data.playerCards.length - 1;
 				cardImage = "images/"
 						+ data.playerCards[lastCardInArray].rank
@@ -25,16 +30,28 @@ function hitPlayer() {
 
 					startGameButton = document
 							.getElementById('startgamebutton');
-					startGameButton.style.visibility = 'visible';
+					startGameButton.style.display = 'inline';
 
 					hitPlayerButton = document
 							.getElementById('hitplayerbutton');
-					hitPlayerButton.style.visibility = 'hidden';
+					hitPlayerButton.style.display = 'none';
 
 					playerStandsButton = document
 							.getElementById('playerstandsbutton');
-					playerStandsButton.style.visibility = 'hidden';
+					playerStandsButton.style.display = 'none';
+
+					playerDoublesButton = document
+							.getElementById('playerdoublesbutton');
+					playerDoublesButton.style.display = 'none';
+
+				} else {
+					// Make buttons clickable again that were earlier
+					// disabled to prevent
+					// the player from pressing buttons repeatedly
+					document.getElementById('playerstandsbutton').disabled = false;
+					// document.getElementById('playerdoublesbutton').disabled
+					// = false;
+					document.getElementById('hitplayerbutton').disabled = false;
 				}
-			});
-			
+			});	
 }

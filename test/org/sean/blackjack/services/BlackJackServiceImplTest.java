@@ -67,9 +67,31 @@ public class BlackJackServiceImplTest {
 		assertEquals(numberOfPlayerCardsBeforeHit + (2 * numberOfPlayerCardsPerHit), round.getPlayerCards().size());
 	}
 	
+	// This method has random cards internally which makes it impossible to test it completely.
+		@Test
+		public void testPlayerDoubles() {
+			double creditsPlusBetBeforeDouble;
+			double creditsPlusBetAfterDouble;
+			int betBeforeDouble;
+			int betAfterDouble;			
+			Round round = new Round();
+			BlackJackService blackJackService = new BlackJackServiceImpl();
+			blackJackService.initializeTable(round);
+			blackJackService.startRound(round);
+			creditsPlusBetBeforeDouble = round.getPlayerCredits() + round.getPlayerBet();
+			betBeforeDouble = round.getPlayerBet();
+			blackJackService.playerDoubles(round);
+			creditsPlusBetAfterDouble = round.getPlayerCredits() + round.getPlayerBet();
+			betAfterDouble = round.getPlayerBet(); 
+			
+			assertEquals(3, round.getPlayerCards().size());
+			assertEquals(creditsPlusBetBeforeDouble, creditsPlusBetAfterDouble, 0);
+			assertEquals(betBeforeDouble*2, betAfterDouble);
+			
+
+		}
 	
-// This method has random cards internally which make it impossible to test it completely. All its internal method calls belong to other classes.
-// Those methods have all been tested
+// This method has random cards internally which makes it impossible to test it completely.
 	@Test
 	public void testPlayerStands() {
 		//Set up a new round with blank player and dealer hands
@@ -93,7 +115,6 @@ public class BlackJackServiceImplTest {
 		blackJackService.playerStands(round);
 		assertTrue(round.isPlayerHasBlackJack());
 		assertTrue(round.getDealerCards().size()!=1);
-		
 
 	}
 

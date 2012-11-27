@@ -21,8 +21,8 @@ p {
 
 	<jsp:include page="/header.jsp" />
 
-	<div id="credits">Your Credits here</div>
-	<div id="bet" style="text-align: right">Your bet here</div>
+	<div id="credits" title="This is your credit total">Your Credits here </div>
+	<div id="bet" title="This is the total you have bet for this game" style="text-align: right">Your bet here</div>
 
 	<div id="dealercards" class="card"></div>
 
@@ -44,18 +44,17 @@ p {
 
 
 	<p>
-		<button type="button" onclick="startGame();" id="startgamebutton">
+		<button type="button" onclick="startGame();" id="startgamebutton" >
 			Start A New Game</button>
-	</p>
 
-
-
-	<p>
-		<button type="button" class="btn" onclick="hitPlayer();"
+		<button type="button" class="btn" onclick="hitPlayer();" title="Get Another Card"
 			id="hitplayerbutton">Hit Me</button>
 
-		<button type="button" class="btn" onclick="playerStands();"
+		<button type="button" class="btn" onclick="playerStands();" title="Stick With These Cards"
 			id="playerstandsbutton">Stand</button>
+			
+		<button type="button" class="btn" onclick="playerDoubles();" title="Double Your Bet and Get One More Card"
+			id="playerdoublesbutton">Double</button>
 	</p>
 
 	<script
@@ -64,7 +63,12 @@ p {
 	<script src="bjapp.start.js"></script>
 	<script src="bjapp.hitplayer.js"></script>
 	<script src="bjapp.player-stands.js"></script>
+	<script src="bjapp.player-doubles.js"></script>
 
+<!-- <script type="text/javascript">
+document.getElementById('hitplayerbutton').title="changed";
+</script>
+ -->
 
 	<jsp:include page="/footer.jsp" />
 
