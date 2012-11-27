@@ -1,5 +1,6 @@
 package org.sean.blackjack.domain;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.sean.blackjack.services.BlackJackService;
+import org.sean.blackjack.services.BlackJackServiceImpl;
 
 public class RoundTest {
 	
@@ -18,7 +21,7 @@ public class RoundTest {
 //	}
 
 	@Test
-	public void testRoundBooleanBooleanBooleanBooleanBooleanStringDoubleIntListOfCardListOfCard() {
+	public void testRoundConstructorWithFields() {
 		double doubleNum = 500.0;
 		int intNum = 20;
 		List<Card> dealerCards = new ArrayList<Card>();
@@ -267,6 +270,31 @@ public class RoundTest {
 		Round round = new Round();
 		round.setPlayerHasBlackJack(true);
 		assertTrue(round.isPlayerHasBlackJack());
+	}
+	
+	@Test
+	public void testPlayerHasBlackJack() {
+		Round round = new Round();	
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));		
+		assertTrue(round.playerHasBlackJack());
+		
+		round = new Round();	
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.NINE));		
+		assertFalse(round.playerHasBlackJack());
+
+	}
+	
+	@Test
+	public void testDealerCanNotMakeBlackJack() {
+		Round round = new Round();
+		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.SIX));
+		assertTrue(round.dealerCanNotMakeBlackJack());
+		
+		round = new Round();	
+		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.ACE));
+		assertFalse(round.dealerCanNotMakeBlackJack());
 	}
 
 }

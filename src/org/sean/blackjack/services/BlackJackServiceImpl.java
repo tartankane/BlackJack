@@ -6,101 +6,111 @@ import org.sean.blackjack.domain.GameMessages;
 import org.sean.blackjack.domain.Round;
 import org.springframework.stereotype.Service;
 
+/**
+ * This Class is part of Spring MVC's Service Layer. It implements
+ * BlackJackService. The instance of the Round class is passed to it's methods which
+ * update the instance of the Round class appropriately for that stage of the BlackJack game.
+ * 
+ */
 @Service
 public class BlackJackServiceImpl implements BlackJackService {
 
+//Note that I have no getters and setters for following fields. Is this a problem?
+	//I guess I am not injecting into these fields.
 	private int betSize = 20;
 	private int initialPlayerCredits = 500;
+	private Deck deck;
 
-	// public Round initializeTable(Round round) {
+	/** 
+	 * Initialize the Round object so that it has the values that need to be seen at 
+	 * the client when the player "sits down at" the BlackJack table.
+	 */
 	public void initializeTable(Round round) {
 		round.setPlayerCredits(initialPlayerCredits);
 		round.setPlayerBet(betSize);
-		// return round;
 	}
 
-	// public Round startRound(Round round) {
+	/** 
+	 * Clear the values of all fields in the round object except for the player's credits
+	 * and the player's bet size.
+	 * Remove the player's bet from the player's credits.
+	 * Deal two visible cards to the player. Deal one visible and one hidden card
+	 * to the dealer.
+	 */
 	public void startRound(Round round) {
-
+		Card card;
+		
 		round.setBustPlayer(false);
 		round.setBustDealer(false);
 		round.setPlayerWon(false);
 		round.setPush(false);
 		round.setPlayerHasBlackJack(false);
 		round.setGameMessage(GameMessages.BLANK_MESSAGE.toString());
-		// There is a fixed bet of betSize credits per round
 		round.setPlayerCredits(round.getPlayerCredits() - betSize);
 		round.setPlayerBet(betSize);
 		round.getDealerCards().clear();
 		round.getPlayerCards().clear();
+		
+		//Get a new 52 card deck
+		deck = Deck.getInstance();
 
 		// Deal a single card to the dealer.
 		// The dealer's hidden card is added to the display in bjapp.start.js
-		// Note that there is no actual hidden card. It is added later.
-		Card card = Deck.dealRandomCard();
+		// Note that there is no actual hidden card. The image of a hidden card is displayed
+		// at the client and represents the dealer's second card. The dealer's second card is added
+		// after the player stands.
+		card = deck.dealRandomCard();
 		round.getDealerCards().add(card);
 
 		// Deal the two starting cards to the player
-		card = Deck.dealRandomCard();
+		card = deck.dealRandomCard();
 		round.getPlayerCards().add(card);
-		card = Deck.dealRandomCard();
+		card = deck.dealRandomCard();
 		round.getPlayerCards().add(card);
-
-		// return round;
 	}
 
+	
+	/** 
+	 * Deal a single card to the player and check to see if the player has gone bust.
+	 */
 	public void hitPlayer(Round round) {
-		// public Round hitPlayer(Round round) {
-		Card card = Deck.dealRandomCard();
-		round.getPlayerCards().add(card);
 
+		Card card = deck.dealRandomCard();
+		round.getPlayerCards().add(card);
 		round.checkBustPlayer();
-		// return round;
 	}
 
+	
+	/** 
+	 * When the player stands, first of all, check if the player has a winning blackjack. 
+	 * If not, deal cards to the dealer until the dealer either goes bust or stands. 
+	 * When the dealer stands, check who won.
+	 */
 	public void playerStands(Round round) {
-		// public Round playerStands(Round round) {
-		// loop until either the dealer must stand or the dealer is bust
+
+		// Check if the player has blackjack and that the dealer's visible card 
+		// excludes the possibility of making a jackpot (visible card has value of 2 to 9).
+		// If so, immediately run the round.checkWhoWon() which will assign the win to the player
+		if (round.playerHasBlackJack() && round.dealerCanNotMakeBlackJack()) {
+			round.checkWhoWon();
+			return;
+		}
+
+		// Deal cards to the dealer until the dealer either goes bust or stands
 		while (!round.dealerMustStand()) {
-			Card card = Deck.dealRandomCard();
+			Card card = deck.dealRandomCard();
 			round.getDealerCards().add(card);
+			// if (round.playerHasBlackJack() &&
+			// round.getDealerCards().size()==2){
+			// round.checkWhoWon();
+			// return;
+			// }
 			if (round.checkBustDealer()) {
-				// If the player wins, return the player's bet plus an equal
-				// amount for winning
-				
-				
-// commented out for test				
-//				round.setPlayerCredits(round.getPlayerCredits() + (2 * betSize));
-				
-				
-				// return round;
 				return;
 			}
 		}
+		// If the dealer has not gone bust, check who won.
 		round.checkWhoWon();
-
-//		if (round.isPush()) {
-//			// If the round is a draw. Return the player's bet.
-//			round.setPlayerCredits(round.getPlayerCredits() + betSize);
-//		} else if (round.isPlayerWon()) {
-//			// Check for BlackJack (Ace and a card of value 10), which pays a
-//			// winning bonus of half the
-//			// player's bet
-//			if (round.isPlayerHasBlackJack()) {
-//				round.setPlayerCredits(round.getPlayerCredits()
-//						+ (2.5 * betSize));
-//			} else {
-//				// If the player wins, return the player's bet plus an equal
-//				// amount for winning
-//				round.setPlayerCredits(round.getPlayerCredits() + (2 * betSize));
-//			}
-//		}
-		// If the player loses, there is no need to do anything as the bet has
-		// already been
-		// deducted from the player's credits.
-
-		// return round;
-
 	}
 
 }

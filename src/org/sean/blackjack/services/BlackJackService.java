@@ -2,16 +2,19 @@ package org.sean.blackjack.services;
 
 import org.sean.blackjack.domain.Round;
 
+/**
+ * This Interface is part of Spring MVC's Service Layer. 
+ * It is implemented by BlackJackServiceImpl
+ *
+ */
 public interface BlackJackService {
-//	Round initializeTable(Round round);
-//	Round startRound(Round round);
-//	Round hitPlayer(Round round);
-//	Round playerStands(Round round);
-	
-	void initializeTable(Round round);
-	void startRound(Round round);
-	void hitPlayer(Round round);
-	void playerStands(Round round);
 
+	void initializeTable(Round round);
+
+	void startRound(Round round);
+
+	void hitPlayer(Round round);
+
+	void playerStands(Round round);
 
 }

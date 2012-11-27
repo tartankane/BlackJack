@@ -6,12 +6,7 @@ import org.junit.Test;
 
 public class CardTest {
 
-//Is it a bad idea to test against default values? cardId is not assigned anything so it defaults to zero
-	@Test
-	public void testGetCardId() {
-		Card card = new Card();
-		assertEquals(0, card.getCardId());
-	}
+
 	
 	@Test
 	public void testGetRank() {

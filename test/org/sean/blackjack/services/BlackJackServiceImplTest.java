@@ -1,12 +1,15 @@
 package org.sean.blackjack.services;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 import org.sean.blackjack.domain.Card;
 import org.sean.blackjack.domain.GameMessages;
+import org.sean.blackjack.domain.Rank;
 import org.sean.blackjack.domain.Round;
+import org.sean.blackjack.domain.Suit;
 
 public class BlackJackServiceImplTest {
 
@@ -65,11 +68,33 @@ public class BlackJackServiceImplTest {
 	}
 	
 	
-// This method has random cards internally which make it impossible to test. All its internal method calls belong to other classes.
-//Those methods have all been tested
-//	@Test
-//	public void testPlayerStands() {
-//		fail("Not yet implemented");
-//	}
+// This method has random cards internally which make it impossible to test it completely. All its internal method calls belong to other classes.
+// Those methods have all been tested
+	@Test
+	public void testPlayerStands() {
+		//Set up a new round with blank player and dealer hands
+		Round round = new Round();
+		BlackJackService blackJackService = new BlackJackServiceImpl();
+		blackJackService.initializeTable(round);
+		blackJackService.startRound(round);
+		round.getPlayerCards().clear();
+		round.getDealerCards().clear();
+		
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
+		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.SIX));
+		blackJackService.playerStands(round);
+		assertTrue(round.isPlayerHasBlackJack());
+		assertTrue(round.getDealerCards().size()==1);
+		
+
+		round.getDealerCards().clear();
+		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.TEN));
+		blackJackService.playerStands(round);
+		assertTrue(round.isPlayerHasBlackJack());
+		assertTrue(round.getDealerCards().size()!=1);
+		
+
+	}
 
 }

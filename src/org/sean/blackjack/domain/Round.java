@@ -5,6 +5,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * The round object represents the current state of the BlackJack game. It is
+ * the object that is passed to the client for display. There is a new instance
+ * of the Round Class per session.
+ * 
+ */
 @Component
 public class Round {
 
@@ -25,6 +31,9 @@ public class Round {
 		super();
 	}
 
+	/**
+	 * Constructor containing all fields
+	 */
 	public Round(boolean push, boolean playerWon, boolean bustPlayer,
 			boolean bustDealer, boolean playerHasBlackJack, String gameMessage,
 			double playerCredits, int playerBet, List<Card> dealerCards,
@@ -42,6 +51,12 @@ public class Round {
 		this.playerCards = playerCards;
 	}
 
+	/**
+	 * Check that the value of the player's hand has not gone above 21. For the
+	 * purposes of this check, an ace will always have a value of 1.
+	 * 
+	 * @return boolean
+	 */
 	public boolean checkBustPlayer() {
 		int total = 0;
 		// The total value of cards allowed in the player's hand in
@@ -59,6 +74,14 @@ public class Round {
 		return false;
 	}
 
+	/**
+	 * Check that the value of the dealer's hand has not gone above 21. For the
+	 * purposes of this check, an ace will always have a value of 1. If the
+	 * dealer is bust, return the player's bet and a matching amount for the win
+	 * to the player's credits.
+	 * 
+	 * @return boolean
+	 */
 	public boolean checkBustDealer() {
 		int total = 0;
 		// The total value of cards allowed in the dealer's hand in
@@ -71,12 +94,86 @@ public class Round {
 			this.setBustDealer(true);
 			this.setPlayerWon(true);
 			this.setGameMessage(GameMessages.DEALER_BUST.toString());
-			this.setPlayerCredits(this.getPlayerCredits() + (2 * this.playerBet));		
+			this.setPlayerCredits(this.getPlayerCredits()
+					+ (2 * this.playerBet));
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * Check if the player has a blackjack, i.e. an Ace and a card with a value
+	 * of 10.
+	 * 
+	 * @return boolean
+	 */
+	public boolean playerHasBlackJack() {
+
+		int totalPlayer = 0;
+		int numberOfPlayersAces = 0;
+		for (Card card : playerCards) {
+			totalPlayer = totalPlayer + card.getRank().getCardValue();
+			if ((card.getRank().getCardValue() == 1)) {
+				numberOfPlayersAces++;
+			}
+		}
+		// An ace has a value of 1 in the enum "Rank". So a Blackjack will add
+		// up to a value of 11
+		if ((totalPlayer == 11) && (playerCards.size() == 2)
+				&& (numberOfPlayersAces == 1)) {
+			this.setPlayerHasBlackJack(true);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// IS this necessary?
+	// public boolean dealerHasBlackJack() {
+	//
+	// int totalDealer = 0;
+	// int numberOfDealersAces = 0;
+	// for (Card card : dealerCards) {
+	// totalDealer = totalDealer + card.getRank().getCardValue();
+	// if ((card.getRank().getCardValue() == 1)) {
+	// numberOfDealersAces++;
+	// }
+	// }
+	// // An ace has a value of 1 in the enum "Rank". So a Blackjack will add
+	// // up to a value of 11
+	// if ((totalDealer == 11) && (dealerCards.size() == 2) &&
+	// (numberOfDealersAces == 1)) {
+	// return true;
+	// } else {
+	// return false;
+	// }
+	// }
+
+	/**
+	 * Check the dealer's initial visible card to see if it is possible for the
+	 * dealer to make a BlackJack or not. If the initial visible card has a
+	 * value between 2 and 9 inclusive, then it is impossible for the dealer to
+	 * make a BlackJack. If it is an Ace, a ten or a royal, then it is possible.
+	 * 
+	 * @return boolean
+	 */
+	public boolean dealerCanNotMakeBlackJack() {
+		int cardValueOfAce = 1;
+		int cardValueOfTenOrRoyal = 10;
+		if ((dealerCards.get(0).getRank().getCardValue() != cardValueOfAce)
+				&& (dealerCards.get(0).getRank().getCardValue() != cardValueOfTenOrRoyal)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Check to see if the total value of the dealer's hand has a value of
+	 * between 17 and 21 inclusive.
+	 * 
+	 * @return boolean
+	 */
 	public boolean dealerMustStand() {
 		int total = 0;
 		int minValueToStand = 17;
@@ -84,25 +181,18 @@ public class Round {
 		int numberOfDealersAces = 0;
 		for (Card card : dealerCards) {
 			total = total + card.getRank().getCardValue();
-			// A dealer's ace must have a value of 11 as long as that does not
-			// cause the dealer
-			// to go bust. Otherwise it keeps the default value of 1. This if
-			// statement checks that
-			// the card is an ace and that the total hand value is 11 if the ace
-			// is given a value of one.
-			// If so, 10 is added to the hand value to give a total value of 11
-			// for the ace.
 			if ((card.getRank().getCardValue() == 1)) {
 				numberOfDealersAces++;
 			}
 		}
-		
-		//Change the card value of an ace to 11 where appropriate. Be
-		//careful changing this logic as it can be tricky.
+
+		// A dealer's ace must have a value of 11 as long as that does not
+		// cause the dealer to go bust. Otherwise it keeps the default value of
+		// 1.
 		for (int i = 0; i < numberOfDealersAces; i++) {
 			if (total <= 11) {
 				total = total + 10;
-			}		
+			}
 		}
 
 		if ((total >= minValueToStand) && (total <= maxValueToStand)) {
@@ -112,6 +202,15 @@ public class Round {
 		}
 	}
 
+	/**
+	 * Check to see whether the player or the dealer has the best BlackJack
+	 * hand. If the dealer wins, the player loses the bet already placed. If
+	 * both player and dealer are equal strength (called a push) then the
+	 * player's bet is returned. If the player wins with a BlackJack, then the
+	 * player's bet is returned along with an additional 1.5 times the bet. If
+	 * the player wins without a BlackJack, then the player's bet is returned
+	 * along with a matching amount.
+	 */
 	public void checkWhoWon() {
 		int totalPlayer = 0;
 		int totalDealer = 0;
@@ -155,17 +254,19 @@ public class Round {
 		}
 
 		// I made the following if statements less convoluted.
-		//they were all if else if etc and difficult to read
+		// they were all if else if etc and difficult to read
 		if (totalPlayer == totalDealer) {
-			
-			// Check to see if the player has BlackJack (an Ace and a card of value
+
+			// Check to see if the player has BlackJack (an Ace and a card of
+			// value
 			// 10) but the dealer doesn't. If so, the player wins.
-			if ( this.isPlayerHasBlackJack() && (dealerCards.size() > 2) ) {
+			if (this.isPlayerHasBlackJack() && (dealerCards.size() > 2)) {
 				this.setPlayerWon(true);
 				this.setGameMessage(GameMessages.PLAYER_WINS_WITH_BLACKJACK
 						.toString());
-				this.setPlayerCredits(this.getPlayerCredits() + (2.5 * this.playerBet));
-				
+				this.setPlayerCredits(this.getPlayerCredits()
+						+ (2.5 * this.playerBet));
+
 			} else {
 				this.setPush(true);
 				this.setGameMessage(GameMessages.DRAW.toString());
@@ -180,96 +281,68 @@ public class Round {
 				this.setPlayerWon(true);
 				this.setGameMessage(GameMessages.PLAYER_WINS_WITH_BLACKJACK
 						.toString());
-				this.setPlayerCredits(this.getPlayerCredits() + (2.5 * this.playerBet));
+				this.setPlayerCredits(this.getPlayerCredits()
+						+ (2.5 * this.playerBet));
 			} else {
 				this.setPlayerWon(true);
 				this.setGameMessage(GameMessages.PLAYER_WINS.toString());
-				this.setPlayerCredits(this.getPlayerCredits() + (2 * this.playerBet));
+				this.setPlayerCredits(this.getPlayerCredits()
+						+ (2 * this.playerBet));
 			}
-			
-//			this.setPlayerWon(true);
+
+			// this.setPlayerWon(true);
 		}
-		
+
 		if (totalPlayer < totalDealer) {
 			this.setPlayerWon(false);
 			this.setGameMessage(GameMessages.PLAYER_LOSES.toString());
-			
-			//credits were already deducted from the player at the start of the round so no need to do anything
+
+			// credits were already deducted from the player at the start of the
+			// round so no need to modify the player's credits.
 		}
 
 	}
 
 	/**
-	 * @return the bustPlayer
+	 * Peter, I read in stack overflow that I shouldnt have javadoc comments for
+	 * normal getters and setters as it is just clutter. What say you?
 	 */
 	public boolean isBustPlayer() {
 		return bustPlayer;
 	}
 
-	/**
-	 * @param bustPlayer
-	 *            the bustPlayer to set
-	 */
 	public void setBustPlayer(boolean bustPlayer) {
 		this.bustPlayer = bustPlayer;
 	}
 
-	/**
-	 * @return the playerCredits
-	 */
 	public double getPlayerCredits() {
 		return playerCredits;
 	}
 
-	/**
-	 * @param playerCredits
-	 *            the playerCredits to set
-	 */
 	public void setPlayerCredits(double playerCredits) {
 		this.playerCredits = playerCredits;
 	}
 
-	/**
-	 * @return the playerBet
-	 */
 	public int getPlayerBet() {
 		return playerBet;
 	}
 
-	/**
-	 * @param playerBet
-	 *            the playerBet to set
-	 */
 	public void setPlayerBet(int playerBet) {
 		this.playerBet = playerBet;
 	}
 
-	/**
-	 * @return the dealerCards
-	 */
 	public List<Card> getDealerCards() {
 		return dealerCards;
 	}
 
-	/**
-	 * @param dealerCards
-	 *            the dealerCards to set
-	 */
 	public void setDealerCards(List<Card> dealerCards) {
 		this.dealerCards = dealerCards;
 	}
 
-	/**
-	 * @return the playerCards
-	 */
 	public List<Card> getPlayerCards() {
 		return playerCards;
 	}
 
-	/**
-	 * @param playerCards
-	 *            the playerCards to set
-	 */
 	public void setPlayerCards(List<Card> playerCards) {
 		this.playerCards = playerCards;
 	}
@@ -290,17 +363,10 @@ public class Round {
 		this.gameMessage = gameMessage;
 	}
 
-	/**
-	 * @return the playerWon
-	 */
 	public boolean isPlayerWon() {
 		return playerWon;
 	}
 
-	/**
-	 * @param playerWon
-	 *            the playerWon to set
-	 */
 	public void setPlayerWon(boolean playerWon) {
 		this.playerWon = playerWon;
 	}
@@ -313,17 +379,10 @@ public class Round {
 		this.push = push;
 	}
 
-	/**
-	 * @return the playerHasBlackJack
-	 */
 	public boolean isPlayerHasBlackJack() {
 		return playerHasBlackJack;
 	}
 
-	/**
-	 * @param playerHasBlackJack
-	 *            the playerHasBlackJack to set
-	 */
 	public void setPlayerHasBlackJack(boolean playerHasBlackJack) {
 		this.playerHasBlackJack = playerHasBlackJack;
 	}
