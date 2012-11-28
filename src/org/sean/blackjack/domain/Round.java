@@ -24,6 +24,8 @@ public class Round {
 	private String gameMessage;
 	private double playerCredits;
 	private int playerBet;
+	private String playerHandValue;
+	private String dealerHandValue;
 	private List<Card> dealerCards = new ArrayList<Card>();
 	private List<Card> playerCards = new ArrayList<Card>();
 
@@ -32,23 +34,47 @@ public class Round {
 	}
 
 	/**
-	 * Constructor containing all fields
+	 * Calculate the values of both the player's and dealer's hands for display
+	 * to the client. Convert these values to strings. In the case that the
+	 * player has different possible hand values due to an ace, modify the
+	 * string to show these two possible values.
+	 * 
 	 */
-	public Round(boolean push, boolean playerWon, boolean bustPlayer,
-			boolean bustDealer, boolean playerHasBlackJack, String gameMessage,
-			double playerCredits, int playerBet, List<Card> dealerCards,
-			List<Card> playerCards) {
-		super();
-		this.push = push;
-		this.playerWon = playerWon;
-		this.bustPlayer = bustPlayer;
-		this.bustDealer = bustDealer;
-		this.playerHasBlackJack = playerHasBlackJack;
-		this.gameMessage = gameMessage;
-		this.playerCredits = playerCredits;
-		this.playerBet = playerBet;
-		this.dealerCards = dealerCards;
-		this.playerCards = playerCards;
+	public void calculateHandValues(boolean thePlayerIsFinishedDrawingCards) {
+		//The boolean playerFinishedDrawingCards indicates that the player has received all 
+		// their cards. In this case, the Ace will be set to a fixed value of either 1 or 11.
+		boolean playerFinishedDrawingCards = thePlayerIsFinishedDrawingCards;
+		int total = 0;
+		int numberOfDealersAces = 0;
+		int numberOfPlayersAces = 0;
+
+		for (Card card : playerCards) {
+			total = total + card.getRank().getCardValue();
+			if ((card.getRank().getCardValue() == 1)) {
+				numberOfPlayersAces++;
+			}
+		}
+		playerHandValue = String.valueOf(total);
+		if ((total <= 11) && numberOfPlayersAces != 0) {
+			if (playerFinishedDrawingCards) {
+				playerHandValue = String.valueOf(total + 10);
+			} else {
+				playerHandValue = playerHandValue + " or "
+						+ String.valueOf(total + 10);
+			}
+		}
+
+		total = 0;
+		for (Card card : dealerCards) {
+			total = total + card.getRank().getCardValue();
+			if ((card.getRank().getCardValue() == 1)) {
+				numberOfDealersAces++;
+			}
+		}
+		dealerHandValue = String.valueOf(total);
+		if ((total <= 11) && numberOfDealersAces != 0) {
+			dealerHandValue = String.valueOf(total + 10);
+		}
 	}
 
 	/**
@@ -100,27 +126,6 @@ public class Round {
 		}
 		return false;
 	}
-
-	// Is this necessary?
-	// public boolean dealerHasBlackJack() {
-	//
-	// int totalDealer = 0;
-	// int numberOfDealersAces = 0;
-	// for (Card card : dealerCards) {
-	// totalDealer = totalDealer + card.getRank().getCardValue();
-	// if ((card.getRank().getCardValue() == 1)) {
-	// numberOfDealersAces++;
-	// }
-	// }
-	// // An ace has a value of 1 in the enum "Rank". So a Blackjack will add
-	// // up to a value of 11
-	// if ((totalDealer == 11) && (dealerCards.size() == 2) &&
-	// (numberOfDealersAces == 1)) {
-	// return true;
-	// } else {
-	// return false;
-	// }
-	// }
 
 	/**
 	 * Check if the player has a blackjack, i.e. an Ace and a card with a value
@@ -266,13 +271,14 @@ public class Round {
 						.toString());
 				this.setPlayerCredits(this.getPlayerCredits()
 						+ (2.5 * this.playerBet));
-
-				/*Check to see if the dealer has BlackJack (an Ace and a card of
-				/ value 10) but the player doesn't. If so, the dealer wins.  */			
-			} else if ( (totalDealer == 21) && (dealerCards.size() == 2) && (!this.isPlayerHasBlackJack()) )  {
+			// Check to see if the dealer has BlackJack (an Ace and a card
+			// of  value 10) but the player doesn't. If so, the dealer wins.
+			} else if ((totalDealer == 21) && (dealerCards.size() == 2)
+					&& (!this.isPlayerHasBlackJack())) {
 				this.setPlayerWon(false);
-				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK.toString());
-				
+				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK
+						.toString());
+
 			} else {
 				this.setPush(true);
 				this.setGameMessage(GameMessages.DRAW.toString());
@@ -295,16 +301,15 @@ public class Round {
 				this.setPlayerCredits(this.getPlayerCredits()
 						+ (2 * this.playerBet));
 			}
-
-			// this.setPlayerWon(true);
 		}
 
 		if (totalPlayer < totalDealer) {
 			this.setPlayerWon(false);
-			if ( (totalDealer == 21) && (dealerCards.size() == 2) ) {
-				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK.toString());
+			if ((totalDealer == 21) && (dealerCards.size() == 2)) {
+				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK
+						.toString());
 			} else {
-			this.setGameMessage(GameMessages.PLAYER_LOSES.toString());
+				this.setGameMessage(GameMessages.PLAYER_LOSES.toString());
 			}
 			// credits were already deducted from the player at the start of the
 			// round so no need to modify the player's credits.
@@ -394,6 +399,22 @@ public class Round {
 
 	public void setPlayerHasBlackJack(boolean playerHasBlackJack) {
 		this.playerHasBlackJack = playerHasBlackJack;
+	}
+
+	public String getPlayerHandValue() {
+		return playerHandValue;
+	}
+
+	public void setPlayerHandValue(String playerHandValue) {
+		this.playerHandValue = playerHandValue;
+	}
+
+	public String getDealerHandValue() {
+		return dealerHandValue;
+	}
+
+	public void setDealerHandValue(String dealerHandValue) {
+		this.dealerHandValue = dealerHandValue;
 	}
 
 }

@@ -50,6 +50,11 @@ function playerStands() {
 						}
 					}
 				}
+				
+				//Display the value of the player's and dealer's hands
+				document.getElementById('playermessage').innerHTML="The Player's Cards. Total equals " + data.playerHandValue;
+				document.getElementById('dealermessage').innerHTML="The Dealer's Cards. Total equals " + data.dealerHandValue;
+
 
 				document.getElementById('gamemessages').style.visibility = 'visible';
 				document.getElementById('gamemessages').innerHTML = data.gameMessage;

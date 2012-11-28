@@ -11,21 +11,22 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Sean O'Regan
+ * Version 1.0
  * 
- *         This class is a Spring Controller in the Spring Model-View-Controller
- *         (MVC) architecture
+ * This class is a Spring Controller in the Spring Model-View-Controller
+ * (MVC) architecture
  * 
- *         The following objects are injected into this class: the Round class
- *         and an implementation of the BlackJackService class (in this case the
- *         BlackJackServiceImpl class)
+ * The following objects are injected into this class: the Round class
+ * and an implementation of the BlackJackService class (in this case the
+ * BlackJackServiceImpl class)
  * 
- *         In this controller, for each client request, the instance of the
- *         Round class is updated by methods of BlackJackService and then
- *         returned to the client
+ * In this controller, for each client request, the instance of the
+ * Round class is updated by methods of BlackJackService and then
+ * returned to the client
  * 
- *         The web.xml file causes ".do" to be appended to all @RequestMapping
- *         requests such that @RequestMapping("/blackJackTable") becomes a
- *         request to 'domain'/blackJackTable.do
+ * The web.xml file causes ".do" to be appended to all @RequestMapping
+ * requests such that @RequestMapping("/blackJackTable") becomes a
+ * request to 'domain'/blackJackTable.do
  */
 @Controller
 @Scope("session")

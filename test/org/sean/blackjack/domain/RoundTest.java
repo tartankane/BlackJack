@@ -14,30 +14,20 @@ import org.sean.blackjack.services.BlackJackServiceImpl;
 
 public class RoundTest {
 	
-//Do I need to test this? If so, how should I test it?
-//	@Test
-//	public void testRound() {
-//		fail("Not yet implemented");
-//	}
-
 	@Test
-	public void testRoundConstructorWithFields() {
-		double doubleNum = 500.0;
-		int intNum = 20;
-		List<Card> dealerCards = new ArrayList<Card>();
-		List<Card> playerCards = new ArrayList<Card>();
-		Round round = new Round(false, false, false, false, false, GameMessages.PLAYER_WINS.toString(), doubleNum, intNum, dealerCards, playerCards);
+	public void testCalculateHandValues() {
+		Round round = new Round();
+		boolean playerFinishedDrawingCards = false; 
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
+		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.ACE));
+		round.calculateHandValues(playerFinishedDrawingCards);
+		assertEquals("11 or 21", round.getPlayerHandValue());
+		assertEquals("11", round.getDealerHandValue());
 		
-		assertFalse(round.isPush());
-		assertFalse(round.isPlayerWon());
-		assertFalse(round.isBustPlayer());
-		assertFalse(round.isBustPlayer());
-		assertFalse(round.isPlayerHasBlackJack());
-		assertEquals(GameMessages.PLAYER_WINS.toString(), round.getGameMessage());
-		assertEquals(doubleNum, round.getPlayerCredits(), 0);
-		assertEquals(intNum, round.getPlayerBet());
-		assertEquals(0, round.getDealerCards().size());
-		assertEquals(0, round.getPlayerCards().size());
+		playerFinishedDrawingCards = true;
+		round.calculateHandValues(playerFinishedDrawingCards);
+		assertEquals("21", round.getPlayerHandValue());
 	}
 
 	@Test

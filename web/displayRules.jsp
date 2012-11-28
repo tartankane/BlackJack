@@ -28,6 +28,7 @@
  <br>Basic BlackJack Rules </br>
 	<br></br>
 
+	<br>CACHE BUSTER</br>
 	<br>BlackJack is a variant of Pontoon and "21"</br>
 	<br>Only one deck is used. Take advantage of this. In casinos, multiple decks are used.</br>
 	<br>A new deck is used for each game</br>
@@ -35,7 +36,7 @@
 	<br>Stand is also known as stick</br>
 	<br>Hit is also known as twist</br>
 	<br>An ace has a value of 1 or 11</br>
-	<br>In Blackjack, there are no 5 card tricks, unlike in Pontoon.</br>
+	<br>Unlike in Pontoon, there are no 5 card tricks in Blackjack</br>
 	<br>The dealer has to stand on a hand of 17 to 21</br>
 	<br>The dealer has to hit on a hand of 16 or less</br>
 	<br>A normal win pays 1:1</br>

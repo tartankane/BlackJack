@@ -6,13 +6,13 @@ package org.sean.blackjack.domain;
  */
 public enum GameMessages {
 		BLANK_MESSAGE (""),
-	    PLAYER_WINS ("You won! Credits have been added to your stack."),
-	    PLAYER_WINS_WITH_BLACKJACK ("You won with a BlackJack! You received a big bonus"),
-	    DEALER_WINS_WITH_BLACKJACK ("The dealer won with a BlackJack. This beats all hands."),
-	    PLAYER_LOSES ("You lost!"),
+	    PLAYER_WINS ("You won! Your bet plus a matching amount has been added to your credits."),
+	    PLAYER_WINS_WITH_BLACKJACK ("You won with a BlackJack! A bonus of half your bet was added to your winnings."),
+	    DEALER_WINS_WITH_BLACKJACK ("The Dealer won with a BlackJack. This beats all hands."),
+	    PLAYER_LOSES ("You lost! The Dealer has taken your bet."),
 	    DRAW ("The game was a draw. Your bet has been returned to you."),
 	    PLAYER_BUST ("You lost because you went bust! The total value of your cards was greater than 21."),
-	    DEALER_BUST ("You won because the dealer went bust. Credits have been added to your stack.");
+	    DEALER_BUST ("You won because the Dealer went bust. Your bet plus a matching amount has been added to your credits.");
 	    
 	    private final String text;
 	    

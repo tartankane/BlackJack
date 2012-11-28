@@ -13,7 +13,8 @@
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 
-	<!-- this bean is for using messages.properties file which this application does not use -->
+	<!-- this bean is for using messages.properties file which this application 
+		does not use -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 
@@ -44,5 +45,16 @@
 
 	<context:component-scan base-package="org.sean.blackjack.control" />
 	<mvc:annotation-driven />
+
+	<!-- Disable caching in browsers. This prevents all pages of this application from being cached -->
+	<mvc:interceptors>
+		<bean id="webContentInterceptor"
+			class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+			<property name="cacheSeconds" value="0" />
+			<property name="useExpiresHeader" value="true" />
+			<property name="useCacheControlHeader" value="true" />
+			<property name="useCacheControlNoStore" value="true" />
+		</bean>
+	</mvc:interceptors>
 
 </beans>

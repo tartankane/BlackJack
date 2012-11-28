@@ -13,10 +13,6 @@ import java.util.Random;
 public class Deck {
 	private List<Card> cardsInDeck = new ArrayList<Card>();
 
-	// public List<Card> getTheDeck() {
-	// return cardsInDeck;
-	// }
-
 	/**
 	 * Adds 52 cards to the List 'cardsInDeck'. This constructor is private to
 	 * prevent subclassing.

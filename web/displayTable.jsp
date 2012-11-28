@@ -21,22 +21,28 @@ p {
 
 	<jsp:include page="/header.jsp" />
 
-	<div id="credits" title="This is your credit total">Your Credits here </div>
-	<div id="bet" title="This is the total you have bet for this game" style="text-align: right">Your bet here</div>
 
+	<div id="credits" class="msg1" title="This is your credit total" >Holder for player credits</div>
+	
+	<div id="bet" class="msg1" style="text-align: right" title="This is the total you have bet for this game">Holder for player bet</div>
+
+	<!-- Holder for the dealer's cards -->
 	<div id="dealercards" class="card"></div>
 
-	<div id="dealermessage" class="msg">The Dealer's Cards</div>
+	<div id="dealermessage" class="msg2">Holder for the dealer message</div>
 
+	<!-- Holder for the player's cards -->
 	<div id="playercards" class="card"></div>
 
-	<div id="playermessage" class="msg">The Player's Cards</div>
+	<div id="playermessage" class="msg2">Holder for the player message</div>
 
-	<div id="gamemessages" class="msg"></div>
-	
-	<!-- This block of javascript also includes some jstl (I think that's what it is - I need to investigate)
+	<div id="gamemessages" class="msg2">Holder for the in-game messages</div>
+
+
+
+	<!-- This block of javascript also includes some jstl.
 	That is why it needs to be placed in the .jsp file itself and not called from a separate
-	javascript file -->
+	javascript file. I need to investigate if there is a better method to do this. Mixing jstl and JS probably bad -->
 	<script>
 		document.getElementById('credits').innerHTML = "Your Credits: " + ${round.playerCredits};
 		document.getElementById('bet').innerHTML = "Your Bet: " + ${round.playerBet};
@@ -44,31 +50,27 @@ p {
 
 
 	<p>
-		<button type="button" onclick="startGame();" id="startgamebutton" >
-			Start A New Game</button>
+		<button id="startgamebutton" type="button" class="btn1"
+			onclick="startGame();">Start A New Game</button>
 
-		<button type="button" class="btn" onclick="hitPlayer();" title="Get Another Card"
-			id="hitplayerbutton">Hit Me</button>
+		<button id="hitplayerbutton" type="button" class="btn2"
+			onclick="hitPlayer();" title="Get Another Card">Hit Me</button>
 
-		<button type="button" class="btn" onclick="playerStands();" title="Stick With These Cards"
-			id="playerstandsbutton">Stand</button>
-			
-		<button type="button" class="btn" onclick="playerDoubles();" title="Double Your Bet and Get One More Card"
-			id="playerdoublesbutton">Double</button>
+		<button id="playerstandsbutton" type="button" class="btn2"
+			onclick="playerStands();" title="Stick With These Cards">Stand</button>
+
+		<button id="playerdoublesbutton" type="button" class="btn2"
+			onclick="playerDoubles();"
+			title="Double Your Bet and Get One More Card. This Option Only Exists When You Have Two Cards">Double</button>
 	</p>
 
 	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-	
+		src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>	
+
 	<script src="bjapp.start.js"></script>
 	<script src="bjapp.hitplayer.js"></script>
 	<script src="bjapp.player-stands.js"></script>
 	<script src="bjapp.player-doubles.js"></script>
-
-<!-- <script type="text/javascript">
-document.getElementById('hitplayerbutton').title="changed";
-</script>
- -->
 
 	<jsp:include page="/footer.jsp" />
 

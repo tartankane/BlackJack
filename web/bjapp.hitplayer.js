@@ -1,20 +1,28 @@
+// Append a new card to the player card display. Display the updated values 
+// of the player's and dealer's hands. If the player goes bust, change the buttons
+// availabel to the player.
 function hitPlayer() {
+	
 	// On a very slow connection, prevent the player from pressing buttons
 	// repeatedly
 	document.getElementById('playerstandsbutton').disabled = true;
 	document.getElementById('playerdoublesbutton').disabled = true;
 	document.getElementById('hitplayerbutton').disabled = true;
 
+	// jQuery.getJSON loads JSON-encoded data from the server using a GET HTTP
+	// request.
 	$.getJSON(
 			"hitPlayer.do",
 			{
-			// optional return value from client here
+			// optional map or string that is sent to the server with
+			// the request
 			},
 			function(data) {
-				// When the player presses the "hitplayerbutton" button
-				// append a new card to the player card display
+
+				// declare variables
 				var startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, lastCardInArray, cardImage;
 
+				// append a new card to the player card display
 				lastCardInArray = data.playerCards.length - 1;
 				cardImage = "images/"
 						+ data.playerCards[lastCardInArray].rank
@@ -53,5 +61,9 @@ function hitPlayer() {
 					// = false;
 					document.getElementById('hitplayerbutton').disabled = false;
 				}
+				
+				//Display the value of the player's and dealer's hands
+				document.getElementById('playermessage').innerHTML="The Player's Cards. Total equals " + data.playerHandValue;
+				document.getElementById('dealermessage').innerHTML="The Dealer's Cards. Total equals " + data.dealerHandValue;
 			});	
 }
