@@ -63,6 +63,19 @@ p {
 			onclick="playerDoubles();"
 			title="Double Your Bet and Get One More Card. This Option Only Exists When You Have Two Cards">Double</button>
 	</p>
+	<p>
+		
+		<select id="changebetdial" name="setBetSize" onchange="playerChangesBet(this.value);" title="Change The Size Of Your Bet"> 
+			<option value="10" selected="selected">Bet 10 Credits</option>
+			<option value="20">Bet 20 Credits</option>
+			<option value="40">Bet 40 Credits</option>
+			<option value="80">Bet 80 Credits</option>
+			<option value="160">Bet 160 Credits</option>
+		</select>
+
+	
+
+	</p>
 
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>	
@@ -71,7 +84,7 @@ p {
 	<script src="bjapp.hitplayer.js"></script>
 	<script src="bjapp.player-stands.js"></script>
 	<script src="bjapp.player-doubles.js"></script>
-
+	<script src="bjapp.player-changes-bet.js"></script>
 	<jsp:include page="/footer.jsp" />
 
 </body>

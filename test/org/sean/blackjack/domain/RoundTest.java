@@ -209,15 +209,19 @@ public class RoundTest {
 	@Test
 	public void testGetGameMessage() {
 		Round round = new Round();
-		round.setGameMessage(GameMessages.PLAYER_WINS.toString());
-		assertEquals(GameMessages.PLAYER_WINS.toString(), round.getGameMessage());
+		round.setGameMessage(Consts.PLAYER_WINS);
+//		round.setGameMessage(GameMessages.PLAYER_WINS.toString());
+		assertEquals(Consts.PLAYER_WINS, round.getGameMessage());
+//		assertEquals(GameMessages.PLAYER_WINS.toString(), round.getGameMessage());
 	}
 
 	@Test
 	public void testSetGameMessage() {
 		Round round = new Round();
-		round.setGameMessage(GameMessages.PLAYER_WINS.toString());
-		assertEquals(GameMessages.PLAYER_WINS.toString(), round.getGameMessage());
+		round.setGameMessage(Consts.PLAYER_WINS);
+		assertEquals(Consts.PLAYER_WINS, round.getGameMessage());
+//		round.setGameMessage(GameMessages.PLAYER_WINS.toString());
+//		assertEquals(GameMessages.PLAYER_WINS.toString(), round.getGameMessage());
 	}
 
 	@Test

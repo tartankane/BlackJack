@@ -1,3 +1,8 @@
+// Display the dealer's initial card. Append the image of a hidden card
+// to the dealer's initial card.
+// Display the player's initial two cards.
+// Display the values of the player's and dealer's hands.
+// Change the buttons available to the player.
 function startGame() {
 
 	// At the start of each game, clear the dealer cards, player cards and
@@ -17,8 +22,8 @@ function startGame() {
 			function(data) {
 
 				// declare variables
-				var index, backOfCard, cardImage, startGameButton, hitPlayerButton, playerStandsButton, dealerMessage, playerMessage, playerDoublesButton;
-
+				var index, backOfCard, cardImage, startGameButton, hitPlayerButton, playerStandsButton, dealerMessage, playerMessage, playerDoublesButton, changeBetDial;
+				
 				// Display the player credits and player bet to the
 				// placeholders "credits" and "bet"
 				document.getElementById('credits').innerHTML = "Your Credits: "
@@ -72,10 +77,14 @@ function startGame() {
 
 				// make the "start a new game" button invisible and make
 				// the "hit player", "player stands" and "player doubles" 
-				// buttons visible and clickable
+				// buttons visible and clickable.
 				startGameButton = document
 						.getElementById('startgamebutton');
 				startGameButton.style.display = 'none';
+				
+				changeBetDial = document
+						.getElementById('changebetdial');
+				changeBetDial.style.display = 'none';
 
 				hitPlayerButton = document
 						.getElementById('hitplayerbutton');

@@ -19,4 +19,8 @@ public interface BlackJackService {
 	
 	void playerStands(Round round);
 
+//	void getMoreCredits(Round round);
+
+	void changeBet(Round round, String betSize);
+
 }

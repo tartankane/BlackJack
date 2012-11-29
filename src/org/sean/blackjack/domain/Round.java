@@ -21,6 +21,7 @@ public class Round {
 	private boolean bustPlayer;
 	private boolean bustDealer;
 	private boolean playerHasBlackJack;
+//	private boolean playerLowOnCredits;
 	private String gameMessage;
 	private double playerCredits;
 	private int playerBet;
@@ -92,9 +93,19 @@ public class Round {
 			total = total + card.getRank().getCardValue();
 		}
 		if (total > totalValueOfCardsAllowed) {
-			this.setBustPlayer(true);
-			this.setPlayerWon(false);
-			this.setGameMessage(GameMessages.PLAYER_BUST.toString());
+//			this.setBustPlayer(true);
+			this.bustPlayer = true;
+			this.playerWon = false;
+//this.setPlayerWon(false);
+			this.gameMessage = Consts.PLAYER_BUST;
+//			gameMessage = GameMessages.PLAYER_BUST.toString();
+			this.playerCredits -= this.playerBet;
+//			this.setPlayerCredits(this.getPlayerCredits()
+//					- (this.playerBet));
+			// If the player is now low on credits, set playerLowOnCredits
+			//to true.
+			checkIfPlayerLowOnCredits();
+//			this.setGameMessage(GameMessages.PLAYER_BUST.toString());
 			return true;
 		}
 		return false;
@@ -119,9 +130,10 @@ public class Round {
 		if (total > totalValueOfCardsAllowed) {
 			this.setBustDealer(true);
 			this.setPlayerWon(true);
-			this.setGameMessage(GameMessages.DEALER_BUST.toString());
+			this.setGameMessage(Consts.DEALER_BUST);
+//			this.setGameMessage(GameMessages.DEALER_BUST.toString());
 			this.setPlayerCredits(this.getPlayerCredits()
-					+ (2 * this.playerBet));
+					+ (this.playerBet));
 			return true;
 		}
 		return false;
@@ -258,8 +270,6 @@ public class Round {
 			}
 		}
 
-		// I made the following if statements less convoluted.
-		// they were all if else if etc and difficult to read
 		if (totalPlayer == totalDealer) {
 
 			// Check to see if the player has BlackJack (an Ace and a card of
@@ -267,22 +277,28 @@ public class Round {
 			// 10) but the dealer doesn't. If so, the player wins.
 			if (this.isPlayerHasBlackJack() && (dealerCards.size() > 2)) {
 				this.setPlayerWon(true);
-				this.setGameMessage(GameMessages.PLAYER_WINS_WITH_BLACKJACK
-						.toString());
+				this.setGameMessage(Consts.PLAYER_WINS_WITH_BLACKJACK);
+//				this.setGameMessage(GameMessages.PLAYER_WINS_WITH_BLACKJACK
+//						.toString());
 				this.setPlayerCredits(this.getPlayerCredits()
-						+ (2.5 * this.playerBet));
+						+ (1.5 * this.playerBet));
 			// Check to see if the dealer has BlackJack (an Ace and a card
 			// of  value 10) but the player doesn't. If so, the dealer wins.
 			} else if ((totalDealer == 21) && (dealerCards.size() == 2)
 					&& (!this.isPlayerHasBlackJack())) {
 				this.setPlayerWon(false);
-				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK
-						.toString());
-
+				this.setGameMessage(Consts.DEALER_WINS_WITH_BLACKJACK);
+//				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK
+//						.toString());
+				this.setPlayerCredits(this.playerCredits - this.playerBet);
+				// If the player is now low on credits, set playerLowOnCredits
+				//to true.
+				checkIfPlayerLowOnCredits();
 			} else {
 				this.setPush(true);
-				this.setGameMessage(GameMessages.DRAW.toString());
-				this.setPlayerCredits(this.getPlayerCredits() + this.playerBet);
+				this.setGameMessage(Consts.DRAW);
+//				this.setGameMessage(GameMessages.DRAW.toString());
+//				this.setPlayerCredits(this.getPlayerCredits() + this.playerBet);
 			}
 
 		}
@@ -291,34 +307,58 @@ public class Round {
 
 			if (this.isPlayerHasBlackJack()) {
 				this.setPlayerWon(true);
-				this.setGameMessage(GameMessages.PLAYER_WINS_WITH_BLACKJACK
-						.toString());
-				this.setPlayerCredits(this.getPlayerCredits()
-						+ (2.5 * this.playerBet));
+				this.setGameMessage(Consts.PLAYER_WINS_WITH_BLACKJACK);
+//				this.setGameMessage(GameMessages.PLAYER_WINS_WITH_BLACKJACK
+//						.toString());
+				this.setPlayerCredits(this.playerCredits
+						+ (1.5 * this.playerBet));
 			} else {
 				this.setPlayerWon(true);
-				this.setGameMessage(GameMessages.PLAYER_WINS.toString());
-				this.setPlayerCredits(this.getPlayerCredits()
-						+ (2 * this.playerBet));
+				this.setGameMessage(Consts.PLAYER_WINS);
+//				this.setGameMessage(GameMessages.PLAYER_WINS.toString());
+				this.setPlayerCredits(this.playerCredits
+						+ (this.playerBet));
 			}
 		}
 
 		if (totalPlayer < totalDealer) {
-			this.setPlayerWon(false);
 			if ((totalDealer == 21) && (dealerCards.size() == 2)) {
-				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK
-						.toString());
+				this.setGameMessage(Consts.DEALER_WINS_WITH_BLACKJACK);
+//				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK
+//						.toString());
 			} else {
-				this.setGameMessage(GameMessages.PLAYER_LOSES.toString());
+				this.setGameMessage(Consts.PLAYER_LOSES);
+//				this.setGameMessage(GameMessages.PLAYER_LOSES.toString());
+				// credits were already deducted from the player at the start of the
+				// round so no need to modify the player's credits.
 			}
-			// credits were already deducted from the player at the start of the
-			// round so no need to modify the player's credits.
+			this.setPlayerWon(false);
+			this.setPlayerCredits(this.playerCredits - this.playerBet);
+			// If the player is now low on credits, set playerLowOnCredits
+			//to true.
+			checkIfPlayerLowOnCredits();
 		}
-
 	}
 
 	/**
-	 * Peter, I read in stack overflow that I shouldnt have javadoc comments for
+	 * Check whether the player is low on credits. If so, set 
+	 * playerLowOnCredits to "true"
+	 */
+//	private void checkIfPlayerLowOnCredits() {
+//		if (this.getPlayerCredits() < Consts.LOW_CREDITS) {
+//			this.setPlayerLowOnCredits(true);
+//		}
+//	}	
+	private void checkIfPlayerLowOnCredits() {
+		if (playerCredits < Consts.LOW_CREDITS_VALUE) {
+			playerCredits = Consts.STARTING_CREDITS;
+			gameMessage=Consts.LOW_CREDITS_MESSAGE;
+//			gameMessage=GameMessages.LOW_CREDITS.toString();
+		}
+	}
+
+	/**
+	 * Peter, I read in stack overflow that I shouldn't have javadoc comments for
 	 * normal getters and setters as it is just clutter. What say you?
 	 */
 	public boolean isBustPlayer() {
@@ -416,5 +456,13 @@ public class Round {
 	public void setDealerHandValue(String dealerHandValue) {
 		this.dealerHandValue = dealerHandValue;
 	}
+
+//	public boolean isPlayerLowOnCredits() {
+//		return playerLowOnCredits;
+//	}
+//
+//	public void setPlayerLowOnCredits(boolean playerLowOnCredits) {
+//		this.playerLowOnCredits = playerLowOnCredits;
+//	}
 
 }

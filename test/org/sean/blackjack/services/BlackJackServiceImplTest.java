@@ -6,7 +6,8 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 import org.sean.blackjack.domain.Card;
-import org.sean.blackjack.domain.GameMessages;
+import org.sean.blackjack.domain.Consts;
+//import org.sean.blackjack.domain.GameMessages;
 import org.sean.blackjack.domain.Rank;
 import org.sean.blackjack.domain.Round;
 import org.sean.blackjack.domain.Suit;
@@ -15,8 +16,8 @@ public class BlackJackServiceImplTest {
 
 	@Test
 	public void testInitializeTable() {
-		int betSize = 20;
-		int initialPlayerCredits = 500;
+		int betSize = 10;
+		int initialPlayerCredits = 1000;
 		BlackJackService blackJackService = new BlackJackServiceImpl();
 		Round round = new Round();
 		blackJackService.initializeTable(round);
@@ -27,8 +28,8 @@ public class BlackJackServiceImplTest {
 
 	@Test
 	public void testStartRound() {
-		int betSize = 20;
-		int initialPlayerCredits = 500;
+		int betSize = 10;
+		int initialPlayerCredits = 1000;
 		int numberOfDealerCards = 1;
 		int numberOfPlayerCards = 2;
 		int indexOfFirstCardInList = 0;
@@ -42,8 +43,9 @@ public class BlackJackServiceImplTest {
 		assertFalse(round.isBustPlayer());
 		assertFalse(round.isBustPlayer());
 		assertFalse(round.isPlayerHasBlackJack());
-		assertEquals(GameMessages.BLANK_MESSAGE.toString(), round.getGameMessage());
-		assertEquals(initialPlayerCredits - betSize , round.getPlayerCredits(), 0);
+		assertEquals(Consts.BLANK_MESSAGE, round.getGameMessage());
+//		assertEquals(GameMessages.BLANK_MESSAGE.toString(), round.getGameMessage());
+		assertEquals(initialPlayerCredits, round.getPlayerCredits(), 0);
 		assertEquals(betSize, round.getPlayerBet());
 		assertEquals(numberOfDealerCards, round.getDealerCards().size());
 		assertEquals(numberOfPlayerCards, round.getPlayerCards().size());
@@ -111,6 +113,24 @@ public class BlackJackServiceImplTest {
 		assertTrue(round.isPlayerHasBlackJack());
 		assertTrue(round.getDealerCards().size()!=1);
 
+	}
+	
+//	@Test
+//	public void testGetMoreCredits() {
+//		Round round = new Round();
+//		round.setPlayerCredits(0);
+//		BlackJackService blackJackService = new BlackJackServiceImpl();
+//		blackJackService.getMoreCredits(round);
+//		assertEquals(Consts.STARTING_CREDITS, round.getPlayerCredits(), 0);
+//	}
+	
+	@Test
+	public void testChangeBet() {
+		Round round = new Round();
+		String betSize = "100";
+		BlackJackService blackJackService = new BlackJackServiceImpl();
+		blackJackService.changeBet(round, betSize);
+		assertEquals(100, round.getPlayerBet());
 	}
 
 }

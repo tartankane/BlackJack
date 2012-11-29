@@ -1,11 +1,13 @@
 package org.sean.blackjack.control;
 
+import org.sean.blackjack.domain.Consts;
 import org.sean.blackjack.domain.Round;
 import org.sean.blackjack.services.BlackJackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,10 +36,10 @@ public class BlackJackController {
 
 	@Autowired
 	private BlackJackService blackJackService;
-	@Autowired
-	private Round round;
+//	@Autowired
+//	private Round round;
 
-	// private Round round = new Round();
+	private Round round = new Round();
 
 	/**
 	 * This method will be automatically run when a client sends a request to
@@ -106,6 +108,35 @@ public class BlackJackController {
 	Round playerStands() {
 
 		blackJackService.playerStands(round);
+		return round;
+	}
+	
+	/**
+	 * This method will be automatically run when a jQuery.getJSON function
+	 * containing the request to "getMoreCredits.do" is called by the client.
+	 * 
+	 * @return Round as a JSON object
+	 */
+//	@RequestMapping("/getMoreCredits")
+//	public @ResponseBody
+//	Round getMoreCredits() {
+//		
+//		blackJackService.getMoreCredits(round);
+//		return round;
+//	}
+	
+	/**
+	 * This method will be automatically run when a jQuery.getJSON function
+	 * containing the request to "getMoreCredits.do" is called by the client.
+	 * 
+	 * @return Round as a JSON object
+	 */
+	@RequestMapping("/changeBet")
+	public @ResponseBody
+	Round changeBet(@RequestParam("BETSIZE") String betSize) {
+//		System.out.println("You got to controller");
+//		System.out.println(betSize);
+		blackJackService.changeBet(round, betSize);
 		return round;
 	}
 

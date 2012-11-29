@@ -1,6 +1,6 @@
 // Append a new card to the player card display. Display the updated values 
 // of the player's and dealer's hands. If the player goes bust, change the buttons
-// availabel to the player.
+// available to the player.
 function hitPlayer() {
 	
 	// On a very slow connection, prevent the player from pressing buttons
@@ -22,7 +22,7 @@ function hitPlayer() {
 				// declare variables
 				var startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, lastCardInArray, cardImage;
 
-				// append a new card to the player card display
+				// append a new player card to the placeholder "playercards"
 				lastCardInArray = data.playerCards.length - 1;
 				cardImage = "images/"
 						+ data.playerCards[lastCardInArray].rank
@@ -31,39 +31,47 @@ function hitPlayer() {
 				$('#playercards').append(
 						$('<img src= ' + cardImage + '>').fadeIn(2000));
 
-				if (data.bustPlayer === true) {
 
+				if (data.bustPlayer === true) {
+					// If the player goes bust,  make the "start a new game" 
+					// button visible and make the "hit player", "player 
+					// stands" and "player doubles" buttons invisible.
+					// Make the in-game game message visible and display it.
 					document.getElementById('gamemessages').style.visibility = 'visible';
 					document.getElementById('gamemessages').innerHTML = data.gameMessage;
 
-					startGameButton = document
-							.getElementById('startgamebutton');
-					startGameButton.style.display = 'inline';
-
-					hitPlayerButton = document
-							.getElementById('hitplayerbutton');
-					hitPlayerButton.style.display = 'none';
-
-					playerStandsButton = document
-							.getElementById('playerstandsbutton');
-					playerStandsButton.style.display = 'none';
-
-					playerDoublesButton = document
-							.getElementById('playerdoublesbutton');
-					playerDoublesButton.style.display = 'none';
+					$.getScript("bjapp.shuffle-button-visibility.js");
+//					startGameButton = document
+//							.getElementById('startgamebutton');
+//					startGameButton.style.display = 'inline';
+//
+//					hitPlayerButton = document
+//							.getElementById('hitplayerbutton');
+//					hitPlayerButton.style.display = 'none';
+//
+//					playerStandsButton = document
+//							.getElementById('playerstandsbutton');
+//					playerStandsButton.style.display = 'none';
+//
+//					playerDoublesButton = document
+//							.getElementById('playerdoublesbutton');
+//					playerDoublesButton.style.display = 'none';
 
 				} else {
-					// Make buttons clickable again that were earlier
-					// disabled to prevent
-					// the player from pressing buttons repeatedly
+					// If the player doesn't go bust, make buttons clickable again 
+					// that were earlier disabled to prevent the player from 
+					// pressing buttons repeatedly.
 					document.getElementById('playerstandsbutton').disabled = false;
-					// document.getElementById('playerdoublesbutton').disabled
-					// = false;
 					document.getElementById('hitplayerbutton').disabled = false;
 				}
 				
 				//Display the value of the player's and dealer's hands
 				document.getElementById('playermessage').innerHTML="The Player's Cards. Total equals " + data.playerHandValue;
 				document.getElementById('dealermessage').innerHTML="The Dealer's Cards. Total equals " + data.dealerHandValue;
+				
+				// If the player is low on credits, offer the option to receive a top up.
+//				if (data.playerLowOnCredits) {
+//					$.getScript("bjapp.prompt-credit-topup.js");
+//				}
 			});	
 }

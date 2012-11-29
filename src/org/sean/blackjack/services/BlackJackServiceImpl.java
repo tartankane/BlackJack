@@ -1,8 +1,9 @@
 package org.sean.blackjack.services;
 
 import org.sean.blackjack.domain.Card;
+import org.sean.blackjack.domain.Consts;
 import org.sean.blackjack.domain.Deck;
-import org.sean.blackjack.domain.GameMessages;
+//import org.sean.blackjack.domain.GameMessages;
 import org.sean.blackjack.domain.Round;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,8 @@ public class BlackJackServiceImpl implements BlackJackService {
 	// Note to self: I have no getters and setters for following fields. Is this
 	// a problem?
 	// I guess I am not injecting into these fields.
-	private int betSize = 20;
-	private int initialPlayerCredits = 500;
 	private Deck deck;
+	private boolean playerDoubledBet = false;
 
 	/**
 	 * Initialize the Round object so that it has the values that need to be
@@ -32,8 +32,8 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            BlackJack game
 	 */
 	public void initializeTable(Round round) {
-		round.setPlayerCredits(initialPlayerCredits);
-		round.setPlayerBet(betSize);
+		round.setPlayerCredits(Consts.STARTING_CREDITS);
+		round.setPlayerBet(Consts.STARTING_BET);
 	}
 
 	/**
@@ -49,15 +49,22 @@ public class BlackJackServiceImpl implements BlackJackService {
 	public void startRound(Round round) {
 		boolean playerFinishedDrawingCards = false;
 		Card card;
-
+	
 		round.setBustPlayer(false);
 		round.setBustDealer(false);
 		round.setPlayerWon(false);
 		round.setPush(false);
 		round.setPlayerHasBlackJack(false);
-		round.setGameMessage(GameMessages.BLANK_MESSAGE.toString());
-		round.setPlayerCredits(round.getPlayerCredits() - betSize);
-		round.setPlayerBet(betSize);
+//		round.setPlayerLowOnCredits(false);
+		round.setGameMessage(Consts.BLANK_MESSAGE);
+//		round.setGameMessage(GameMessages.BLANK_MESSAGE.toString());
+		// If the player doubled the bet the previous round, set it 
+		// back to the correct value.
+		if (this.playerDoubledBet) {
+			round.setPlayerBet(round.getPlayerBet()/2);
+			this.playerDoubledBet = false;
+		}
+//		round.setPlayerCredits(round.getPlayerCredits() - round.getPlayerBet());
 		round.getDealerCards().clear();
 		round.getPlayerCards().clear();
 
@@ -81,7 +88,6 @@ public class BlackJackServiceImpl implements BlackJackService {
 		round.getPlayerCards().add(card);
 
 		round.calculateHandValues(playerFinishedDrawingCards);
-
 	}
 
 	/**
@@ -121,8 +127,9 @@ public class BlackJackServiceImpl implements BlackJackService {
 		 * The player's credits have already been reduced by betSize. Reduce
 		 * credits again by betSize for a total reduction of 2 times betSize.
 		 */
-		round.setPlayerCredits(round.getPlayerCredits() - betSize);
-		round.setPlayerBet(doubleUp * betSize);
+//		round.setPlayerCredits(round.getPlayerCredits() - round.getPlayerBet());
+		round.setPlayerBet(doubleUp * round.getPlayerBet());
+		this.playerDoubledBet = true;
 		if (round.checkBustPlayer()) {
 			round.calculateHandValues(playerFinishedDrawingCards);
 			return;
@@ -175,6 +182,31 @@ public class BlackJackServiceImpl implements BlackJackService {
 		// If the dealer has not gone bust, check who won.
 		round.checkWhoWon();
 		round.calculateHandValues(playerFinishedDrawingCards);
+	}
+
+
+	/**
+	 * Re-set the player credits to the starting amount
+	 * 
+	 * @param round
+	 *            - The round object represents the current state of the
+	 *            BlackJack game
+	 */
+//	public void getMoreCredits(Round round) {
+//		round.setPlayerCredits(Consts.STARTING_CREDITS);
+//		
+//	}
+
+	/**
+	 * Change the player's bet
+	 * 
+	 * @param round
+	 *            - The round object represents the current state of the
+	 *            BlackJack game
+	 * @param betSize a String received from the client
+	 */
+	public void changeBet(Round round, String betSize) {
+		round.setPlayerBet(Integer.valueOf(betSize));		
 	}
 
 }
