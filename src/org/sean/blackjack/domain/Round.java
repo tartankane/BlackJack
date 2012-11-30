@@ -14,19 +14,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class Round {
 
-	// a push in BlackJack means that both player and dealer have equal value
-	// hands, so neither loses. The player's bet is returned to the player.
-	private boolean push;
-	private boolean playerWon;
 	private boolean bustPlayer;
-	private boolean bustDealer;
 	private boolean playerHasBlackJack;
-//	private boolean playerLowOnCredits;
-	private String gameMessage;
 	private double playerCredits;
 	private int playerBet;
+	private String gameMessage;
+	// playerHandValue is a String because Aces have a value of "1 or 11" 
+	// and sometimes this fact needs to be displayed to the client.
 	private String playerHandValue;
-	private String dealerHandValue;
+	private int dealerHandValue;
 	private List<Card> dealerCards = new ArrayList<Card>();
 	private List<Card> playerCards = new ArrayList<Card>();
 
@@ -40,6 +36,8 @@ public class Round {
 	 * player has different possible hand values due to an ace, modify the
 	 * string to show these two possible values.
 	 * 
+	 * @param thePlayerIsFinishedDrawingCards - boolean indicating that the player
+	 * 											is finished taking cards.
 	 */
 	public void calculateHandValues(boolean thePlayerIsFinishedDrawingCards) {
 		//The boolean playerFinishedDrawingCards indicates that the player has received all 
@@ -51,9 +49,8 @@ public class Round {
 
 		for (Card card : playerCards) {
 			total = total + card.getRank().getCardValue();
-			if ((card.getRank().getCardValue() == 1)) {
-				numberOfPlayersAces++;
-			}
+			numberOfPlayersAces = ifAceThenIncrementAceCount(numberOfPlayersAces,
+					card);
 		}
 		playerHandValue = String.valueOf(total);
 		if ((total <= 11) && numberOfPlayersAces != 0) {
@@ -68,73 +65,67 @@ public class Round {
 		total = 0;
 		for (Card card : dealerCards) {
 			total = total + card.getRank().getCardValue();
-			if ((card.getRank().getCardValue() == 1)) {
-				numberOfDealersAces++;
-			}
+			numberOfDealersAces = ifAceThenIncrementAceCount(numberOfDealersAces,
+					card);
 		}
-		dealerHandValue = String.valueOf(total);
 		if ((total <= 11) && numberOfDealersAces != 0) {
-			dealerHandValue = String.valueOf(total + 10);
+			dealerHandValue = total + 10;
+		} else {
+			dealerHandValue = total;
 		}
+		
 	}
 
 	/**
-	 * Check that the value of the player's hand has not gone above 21. For the
-	 * purposes of this check, an ace will always have a value of 1.
+	 * If the card passed to the method is an ace, increment and return the 
+	 * numberOfAces count.
 	 * 
-	 * @return boolean
+	 * @param numberOfAces - the number of aces
+	 * @param card - the card to be checked if an ace or not
+	 * @return numberOfAces - the number of aces
 	 */
-	public boolean checkBustPlayer() {
-		// The total value of cards allowed in the player's hand in
-		// a game of blackjack is 21.
-		int totalValueOfCardsAllowed = 21;
-		int total = 0;
-		for (Card card : playerCards) {
-			total = total + card.getRank().getCardValue();
+	private int ifAceThenIncrementAceCount(int numberOfAces, Card card) {
+		if ((card.getRank().getCardValue() == 1)) {
+			numberOfAces++;
 		}
-		if (total > totalValueOfCardsAllowed) {
-//			this.setBustPlayer(true);
-			this.bustPlayer = true;
-			this.playerWon = false;
-//this.setPlayerWon(false);
-			this.gameMessage = Consts.PLAYER_BUST;
-//			gameMessage = GameMessages.PLAYER_BUST.toString();
-			this.playerCredits -= this.playerBet;
-//			this.setPlayerCredits(this.getPlayerCredits()
-//					- (this.playerBet));
-			// If the player is now low on credits, set playerLowOnCredits
-			//to true.
-			checkIfPlayerLowOnCredits();
-//			this.setGameMessage(GameMessages.PLAYER_BUST.toString());
-			return true;
-		}
-		return false;
+		return numberOfAces;
 	}
-
+	
 	/**
-	 * Check that the value of the dealer's hand has not gone above 21. For the
-	 * purposes of this check, an ace will always have a value of 1. If the
-	 * dealer is bust, return the player's bet and a matching amount for the win
-	 * to the player's credits.
+	 * Check that the value of the hand has not gone above 21. For the
+	 * purposes of this check, an ace will always have a value of 1. 
+	 * If the player is bust, deduct the player's bet from the player's 
+	 * credits. If the dealer is bust, add an amount matching the player's 
+	 * bet to the player's credits.
 	 * 
-	 * @return boolean
+	 * @param cards - the list of cards to be checked
+	 * @param isPlayer - true if this is the player's hand
+	 * @return boolean - true if the cards are over 21
 	 */
-	public boolean checkBustDealer() {
-		int total = 0;
-		// The total value of cards allowed in the dealer's hand in
-		// a game of blackjack is 21.
+	public boolean checkBust(List<Card> cards, boolean isPlayer) {
+		// The total value of cards allowed in a hand of blackjack 
+		// is 21.
 		int totalValueOfCardsAllowed = 21;
-		for (Card card : dealerCards) {
+		int total = 0;
+		for (Card card : cards) {
 			total = total + card.getRank().getCardValue();
 		}
-		if (total > totalValueOfCardsAllowed) {
-			this.setBustDealer(true);
-			this.setPlayerWon(true);
-			this.setGameMessage(Consts.DEALER_BUST);
-//			this.setGameMessage(GameMessages.DEALER_BUST.toString());
-			this.setPlayerCredits(this.getPlayerCredits()
-					+ (this.playerBet));
-			return true;
+		if (isPlayer) {
+			if (total > totalValueOfCardsAllowed) {
+				this.bustPlayer = true;
+				this.gameMessage = Consts.PLAYER_BUST;
+				this.playerCredits -= this.playerBet;
+				// If the player is now low on credits, set playerLowOnCredits
+				//to true.
+				checkIfPlayerLowOnCredits();
+				return true;
+			}
+		} else {
+			if (total > totalValueOfCardsAllowed) {
+				this.gameMessage = Consts.DEALER_BUST;
+				this.playerCredits += this.playerBet;
+				return true;
+			}
 		}
 		return false;
 	}
@@ -151,15 +142,14 @@ public class Round {
 		int numberOfPlayersAces = 0;
 		for (Card card : playerCards) {
 			totalPlayer = totalPlayer + card.getRank().getCardValue();
-			if ((card.getRank().getCardValue() == 1)) {
-				numberOfPlayersAces++;
-			}
+			numberOfPlayersAces = ifAceThenIncrementAceCount(numberOfPlayersAces,
+					card);
 		}
 		// An ace has a value of 1 in the enum "Rank". So a Blackjack will add
 		// up to a value of 11
 		if ((totalPlayer == 11) && (playerCards.size() == 2)
 				&& (numberOfPlayersAces == 1)) {
-			this.setPlayerHasBlackJack(true);
+			this.playerHasBlackJack = true;
 			return true;
 		} else {
 			return false;
@@ -198,9 +188,8 @@ public class Round {
 		int numberOfDealersAces = 0;
 		for (Card card : dealerCards) {
 			total = total + card.getRank().getCardValue();
-			if ((card.getRank().getCardValue() == 1)) {
-				numberOfDealersAces++;
-			}
+			numberOfDealersAces = ifAceThenIncrementAceCount(numberOfDealersAces,
+					card);
 		}
 
 		// A dealer's ace must have a value of 11 as long as that does not
@@ -236,9 +225,8 @@ public class Round {
 
 		for (Card card : playerCards) {
 			totalPlayer = totalPlayer + card.getRank().getCardValue();
-			if ((card.getRank().getCardValue() == 1)) {
-				numberOfPlayersAces++;
-			}
+			numberOfPlayersAces = ifAceThenIncrementAceCount(numberOfPlayersAces,
+					card);
 		}
 
 		// Adjust player's hand value for any aces
@@ -253,14 +241,13 @@ public class Round {
 		// This is possible here because the player's hand value has been
 		// adjusted for aces
 		if ((totalPlayer == 21) && (playerCards.size() == 2)) {
-			this.setPlayerHasBlackJack(true);
+			this.playerHasBlackJack = true;
 		}
 
 		for (Card card : dealerCards) {
 			totalDealer = totalDealer + card.getRank().getCardValue();
-			if ((card.getRank().getCardValue() == 1)) {
-				numberOfDealersAces++;
-			}
+			numberOfDealersAces = ifAceThenIncrementAceCount(numberOfDealersAces,
+					card);
 		}
 
 		// Adjust dealer's hand value for any aces
@@ -275,65 +262,42 @@ public class Round {
 			// Check to see if the player has BlackJack (an Ace and a card of
 			// value
 			// 10) but the dealer doesn't. If so, the player wins.
-			if (this.isPlayerHasBlackJack() && (dealerCards.size() > 2)) {
-				this.setPlayerWon(true);
-				this.setGameMessage(Consts.PLAYER_WINS_WITH_BLACKJACK);
-//				this.setGameMessage(GameMessages.PLAYER_WINS_WITH_BLACKJACK
-//						.toString());
-				this.setPlayerCredits(this.getPlayerCredits()
-						+ (1.5 * this.playerBet));
+			if (this.playerHasBlackJack && (dealerCards.size() > 2)) {
+				this.gameMessage = Consts.PLAYER_WINS_WITH_BLACKJACK;
+				this.playerCredits += 1.5 * this.playerBet;
 			// Check to see if the dealer has BlackJack (an Ace and a card
 			// of  value 10) but the player doesn't. If so, the dealer wins.
-			} else if ((totalDealer == 21) && (dealerCards.size() == 2)
-					&& (!this.isPlayerHasBlackJack())) {
-				this.setPlayerWon(false);
-				this.setGameMessage(Consts.DEALER_WINS_WITH_BLACKJACK);
-//				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK
-//						.toString());
-				this.setPlayerCredits(this.playerCredits - this.playerBet);
+			} else if ( (totalDealer == 21) && (dealerCards.size() == 2)
+					&& (!this.playerHasBlackJack) ) {
+				this.gameMessage = Consts.DEALER_WINS_WITH_BLACKJACK;
+				this.playerCredits -= this.playerBet;
 				// If the player is now low on credits, set playerLowOnCredits
 				//to true.
 				checkIfPlayerLowOnCredits();
 			} else {
-				this.setPush(true);
-				this.setGameMessage(Consts.DRAW);
-//				this.setGameMessage(GameMessages.DRAW.toString());
-//				this.setPlayerCredits(this.getPlayerCredits() + this.playerBet);
+				this.gameMessage = Consts.DRAW;
 			}
 
 		}
 
 		if (totalPlayer > totalDealer) {
 
-			if (this.isPlayerHasBlackJack()) {
-				this.setPlayerWon(true);
-				this.setGameMessage(Consts.PLAYER_WINS_WITH_BLACKJACK);
-//				this.setGameMessage(GameMessages.PLAYER_WINS_WITH_BLACKJACK
-//						.toString());
-				this.setPlayerCredits(this.playerCredits
-						+ (1.5 * this.playerBet));
+			if (this.playerHasBlackJack) {
+				this.gameMessage = Consts.PLAYER_WINS_WITH_BLACKJACK;
+				this.playerCredits += 1.5 * this.playerBet;
 			} else {
-				this.setPlayerWon(true);
-				this.setGameMessage(Consts.PLAYER_WINS);
-//				this.setGameMessage(GameMessages.PLAYER_WINS.toString());
-				this.setPlayerCredits(this.playerCredits
-						+ (this.playerBet));
+				this.gameMessage = Consts.PLAYER_WINS;
+				this.playerCredits += this.playerBet;
 			}
 		}
 
 		if (totalPlayer < totalDealer) {
 			if ((totalDealer == 21) && (dealerCards.size() == 2)) {
-				this.setGameMessage(Consts.DEALER_WINS_WITH_BLACKJACK);
-//				this.setGameMessage(GameMessages.DEALER_WINS_WITH_BLACKJACK
-//						.toString());
+				this.gameMessage = Consts.DEALER_WINS_WITH_BLACKJACK;
 			} else {
-				this.setGameMessage(Consts.PLAYER_LOSES);
-//				this.setGameMessage(GameMessages.PLAYER_LOSES.toString());
-				// credits were already deducted from the player at the start of the
-				// round so no need to modify the player's credits.
+				this.gameMessage = Consts.PLAYER_LOSES;
 			}
-			this.setPlayerWon(false);
-			this.setPlayerCredits(this.playerCredits - this.playerBet);
+			this.playerCredits -= this.playerBet;
 			// If the player is now low on credits, set playerLowOnCredits
 			//to true.
 			checkIfPlayerLowOnCredits();
@@ -343,17 +307,11 @@ public class Round {
 	/**
 	 * Check whether the player is low on credits. If so, set 
 	 * playerLowOnCredits to "true"
-	 */
-//	private void checkIfPlayerLowOnCredits() {
-//		if (this.getPlayerCredits() < Consts.LOW_CREDITS) {
-//			this.setPlayerLowOnCredits(true);
-//		}
-//	}	
+	 */	
 	private void checkIfPlayerLowOnCredits() {
 		if (playerCredits < Consts.LOW_CREDITS_VALUE) {
 			playerCredits = Consts.STARTING_CREDITS;
 			gameMessage=Consts.LOW_CREDITS_MESSAGE;
-//			gameMessage=GameMessages.LOW_CREDITS.toString();
 		}
 	}
 
@@ -401,14 +359,6 @@ public class Round {
 		this.playerCards = playerCards;
 	}
 
-	public boolean isBustDealer() {
-		return bustDealer;
-	}
-
-	public void setBustDealer(boolean bustDealer) {
-		this.bustDealer = bustDealer;
-	}
-
 	public String getGameMessage() {
 		return gameMessage;
 	}
@@ -416,23 +366,7 @@ public class Round {
 	public void setGameMessage(String gameMessage) {
 		this.gameMessage = gameMessage;
 	}
-
-	public boolean isPlayerWon() {
-		return playerWon;
-	}
-
-	public void setPlayerWon(boolean playerWon) {
-		this.playerWon = playerWon;
-	}
-
-	public boolean isPush() {
-		return push;
-	}
-
-	public void setPush(boolean push) {
-		this.push = push;
-	}
-
+	
 	public boolean isPlayerHasBlackJack() {
 		return playerHasBlackJack;
 	}
@@ -449,20 +383,12 @@ public class Round {
 		this.playerHandValue = playerHandValue;
 	}
 
-	public String getDealerHandValue() {
+	public int getDealerHandValue() {
 		return dealerHandValue;
 	}
 
-	public void setDealerHandValue(String dealerHandValue) {
+	public void setDealerHandValue(int dealerHandValue) {
 		this.dealerHandValue = dealerHandValue;
 	}
-
-//	public boolean isPlayerLowOnCredits() {
-//		return playerLowOnCredits;
-//	}
-//
-//	public void setPlayerLowOnCredits(boolean playerLowOnCredits) {
-//		this.playerLowOnCredits = playerLowOnCredits;
-//	}
 
 }

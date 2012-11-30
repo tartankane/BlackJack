@@ -19,10 +19,11 @@ function startGame() {
 			// optional map or string that is sent to the server with
 			// the request
 			},
+			// data is the JSON object returned from the server
 			function(data) {
 
 				// declare variables
-				var index, backOfCard, cardImage, startGameButton, hitPlayerButton, playerStandsButton, dealerMessage, playerMessage, playerDoublesButton, changeBetDial;
+				var index, backOfCard, cardImage, startGameButton, hitPlayerButton, playerStandsButton, dealerMessage, playerMessage, playerDoublesButton, betDropDown;
 				
 				// Display the player credits and player bet to the
 				// placeholders "credits" and "bet"
@@ -59,6 +60,7 @@ function startGame() {
 							$('<img src= ' + cardImage + '>').fadeIn(
 									2000));
 				}
+				
 
 				// Display the value of the player's and dealer's hands
 				// to the placeholders "playermessage" and
@@ -70,7 +72,6 @@ function startGame() {
 				dealerMessage = document
 						.getElementById('dealermessage');
 				dealerMessage.style.visibility = 'visible';
-
 				playerMessage = document
 						.getElementById('playermessage');
 				playerMessage.style.visibility = 'visible';
@@ -82,9 +83,9 @@ function startGame() {
 						.getElementById('startgamebutton');
 				startGameButton.style.display = 'none';
 				
-				changeBetDial = document
-						.getElementById('changebetdial');
-				changeBetDial.style.display = 'none';
+				betDropDown = document
+						.getElementById('betdropdown');
+				betDropDown.style.display = 'none';
 
 				hitPlayerButton = document
 						.getElementById('hitplayerbutton');
@@ -100,6 +101,27 @@ function startGame() {
 						.getElementById('playerdoublesbutton');
 				playerDoublesButton.style.display = 'inline';
 				playerDoublesButton.disabled = false;
+				
+				//EVERYTHING BELOW HER EIS FOR TEST PURPOSES
+				// display the initial player cards to the placeholder
+				// "playercards"
+				for (index = 0; index < data.playerCards.length; index++) {
+					cardImage = "images/"
+							+ data.playerCards[index].rank
+							+ data.playerCards[index].suit + ".png";
+					$('#leftie').append(
+							$('<img src= ' + cardImage + '>').fadeIn(
+									2000));
+				}
+				
+				for (index = 0; index < data.playerCards.length; index++) {
+					cardImage = "images/"
+							+ data.playerCards[index].rank
+							+ data.playerCards[index].suit + ".png";
+					$('#rightie').append(
+							$('<img src= ' + cardImage + '>').fadeIn(
+									2000));
+				}
 
 			});
 			

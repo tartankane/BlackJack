@@ -60,10 +60,10 @@ h1 small {
 	text-decoration: none;
 }
 
-#links li a:visited {
+/*#links li a:visited {
 	color: #ffffff;
 	text-decoration: none;
-}
+}*/
 
 #links li a:hover {
 	color: #000000;
@@ -82,7 +82,7 @@ h1 small {
 }
 
 .btn1 {
-	font-size: 150%;
+	font-size: 165%;
 }
 
 /* Invisible Button Occupying No Space*/
@@ -113,5 +113,60 @@ h1 small {
 	text-align: center;
 	visibility: hidden;
 	height: 50px;
+	font-size: 150%;
+}
+
+/* Everything below her eis for test purposes */
+.wrapper {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.column1 {
+	   align:left;
+       width: 50%;
+       font-size: 250%;
+}
+
+.column2 {
+	   align:right;
+       width: 50%;
+       font-size: 250%;
+}
+
+.wrap {
+  overflow:hidden;
+/*  width:1200px;  Optional */
+}
+
+.wrap2 {
+  overflow:hidden;
+/*  width:1200px;  Optional */
+}
+
+.left {
+  float:left;
+ /*  width:150px; */
+}
+
+.middle {
+ /* float:left;
+   min-width:800px; */
+}
+
+.right {
+  float:right;
+ /*  width:150px; */
+}
+
+.btn3 {
+/*	text-align: left;*/
+	  float:left;
+	font-size: 150%;
+}
+
+.btn4 {
+	/* text-align: right; */
+	float:right;
 	font-size: 150%;
 }

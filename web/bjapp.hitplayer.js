@@ -17,6 +17,7 @@ function hitPlayer() {
 			// optional map or string that is sent to the server with
 			// the request
 			},
+			// data is the JSON object returned from the server
 			function(data) {
 
 				// declare variables
@@ -39,23 +40,7 @@ function hitPlayer() {
 					// Make the in-game game message visible and display it.
 					document.getElementById('gamemessages').style.visibility = 'visible';
 					document.getElementById('gamemessages').innerHTML = data.gameMessage;
-
 					$.getScript("bjapp.shuffle-button-visibility.js");
-//					startGameButton = document
-//							.getElementById('startgamebutton');
-//					startGameButton.style.display = 'inline';
-//
-//					hitPlayerButton = document
-//							.getElementById('hitplayerbutton');
-//					hitPlayerButton.style.display = 'none';
-//
-//					playerStandsButton = document
-//							.getElementById('playerstandsbutton');
-//					playerStandsButton.style.display = 'none';
-//
-//					playerDoublesButton = document
-//							.getElementById('playerdoublesbutton');
-//					playerDoublesButton.style.display = 'none';
 
 				} else {
 					// If the player doesn't go bust, make buttons clickable again 
@@ -69,9 +54,28 @@ function hitPlayer() {
 				document.getElementById('playermessage').innerHTML="The Player's Cards. Total equals " + data.playerHandValue;
 				document.getElementById('dealermessage').innerHTML="The Dealer's Cards. Total equals " + data.dealerHandValue;
 				
-				// If the player is low on credits, offer the option to receive a top up.
-//				if (data.playerLowOnCredits) {
-//					$.getScript("bjapp.prompt-credit-topup.js");
-//				}
+				//Display the value of the player's credits and current bet size
+				document.getElementById('credits').innerHTML = "Your Credits: "
+					+ data.playerCredits;
+				document.getElementById('bet').innerHTML = "Your Bet: "
+					+ data.playerBet;
+				
+				//EVERYTHING BELOW HERE IS FOR TEST
+				lastCardInArray = data.playerCards.length - 1;
+				cardImage = "images/"
+						+ data.playerCards[lastCardInArray].rank
+						+ data.playerCards[lastCardInArray].suit
+						+ ".png";
+				$('#leftie').append(
+						$('<img src= ' + cardImage + '>').fadeIn(2000));
+				
+				lastCardInArray = data.playerCards.length - 1;
+				cardImage = "images/"
+						+ data.playerCards[lastCardInArray].rank
+						+ data.playerCards[lastCardInArray].suit
+						+ ".png";
+				$('#rightie').append(
+						$('<img src= ' + cardImage + '>').fadeIn(2000));
+
 			});	
 }

@@ -7,9 +7,9 @@
 startGameButton = document.getElementById('startgamebutton');
 startGameButton.style.display = 'inline';
 
-changeBetDial = document
-.getElementById('changebetdial');
-changeBetDial.style.display = 'inline';
+betDropDown = document
+.getElementById('betdropdown');
+betDropDown.style.display = 'inline';
 
 hitPlayerButton = document.getElementById('hitplayerbutton');
 hitPlayerButton.style.display = 'none';

@@ -18,6 +18,7 @@ function playerStands() {
 			// optional map or string that is sent to the server with
 			// the request
 			},
+			// data is the JSON object returned from the server
 			function(data) {
 				
 				// declare variables
@@ -69,22 +70,8 @@ function playerStands() {
 				// button visible and make the "hit player", "player 
 				// stands" and "player doubles" buttons invisible.
 				$.getScript("bjapp.shuffle-button-visibility.js");
-//				startGameButton = document
-//						.getElementById('startgamebutton');
-//				startGameButton.style.display = 'inline';
-//
-//				hitPlayerButton = document
-//						.getElementById('hitplayerbutton');
-//				hitPlayerButton.style.display = 'none';
-//
-//				playerStandsButton = document
-//						.getElementById('playerstandsbutton');
-//				playerStandsButton.style.display = 'none';
-//
-//				playerDoublesButton = document
-//						.getElementById('playerdoublesbutton');
-//				playerDoublesButton.style.display = 'none';
-
+				
+				//Display the value of the player's credits and current bet size
 				document.getElementById('credits').innerHTML = "Your Credits: "
 						+ data.playerCredits;
 				document.getElementById('bet').innerHTML = "Your Bet: "
@@ -95,10 +82,6 @@ function playerStands() {
 				document.getElementById('hitplayerbutton').disabled = false;
 				document.getElementById('playerdoublesbutton').disabled = false;
 
-				// If the player is low on credits, offer the option to receive a top up.
-//				if (data.playerLowOnCredits) {
-//					$.getScript("bjapp.prompt-credit-topup.js");
-//				}
 			});
 			
 }

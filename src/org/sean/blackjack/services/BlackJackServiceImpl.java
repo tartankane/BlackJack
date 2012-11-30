@@ -1,17 +1,14 @@
 package org.sean.blackjack.services;
 
-import org.sean.blackjack.domain.Card;
 import org.sean.blackjack.domain.Consts;
 import org.sean.blackjack.domain.Deck;
-//import org.sean.blackjack.domain.GameMessages;
 import org.sean.blackjack.domain.Round;
 import org.springframework.stereotype.Service;
 
 /**
  * This Class is part of Spring MVC's Service Layer. It implements
  * BlackJackService. The instance of the Round class is passed to it's methods
- * which update the instance of the Round class appropriately for that stage of
- * the BlackJack game.
+ * and updated appropriately for that stage of the BlackJack game.
  * 
  */
 @Service
@@ -48,23 +45,20 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 */
 	public void startRound(Round round) {
 		boolean playerFinishedDrawingCards = false;
-		Card card;
+//		Card card;
 	
 		round.setBustPlayer(false);
-		round.setBustDealer(false);
-		round.setPlayerWon(false);
-		round.setPush(false);
+//		round.setBustDealer(false);
+//		round.setPlayerWon(false);
+//		round.setPush(false);
 		round.setPlayerHasBlackJack(false);
-//		round.setPlayerLowOnCredits(false);
 		round.setGameMessage(Consts.BLANK_MESSAGE);
-//		round.setGameMessage(GameMessages.BLANK_MESSAGE.toString());
 		// If the player doubled the bet the previous round, set it 
 		// back to the correct value.
 		if (this.playerDoubledBet) {
 			round.setPlayerBet(round.getPlayerBet()/2);
 			this.playerDoubledBet = false;
 		}
-//		round.setPlayerCredits(round.getPlayerCredits() - round.getPlayerBet());
 		round.getDealerCards().clear();
 		round.getPlayerCards().clear();
 
@@ -72,20 +66,23 @@ public class BlackJackServiceImpl implements BlackJackService {
 		deck = Deck.getInstance();
 
 		// Deal a single card to the dealer.
-		// The dealer's hidden card is added to the display in bjapp.start.js
+		// The dealer's hidden card is added to the display in start.js
 		// Note that there is no actual hidden card. The image of a hidden card
 		// is displayed
 		// at the client and represents the dealer's second card. The dealer's
-		// second card is added
+		// actual second card is added
 		// after the player stands.
-		card = deck.dealRandomCard();
-		round.getDealerCards().add(card);
+//		card = deck.dealRandomCard();
+//		round.getDealerCards().add(card);
+		round.getDealerCards().add(deck.dealRandomCard());
 
 		// Deal the two starting cards to the player
-		card = deck.dealRandomCard();
-		round.getPlayerCards().add(card);
-		card = deck.dealRandomCard();
-		round.getPlayerCards().add(card);
+//		card = deck.dealRandomCard();
+//		round.getPlayerCards().add(card);
+//		card = deck.dealRandomCard();
+//		round.getPlayerCards().add(card);
+		round.getPlayerCards().add(deck.dealRandomCard());
+		round.getPlayerCards().add(deck.dealRandomCard());
 
 		round.calculateHandValues(playerFinishedDrawingCards);
 	}
@@ -99,10 +96,13 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            BlackJack game
 	 */
 	public void hitPlayer(Round round) {
+		boolean isPlayer = true;
 		boolean playerFinishedDrawingCards = false;
-		Card card = deck.dealRandomCard();
-		round.getPlayerCards().add(card);
-		round.checkBustPlayer();
+//		Card card = deck.dealRandomCard();
+//		round.getPlayerCards().add(card);
+		round.getPlayerCards().add(deck.dealRandomCard());
+//		round.checkBustPlayer();
+		round.checkBust(round.getPlayerCards(), isPlayer);
 		round.calculateHandValues(playerFinishedDrawingCards);
 	}
 
@@ -117,20 +117,19 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            BlackJack game
 	 */
 	public void playerDoubles(Round round) {
+		boolean isPlayer = true;
 		boolean playerFinishedDrawingCards = false;
-		int doubleUp = 2;
-		Card card;
-		card = deck.dealRandomCard();
-		round.getPlayerCards().add(card);
-		playerFinishedDrawingCards = true;
-		/*
-		 * The player's credits have already been reduced by betSize. Reduce
-		 * credits again by betSize for a total reduction of 2 times betSize.
-		 */
-//		round.setPlayerCredits(round.getPlayerCredits() - round.getPlayerBet());
-		round.setPlayerBet(doubleUp * round.getPlayerBet());
+		
+		//Double the player's bet
+		round.setPlayerBet(2 * round.getPlayerBet());
 		this.playerDoubledBet = true;
-		if (round.checkBustPlayer()) {
+//		Card card;
+//		card = deck.dealRandomCard();
+//		round.getPlayerCards().add(card);
+		round.getPlayerCards().add(deck.dealRandomCard());
+		playerFinishedDrawingCards = true;
+//		if (round.checkBustPlayer()) {
+		if (round.checkBust(round.getPlayerCards(), isPlayer)) {
 			round.calculateHandValues(playerFinishedDrawingCards);
 			return;
 		}
@@ -147,6 +146,7 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            BlackJack game
 	 */
 	public void playerStands(Round round) {
+		boolean isPlayer = false;
 		boolean playerFinishedDrawingCards = true;
 
 		// Check if the player has blackjack and that the dealer's visible card
@@ -162,8 +162,9 @@ public class BlackJackServiceImpl implements BlackJackService {
 
 		// Deal cards to the dealer until the dealer either goes bust or stands
 		while (!round.dealerMustStand()) {
-			Card card = deck.dealRandomCard();
-			round.getDealerCards().add(card);
+//			Card card = deck.dealRandomCard();
+//			round.getDealerCards().add(card);
+			round.getDealerCards().add(deck.dealRandomCard());
 			/*
 			 * If the player has a BlackJack, then the dealer should not be
 			 * dealt more than two cards in total
@@ -174,28 +175,16 @@ public class BlackJackServiceImpl implements BlackJackService {
 				round.calculateHandValues(playerFinishedDrawingCards);
 				return;
 			}
-			if (round.checkBustDealer()) {
+//			if (round.checkBustDealer()) {
+			if (round.checkBust(round.getDealerCards(), isPlayer)) {
 				round.calculateHandValues(playerFinishedDrawingCards);
 				return;
 			}
 		}
-		// If the dealer has not gone bust, check who won.
+		// The dealer stands. Check who won.
 		round.checkWhoWon();
 		round.calculateHandValues(playerFinishedDrawingCards);
 	}
-
-
-	/**
-	 * Re-set the player credits to the starting amount
-	 * 
-	 * @param round
-	 *            - The round object represents the current state of the
-	 *            BlackJack game
-	 */
-//	public void getMoreCredits(Round round) {
-//		round.setPlayerCredits(Consts.STARTING_CREDITS);
-//		
-//	}
 
 	/**
 	 * Change the player's bet
@@ -203,10 +192,15 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 * @param round
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
-	 * @param betSize a String received from the client
+	 * @param betSize - a String received from the client and set by a 
+	 * 					drop down list
 	 */
 	public void changeBet(Round round, String betSize) {
-		round.setPlayerBet(Integer.valueOf(betSize));		
+		round.setPlayerBet(Integer.valueOf(betSize));
+		// In case the player just doubled the bet, set playerDoubledBet
+		// to false so that the new bet value set by the client will not be 
+		// modified by this.startRound().
+		playerDoubledBet=false;
 	}
 
 }

@@ -63,19 +63,47 @@ p {
 			onclick="playerDoubles();"
 			title="Double Your Bet and Get One More Card. This Option Only Exists When You Have Two Cards">Double</button>
 	</p>
+	
 	<p>
-		
-		<select id="changebetdial" name="setBetSize" onchange="playerChangesBet(this.value);" title="Change The Size Of Your Bet"> 
+		<!-- Drop down list to select bet size -->
+		<select id="betdropdown" name="setBetSize" onchange="playerChangesBet(this.value);" title="Change The Size Of Your Bet"> 
 			<option value="10" selected="selected">Bet 10 Credits</option>
 			<option value="20">Bet 20 Credits</option>
 			<option value="40">Bet 40 Credits</option>
 			<option value="80">Bet 80 Credits</option>
 			<option value="160">Bet 160 Credits</option>
 		</select>
-
-	
-
 	</p>
+	
+	<div class="wrap">
+  		<div id="leftie" class="left"></div>
+  		<!-- <div id="middlie" class="middle">MIDDLE</div>-->
+  		<div id="rightie" class="right"></div>
+	</div>
+	<p> </p>
+	<div class="wrap2">
+ 		<button id="hitplayerbutton1" type="button" class="btn3"
+			onclick="hitPlayer();" title="Get Another Card">Hit Me</button>
+
+		<button id="playerstandsbutton1" type="button" class="btn3"
+			onclick="playerStands();" title="Stick With These Cards">Stand</button>
+			
+		<button id="hitplayerbutton2" type="button" class="btn4"
+			onclick="hitPlayer();" title="Get Another Card">Hit Me</button>
+
+		<button id="playerstandsbutton2" type="button" class="btn4"
+			onclick="playerStands();" title="Stick With These Cards">Stand</button>
+	</div>
+	
+	
+<!--  	<div class="wrapper">
+
+        <div class="column1">left</div>
+        <div ><h2>Page Ran Away</h2></div>
+        <div class="column2">right</div>
+
+	</div>
+-->
 
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>	
@@ -86,6 +114,8 @@ p {
 	<script src="bjapp.player-doubles.js"></script>
 	<script src="bjapp.player-changes-bet.js"></script>
 	<jsp:include page="/footer.jsp" />
+	
+
 
 </body>
 

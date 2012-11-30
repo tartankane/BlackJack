@@ -1,6 +1,5 @@
 package org.sean.blackjack.control;
 
-import org.sean.blackjack.domain.Consts;
 import org.sean.blackjack.domain.Round;
 import org.sean.blackjack.services.BlackJackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
  * request to 'domain'/blackJackTable.do
  */
 @Controller
-@Scope("session")
+//@Scope("session")
 public class BlackJackController {
 
 	@Autowired
