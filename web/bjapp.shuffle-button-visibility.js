@@ -19,3 +19,6 @@ playerStandsButton.style.display = 'none';
 
 playerDoublesButton = document.getElementById('playerdoublesbutton');
 playerDoublesButton.style.display = 'none';
+
+playerSplitsButton = document.getElementById('playersplitsbutton');
+playerSplitsButton.style.display = 'none';

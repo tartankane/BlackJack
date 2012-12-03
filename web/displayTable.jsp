@@ -62,6 +62,10 @@ p {
 		<button id="playerdoublesbutton" type="button" class="btn2"
 			onclick="playerDoubles();"
 			title="Double Your Bet and Get One More Card. This Option Only Exists When You Have Two Cards">Double</button>
+			
+		<button id="playersplitsbutton" type="button" class="btn2"
+			onclick="playerSplits();"
+			title="Do the Splitz">Split Cards</button>
 	</p>
 	
 	<p>
@@ -76,42 +80,49 @@ p {
 	</p>
 	
 	<div class="wrap">
-  		<div id="leftie" class="left"></div>
-  		<!-- <div id="middlie" class="middle">MIDDLE</div>-->
-  		<div id="rightie" class="right"></div>
+  		<div id="splitcardsleft" class="left"></div>	
+  		<div id="splitcardsright" class="right"></div>
 	</div>
-	<p> </p>
+	
+	<div class="wrap">
+  		<div id="splitleftplayermessage" class="msg3">Holder for the left player message</div>
+
+		<div id="splitrightplayermessage" class="msg4">Holder for the right player message</div>
+	</div>
+	
+	<div class="wrap">
+  		<div id="splitleftgamemessages" class="msg3">Holder for the left in-game messages</div>
+
+		<div id="splitrightgamemessages" class="msg4">Holder for the right in-game messages</div>
+	</div>
+	
 	<div class="wrap2">
- 		<button id="hitplayerbutton1" type="button" class="btn3"
-			onclick="hitPlayer();" title="Get Another Card">Hit Me</button>
+ 		<button id="lefthitplayerbutton" type="button" class="btn3"
+			onclick="splitLeftHitPlayer();" title="Get Another Card">Hit Me</button>
 
-		<button id="playerstandsbutton1" type="button" class="btn3"
-			onclick="playerStands();" title="Stick With These Cards">Stand</button>
+		<button id="leftplayerstandsbutton" type="button" class="btn3"
+			onclick="splitLeftPlayerStands();" title="Stick With These Cards">Stand</button>
 			
-		<button id="hitplayerbutton2" type="button" class="btn4"
-			onclick="hitPlayer();" title="Get Another Card">Hit Me</button>
+		<button id="righthitplayerbutton" type="button" class="btn4"
+			onclick="splitRightHitPlayer();" title="Get Another Card">Hit Me</button>
 
-		<button id="playerstandsbutton2" type="button" class="btn4"
-			onclick="playerStands();" title="Stick With These Cards">Stand</button>
+		<button id="rightplayerstandsbutton" type="button" class="btn4"
+			onclick="splitRightPlayerStands();" title="Stick With These Cards">Stand</button>
 	</div>
-	
-	
-<!--  	<div class="wrapper">
 
-        <div class="column1">left</div>
-        <div ><h2>Page Ran Away</h2></div>
-        <div class="column2">right</div>
-
-	</div>
--->
 
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>	
 
 	<script src="bjapp.start.js"></script>
-	<script src="bjapp.hitplayer.js"></script>
+	<script src="bjapp.hit-player.js"></script>
+	<script src="bjapp.split-left-hit-player.js"></script>
+	<script src="bjapp.split-right-hit-player.js"></script>
 	<script src="bjapp.player-stands.js"></script>
+	<script src="bjapp.split-left-player-stands.js"></script>
+	<script src="bjapp.split-right-player-stands.js"></script>
 	<script src="bjapp.player-doubles.js"></script>
+	<script src="bjapp.player-splits.js"></script>
 	<script src="bjapp.player-changes-bet.js"></script>
 	<jsp:include page="/footer.jsp" />
 	

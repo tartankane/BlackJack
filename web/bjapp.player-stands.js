@@ -22,7 +22,7 @@ function playerStands() {
 			function(data) {
 				
 				// declare variables
-				var index, startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, cardImage;
+				var index, startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton, cardImage;
 				
 				// Only update the display of dealer cards to the
 				// screen if the dealer has more than one card. This 

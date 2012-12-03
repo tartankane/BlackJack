@@ -48,10 +48,8 @@ public class BlackJackServiceImpl implements BlackJackService {
 //		Card card;
 	
 		round.setBustPlayer(false);
-//		round.setBustDealer(false);
-//		round.setPlayerWon(false);
-//		round.setPush(false);
 		round.setPlayerHasBlackJack(false);
+		round.setPlayerCanSplit(false);
 		round.setGameMessage(Consts.BLANK_MESSAGE);
 		// If the player doubled the bet the previous round, set it 
 		// back to the correct value.
@@ -72,19 +70,14 @@ public class BlackJackServiceImpl implements BlackJackService {
 		// at the client and represents the dealer's second card. The dealer's
 		// actual second card is added
 		// after the player stands.
-//		card = deck.dealRandomCard();
-//		round.getDealerCards().add(card);
 		round.getDealerCards().add(deck.dealRandomCard());
 
 		// Deal the two starting cards to the player
-//		card = deck.dealRandomCard();
-//		round.getPlayerCards().add(card);
-//		card = deck.dealRandomCard();
-//		round.getPlayerCards().add(card);
 		round.getPlayerCards().add(deck.dealRandomCard());
 		round.getPlayerCards().add(deck.dealRandomCard());
 
 		round.calculateHandValues(playerFinishedDrawingCards);
+		round.checkIfPlayerCanSplit();
 	}
 
 	/**
@@ -201,6 +194,73 @@ public class BlackJackServiceImpl implements BlackJackService {
 		// to false so that the new bet value set by the client will not be 
 		// modified by this.startRound().
 		playerDoubledBet=false;
+	}
+
+	/**
+	 * Splits the player's beginning two cards into two different hands of one card
+	 * each. This will enable the player to play out each hand separately.
+	 * 
+	 * @param round
+	 *            - The round object represents the current state of the
+	 *            BlackJack game
+	 */
+	public void playerSplits(Round round) {
+		
+		round.playerSplits();
+	}
+
+	
+	/**
+	 * Deal a single card to the player's hand on the left of the client screen.
+	 * Check to see if the player has gone bust.
+	 * 
+	 * @param round
+	 *            - The round object represents the current state of the
+	 *            BlackJack game
+	 */
+	public void splitLeftHitPlayer(Round round) {
+		boolean isSplitLeft = true;
+		boolean splitLeftFinishedDrawingCards = false;
+		round.getSplitPlayer().getSplitLeftPlayerCards().add(deck.dealRandomCard());
+		round.getSplitPlayer().checkSplitBust(round.getSplitPlayer().getSplitLeftPlayerCards(), isSplitLeft);
+//		round.calculateHandValues(playerFinishedDrawingCards);
+	}
+
+	/**
+	 * Change the player's bet
+	 * 
+	 * @param round
+	 *            - The round object represents the current state of the
+	 *            BlackJack game
+	 */
+	public void splitLeftPlayerStands(Round round) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * Change the player's bet
+	 * 
+	 * @param round
+	 *            - The round object represents the current state of the
+	 *            BlackJack game
+	 */
+	public void splitRightHitPlayer(Round round) {
+		boolean isSplitLeft = false;
+		boolean splitRightFinishedDrawingCards = false;
+		
+	}
+
+	/**
+	 * Change the player's bet
+	 * 
+	 * @param round
+	 *            - The round object represents the current state of the
+	 *            BlackJack game
+	 */
+	public void splitRightPlayerStands(Round round) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

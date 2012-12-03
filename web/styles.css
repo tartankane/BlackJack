@@ -40,7 +40,8 @@ h1 small {
 	padding: 0px;
 	font-size: 110%;
 	color: #ffffff;
-	line-height: 30px;
+	line-height: 30px; 
+/*	line-height: 5%;*/
 }
 
 #links li {
@@ -101,7 +102,8 @@ h1 small {
 
 .card {
 	text-align: center;
-	height: 100px;
+/*	height: 10%;*/
+	height: 100px; 
 }
 
 /*  Override the default display:inline to allow text alignment in a span  */
@@ -112,12 +114,31 @@ h1 small {
 .msg2 {
 	text-align: center;
 	visibility: hidden;
-	height: 50px;
+/*	height: 5%;*/
+	height: 50px; 
+	font-size: 150%;
+}
+
+.msg3 {
+	float:left;
+	text-align: center;
+/*	visibility: hidden; */
+	height: 50px; 
+/*	height: 5%;*/
+	font-size: 150%;
+}
+
+.msg4 {
+	float:right;
+	text-align: center;
+/*	visibility: hidden; */
+	height: 50px; 
+/*	height: 5%;*/
 	font-size: 150%;
 }
 
 /* Everything below her eis for test purposes */
-.wrapper {
+/* .wrapper {
     margin: 0 auto;
     width: 100%;
 }
@@ -132,15 +153,19 @@ h1 small {
 	   align:right;
        width: 50%;
        font-size: 250%;
-}
+} */
 
 .wrap {
   overflow:hidden;
+  /*	height: 10%; */
+  	height: 100;
 /*  width:1200px;  Optional */
 }
 
 .wrap2 {
   overflow:hidden;
+/*  	height: 5%; */
+  	height: 50;
 /*  width:1200px;  Optional */
 }
 
@@ -161,12 +186,14 @@ h1 small {
 
 .btn3 {
 /*	text-align: left;*/
+	display: none;
 	  float:left;
 	font-size: 150%;
 }
 
 .btn4 {
 	/* text-align: right; */
+	display: none;
 	float:right;
 	font-size: 150%;
 }

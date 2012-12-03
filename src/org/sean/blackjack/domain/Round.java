@@ -14,17 +14,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class Round {
 
+	private boolean playerCanSplit;
 	private boolean bustPlayer;
 	private boolean playerHasBlackJack;
 	private double playerCredits;
 	private int playerBet;
 	private String gameMessage;
-	// playerHandValue is a String because Aces have a value of "1 or 11" 
+	// playerHandValue is a String because Aces have a value of "1 or 11"
 	// and sometimes this fact needs to be displayed to the client.
 	private String playerHandValue;
 	private int dealerHandValue;
 	private List<Card> dealerCards = new ArrayList<Card>();
 	private List<Card> playerCards = new ArrayList<Card>();
+	private SplitPlayer splitPlayer;
 
 	public Round() {
 		super();
@@ -36,12 +38,14 @@ public class Round {
 	 * player has different possible hand values due to an ace, modify the
 	 * string to show these two possible values.
 	 * 
-	 * @param thePlayerIsFinishedDrawingCards - boolean indicating that the player
-	 * 											is finished taking cards.
+	 * @param thePlayerIsFinishedDrawingCards
+	 *            - boolean indicating that the player is finished taking cards.
 	 */
 	public void calculateHandValues(boolean thePlayerIsFinishedDrawingCards) {
-		//The boolean playerFinishedDrawingCards indicates that the player has received all 
-		// their cards. In this case, the Ace will be set to a fixed value of either 1 or 11.
+		// The boolean playerFinishedDrawingCards indicates that the player has
+		// received all
+		// their cards. In this case, the Ace will be set to a fixed value of
+		// either 1 or 11.
 		boolean playerFinishedDrawingCards = thePlayerIsFinishedDrawingCards;
 		int total = 0;
 		int numberOfDealersAces = 0;
@@ -49,8 +53,8 @@ public class Round {
 
 		for (Card card : playerCards) {
 			total = total + card.getRank().getCardValue();
-			numberOfPlayersAces = ifAceThenIncrementAceCount(numberOfPlayersAces,
-					card);
+			numberOfPlayersAces = ifAceThenIncrementAceCount(
+					numberOfPlayersAces, card);
 		}
 		playerHandValue = String.valueOf(total);
 		if ((total <= 11) && numberOfPlayersAces != 0) {
@@ -65,23 +69,25 @@ public class Round {
 		total = 0;
 		for (Card card : dealerCards) {
 			total = total + card.getRank().getCardValue();
-			numberOfDealersAces = ifAceThenIncrementAceCount(numberOfDealersAces,
-					card);
+			numberOfDealersAces = ifAceThenIncrementAceCount(
+					numberOfDealersAces, card);
 		}
 		if ((total <= 11) && numberOfDealersAces != 0) {
 			dealerHandValue = total + 10;
 		} else {
 			dealerHandValue = total;
 		}
-		
+
 	}
 
 	/**
-	 * If the card passed to the method is an ace, increment and return the 
+	 * If the card passed to the method is an ace, increment and return the
 	 * numberOfAces count.
 	 * 
-	 * @param numberOfAces - the number of aces
-	 * @param card - the card to be checked if an ace or not
+	 * @param numberOfAces
+	 *            - the number of aces
+	 * @param card
+	 *            - the card to be checked if an ace or not
 	 * @return numberOfAces - the number of aces
 	 */
 	private int ifAceThenIncrementAceCount(int numberOfAces, Card card) {
@@ -90,20 +96,21 @@ public class Round {
 		}
 		return numberOfAces;
 	}
-	
+
 	/**
-	 * Check that the value of the hand has not gone above 21. For the
-	 * purposes of this check, an ace will always have a value of 1. 
-	 * If the player is bust, deduct the player's bet from the player's 
-	 * credits. If the dealer is bust, add an amount matching the player's 
-	 * bet to the player's credits.
+	 * Check that the value of the hand has not gone above 21. For the purposes
+	 * of this check, an ace will always have a value of 1. If the player is
+	 * bust, deduct the player's bet from the player's credits. If the dealer is
+	 * bust, add an amount matching the player's bet to the player's credits.
 	 * 
-	 * @param cards - the list of cards to be checked
-	 * @param isPlayer - true if this is the player's hand
+	 * @param cards
+	 *            - the list of cards to be checked
+	 * @param isPlayer
+	 *            - true if this is the player's hand
 	 * @return boolean - true if the cards are over 21
 	 */
 	public boolean checkBust(List<Card> cards, boolean isPlayer) {
-		// The total value of cards allowed in a hand of blackjack 
+		// The total value of cards allowed in a hand of blackjack
 		// is 21.
 		int totalValueOfCardsAllowed = 21;
 		int total = 0;
@@ -115,8 +122,6 @@ public class Round {
 				this.bustPlayer = true;
 				this.gameMessage = Consts.PLAYER_BUST;
 				this.playerCredits -= this.playerBet;
-				// If the player is now low on credits, set playerLowOnCredits
-				//to true.
 				checkIfPlayerLowOnCredits();
 				return true;
 			}
@@ -142,8 +147,8 @@ public class Round {
 		int numberOfPlayersAces = 0;
 		for (Card card : playerCards) {
 			totalPlayer = totalPlayer + card.getRank().getCardValue();
-			numberOfPlayersAces = ifAceThenIncrementAceCount(numberOfPlayersAces,
-					card);
+			numberOfPlayersAces = ifAceThenIncrementAceCount(
+					numberOfPlayersAces, card);
 		}
 		// An ace has a value of 1 in the enum "Rank". So a Blackjack will add
 		// up to a value of 11
@@ -188,8 +193,8 @@ public class Round {
 		int numberOfDealersAces = 0;
 		for (Card card : dealerCards) {
 			total = total + card.getRank().getCardValue();
-			numberOfDealersAces = ifAceThenIncrementAceCount(numberOfDealersAces,
-					card);
+			numberOfDealersAces = ifAceThenIncrementAceCount(
+					numberOfDealersAces, card);
 		}
 
 		// A dealer's ace must have a value of 11 as long as that does not
@@ -225,8 +230,8 @@ public class Round {
 
 		for (Card card : playerCards) {
 			totalPlayer = totalPlayer + card.getRank().getCardValue();
-			numberOfPlayersAces = ifAceThenIncrementAceCount(numberOfPlayersAces,
-					card);
+			numberOfPlayersAces = ifAceThenIncrementAceCount(
+					numberOfPlayersAces, card);
 		}
 
 		// Adjust player's hand value for any aces
@@ -246,8 +251,8 @@ public class Round {
 
 		for (Card card : dealerCards) {
 			totalDealer = totalDealer + card.getRank().getCardValue();
-			numberOfDealersAces = ifAceThenIncrementAceCount(numberOfDealersAces,
-					card);
+			numberOfDealersAces = ifAceThenIncrementAceCount(
+					numberOfDealersAces, card);
 		}
 
 		// Adjust dealer's hand value for any aces
@@ -265,14 +270,14 @@ public class Round {
 			if (this.playerHasBlackJack && (dealerCards.size() > 2)) {
 				this.gameMessage = Consts.PLAYER_WINS_WITH_BLACKJACK;
 				this.playerCredits += 1.5 * this.playerBet;
-			// Check to see if the dealer has BlackJack (an Ace and a card
-			// of  value 10) but the player doesn't. If so, the dealer wins.
-			} else if ( (totalDealer == 21) && (dealerCards.size() == 2)
-					&& (!this.playerHasBlackJack) ) {
+				// Check to see if the dealer has BlackJack (an Ace and a card
+				// of value 10) but the player doesn't. If so, the dealer wins.
+			} else if ((totalDealer == 21) && (dealerCards.size() == 2)
+					&& (!this.playerHasBlackJack)) {
 				this.gameMessage = Consts.DEALER_WINS_WITH_BLACKJACK;
 				this.playerCredits -= this.playerBet;
 				// If the player is now low on credits, set playerLowOnCredits
-				//to true.
+				// to true.
 				checkIfPlayerLowOnCredits();
 			} else {
 				this.gameMessage = Consts.DRAW;
@@ -299,25 +304,48 @@ public class Round {
 			}
 			this.playerCredits -= this.playerBet;
 			// If the player is now low on credits, set playerLowOnCredits
-			//to true.
+			// to true.
 			checkIfPlayerLowOnCredits();
 		}
 	}
 
 	/**
-	 * Check whether the player is low on credits. If so, set 
-	 * playerLowOnCredits to "true"
-	 */	
+	 * Check whether the player is low on credits. If so, set playerLowOnCredits
+	 * to "true"
+	 */
 	private void checkIfPlayerLowOnCredits() {
 		if (playerCredits < Consts.LOW_CREDITS_VALUE) {
 			playerCredits = Consts.STARTING_CREDITS;
-			gameMessage=Consts.LOW_CREDITS_MESSAGE;
+			gameMessage = Consts.LOW_CREDITS_MESSAGE;
 		}
 	}
 
 	/**
-	 * Peter, I read in stack overflow that I shouldn't have javadoc comments for
-	 * normal getters and setters as it is just clutter. What say you?
+	 * Check if the player's initial two cards have the same card value.
+	 * If so, then set a boolean flag to true. Note that 10, Jack, Queen 
+	 * and King all have the same card value in BlackJack.
+	 */
+	public void checkIfPlayerCanSplit() {
+		if (this.playerCards.get(0).getRank().getCardValue() == this.playerCards
+				.get(1).getRank().getCardValue()) {
+			this.setPlayerCanSplit(true);
+		}
+	}
+
+	/**
+	 * If the player splits the cards, make two new empty hands. Move the player's
+	 * first card into one of the new hands. Move the player's second card into the 
+	 * other new hand.
+	 */
+	public void playerSplits() {
+		splitPlayer = new SplitPlayer();
+		this.splitPlayer.getSplitLeftPlayerCards().add(this.playerCards.get(0));
+		this.splitPlayer.getSplitRightPlayerCards().add(this.playerCards.get(1));
+	}
+
+	/**
+	 * Peter, I read in stack overflow that I shouldn't have javadoc comments
+	 * for normal getters and setters as it is just clutter. What say you?
 	 */
 	public boolean isBustPlayer() {
 		return bustPlayer;
@@ -366,7 +394,7 @@ public class Round {
 	public void setGameMessage(String gameMessage) {
 		this.gameMessage = gameMessage;
 	}
-	
+
 	public boolean isPlayerHasBlackJack() {
 		return playerHasBlackJack;
 	}
@@ -389,6 +417,22 @@ public class Round {
 
 	public void setDealerHandValue(int dealerHandValue) {
 		this.dealerHandValue = dealerHandValue;
+	}
+
+	public boolean isPlayerCanSplit() {
+		return playerCanSplit;
+	}
+
+	public void setPlayerCanSplit(boolean playerCanSplit) {
+		this.playerCanSplit = playerCanSplit;
+	}
+
+	public SplitPlayer getSplitPlayer() {
+		return splitPlayer;
+	}
+
+	public void setSplitPlayer(SplitPlayer splitPlayer) {
+		this.splitPlayer = splitPlayer;
 	}
 
 }

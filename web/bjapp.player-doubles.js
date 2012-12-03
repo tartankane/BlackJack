@@ -27,7 +27,7 @@ function playerDoubles() {
 			function(data) {
 				
 				// declare variables
-				var lastCardInArray, index, startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, cardImage;
+				var lastCardInArray, index, startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton, cardImage;
 
 				// append the final player card to the placeholder "playercards"
 				lastCardInArray = data.playerCards.length - 1;

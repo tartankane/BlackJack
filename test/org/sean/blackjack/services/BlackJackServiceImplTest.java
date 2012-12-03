@@ -38,8 +38,8 @@ public class BlackJackServiceImplTest {
 		blackJackService.initializeTable(round);
 		blackJackService.startRound(round);
 		
-		assertFalse(round.isPush());
-		assertFalse(round.isPlayerWon());
+//		assertFalse(round.isPush());
+//		assertFalse(round.isPlayerWon());
 		assertFalse(round.isBustPlayer());
 		assertFalse(round.isBustPlayer());
 		assertFalse(round.isPlayerHasBlackJack());
@@ -132,5 +132,59 @@ public class BlackJackServiceImplTest {
 		blackJackService.changeBet(round, betSize);
 		assertEquals(100, round.getPlayerBet());
 	}
+	
+
+	@Test
+	public void testPlayerSplits() {
+		
+		Round round = new Round();
+		round.getPlayerCards().add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
+		
+		BlackJackService blackJackService = new BlackJackServiceImpl();
+		blackJackService.playerSplits(round);
+		
+		assertEquals(1, round.getSplitPlayer().getSplitLeftPlayerCards().size());
+		assertEquals(1, round.getSplitPlayer().getSplitRightPlayerCards().size());
+	}
+
+	
+	@Test
+	public void testSplitLeftHitPlayer() {
+		Round round = new Round();
+		
+		BlackJackService blackJackService = new BlackJackServiceImpl();
+		//Necessary to call blackJackService.startRound to make a deck.
+		blackJackService.startRound(round);
+	
+		round.getPlayerCards().clear();
+		round.getPlayerCards().add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
+		blackJackService.playerSplits(round);
+		
+		assertEquals(1, round.getSplitPlayer().getSplitLeftPlayerCards().size());
+		blackJackService.splitLeftHitPlayer(round);
+		assertEquals(2, round.getSplitPlayer().getSplitLeftPlayerCards().size());
+		
+	}
+
+//	@Test
+//	public void testSplitLeftPlayerStands() {
+//		fail("Not yet implemented");
+//		
+//	}
+//
+//	@Test
+//	public void testSplitRightHitPlayer() {
+//		fail("Not yet implemented");
+//		
+//	}
+//
+//	@Test
+//	public void testSplitRightPlayerStands() {
+//		fail("Not yet implemented");
+//		
+//	}
+
 
 }

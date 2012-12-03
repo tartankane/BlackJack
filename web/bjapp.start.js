@@ -5,6 +5,11 @@
 // Change the buttons available to the player.
 function startGame() {
 
+	// On a very slow connection, prevent the player from pressing the 
+	// start button or changing the bet drop down menu repeatedly
+	document.getElementById('startgamebutton').disabled = true;
+	document.getElementById('betdropdown').disabled = true;
+	
 	// At the start of each game, clear the dealer cards, player cards and
 	// in-game messages
 	document.getElementById('dealercards').innerHTML = '';
@@ -23,7 +28,7 @@ function startGame() {
 			function(data) {
 
 				// declare variables
-				var index, backOfCard, cardImage, startGameButton, hitPlayerButton, playerStandsButton, dealerMessage, playerMessage, playerDoublesButton, betDropDown;
+				var index, backOfCard, cardImage, startGameButton, hitPlayerButton, playerStandsButton, playerSplitsButton, dealerMessage, playerMessage, playerDoublesButton, betDropDown;
 				
 				// Display the player credits and player bet to the
 				// placeholders "credits" and "bet"
@@ -102,27 +107,19 @@ function startGame() {
 				playerDoublesButton.style.display = 'inline';
 				playerDoublesButton.disabled = false;
 				
-				//EVERYTHING BELOW HER EIS FOR TEST PURPOSES
-				// display the initial player cards to the placeholder
-				// "playercards"
-				for (index = 0; index < data.playerCards.length; index++) {
-					cardImage = "images/"
-							+ data.playerCards[index].rank
-							+ data.playerCards[index].suit + ".png";
-					$('#leftie').append(
-							$('<img src= ' + cardImage + '>').fadeIn(
-									2000));
+				if (data.playerCanSplit) {
+					playerSplitsButton = document
+						.getElementById('playersplitsbutton');
+					playerSplitsButton.style.display = 'inline';
+					playerSplitsButton.disabled = false;
 				}
 				
-				for (index = 0; index < data.playerCards.length; index++) {
-					cardImage = "images/"
-							+ data.playerCards[index].rank
-							+ data.playerCards[index].suit + ".png";
-					$('#rightie').append(
-							$('<img src= ' + cardImage + '>').fadeIn(
-									2000));
-				}
+
 
 			});
+	
+	// Make the start button and the bet drop down menu usable again.
+	document.getElementById('startgamebutton').disabled = false;
+	document.getElementById('betdropdown').disabled = false;
 			
 }

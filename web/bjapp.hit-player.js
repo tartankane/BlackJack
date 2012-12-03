@@ -8,6 +8,7 @@ function hitPlayer() {
 	document.getElementById('playerstandsbutton').disabled = true;
 	document.getElementById('playerdoublesbutton').disabled = true;
 	document.getElementById('hitplayerbutton').disabled = true;
+	document.getElementById('playersplitsbutton').disabled = true;
 
 	// jQuery.getJSON loads JSON-encoded data from the server using a GET HTTP
 	// request.
@@ -21,7 +22,7 @@ function hitPlayer() {
 			function(data) {
 
 				// declare variables
-				var startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, lastCardInArray, cardImage;
+				var startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton, lastCardInArray, cardImage;
 
 				// append a new player card to the placeholder "playercards"
 				lastCardInArray = data.playerCards.length - 1;
@@ -43,9 +44,10 @@ function hitPlayer() {
 					$.getScript("bjapp.shuffle-button-visibility.js");
 
 				} else {
-					// If the player doesn't go bust, make buttons clickable again 
-					// that were earlier disabled to prevent the player from 
-					// pressing buttons repeatedly.
+					// If the player doesn't go bust, make the playerStandsButton
+					// and the hitPlayerButton clickable again.
+					// The playerSplitsButton and playerDoublesButton will stay disabled as 
+					// they are only valid when the player has the starting two cards.
 					document.getElementById('playerstandsbutton').disabled = false;
 					document.getElementById('hitplayerbutton').disabled = false;
 				}
@@ -60,22 +62,5 @@ function hitPlayer() {
 				document.getElementById('bet').innerHTML = "Your Bet: "
 					+ data.playerBet;
 				
-				//EVERYTHING BELOW HERE IS FOR TEST
-				lastCardInArray = data.playerCards.length - 1;
-				cardImage = "images/"
-						+ data.playerCards[lastCardInArray].rank
-						+ data.playerCards[lastCardInArray].suit
-						+ ".png";
-				$('#leftie').append(
-						$('<img src= ' + cardImage + '>').fadeIn(2000));
-				
-				lastCardInArray = data.playerCards.length - 1;
-				cardImage = "images/"
-						+ data.playerCards[lastCardInArray].rank
-						+ data.playerCards[lastCardInArray].suit
-						+ ".png";
-				$('#rightie').append(
-						$('<img src= ' + cardImage + '>').fadeIn(2000));
-
 			});	
 }

@@ -109,24 +109,80 @@ public class BlackJackController {
 		blackJackService.playerStands(round);
 		return round;
 	}
-	
+
 	/**
 	 * This method will be automatically run when a jQuery.getJSON function
-	 * containing the request to "getMoreCredits.do" is called by the client.
+	 * containing the request to "playerSplits.do" is called by the client.
 	 * 
 	 * @return Round as a JSON object
 	 */
-//	@RequestMapping("/getMoreCredits")
-//	public @ResponseBody
-//	Round getMoreCredits() {
-//		
-//		blackJackService.getMoreCredits(round);
-//		return round;
-//	}
+	@RequestMapping("/playerSplits")
+	public @ResponseBody
+	Round playerSplits() {
+		System.out.println("I'm splitting. I'm outa here");
+		blackJackService.playerSplits(round);
+		return round;
+	}
 	
 	/**
 	 * This method will be automatically run when a jQuery.getJSON function
-	 * containing the request to "getMoreCredits.do" is called by the client.
+	 * containing the request to "splitLeftHitPlayer.do" is called by the client.
+	 * 
+	 * @return Round as a JSON object
+	 */
+	@RequestMapping("/splitLeftHitPlayer")
+	public @ResponseBody
+	Round splitLeftHitPlayer() {
+		System.out.println("I'm splitLeftHitPlayer. I'm outa here");
+		blackJackService.splitLeftHitPlayer(round);
+		return round;
+	}
+	
+	/**
+	 * This method will be automatically run when a jQuery.getJSON function
+	 * containing the request to "splitLeftPlayerStands.do" is called by the client.
+	 * 
+	 * @return Round as a JSON object
+	 */
+	@RequestMapping("/splitLeftPlayerStands")
+	public @ResponseBody
+	Round splitLeftPlayerStands() {
+		System.out.println("I'm splitLeftPlayerStands. I'm outa here");
+		blackJackService.splitLeftPlayerStands(round);
+		return round;
+	}
+	
+	/**
+	 * This method will be automatically run when a jQuery.getJSON function
+	 * containing the request to "splitRightHitPlayer.do" is called by the client.
+	 * 
+	 * @return Round as a JSON object
+	 */
+	@RequestMapping("/splitRightHitPlayer")
+	public @ResponseBody
+	Round splitRightHitPlayer() {
+		System.out.println("I'm splitRightHitPlayer. I'm outa here");
+		blackJackService.splitRightHitPlayer(round);
+		return round;
+	}
+	
+	/**
+	 * This method will be automatically run when a jQuery.getJSON function
+	 * containing the request to "splitRightPlayerStands.do" is called by the client.
+	 * 
+	 * @return Round as a JSON object
+	 */
+	@RequestMapping("/splitRightPlayerStands")
+	public @ResponseBody
+	Round splitRightPlayerStands() {
+		System.out.println("I'm splitRightPlayerStands. I'm outa here");
+		blackJackService.splitRightPlayerStands(round);
+		return round;
+	}
+	
+	/**
+	 * This method will be automatically run when a jQuery.getJSON function
+	 * containing the request to "changeBet.do" is called by the client.
 	 * 
 	 * @return Round as a JSON object
 	 */
