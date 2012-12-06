@@ -251,8 +251,14 @@ public class RoundTest {
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		round.playerSplits();
 		
-		assertEquals(1, round.getSplitPlayer().getSplitLeftPlayerCards().size());
-		assertEquals(1, round.getSplitPlayer().getSplitRightPlayerCards().size());
+		assertEquals(1, round.getSplitPlayer().getSplitLeftCards().size());
+		assertEquals(1, round.getSplitPlayer().getSplitRightCards().size());
+	}
+	
+	
+	@Test
+	public void checkIfPlayerLowOnCredits() {
+		fail("not yet implemented");
 	}
 
 }

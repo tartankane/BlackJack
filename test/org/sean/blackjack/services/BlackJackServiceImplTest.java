@@ -144,8 +144,8 @@ public class BlackJackServiceImplTest {
 		BlackJackService blackJackService = new BlackJackServiceImpl();
 		blackJackService.playerSplits(round);
 		
-		assertEquals(1, round.getSplitPlayer().getSplitLeftPlayerCards().size());
-		assertEquals(1, round.getSplitPlayer().getSplitRightPlayerCards().size());
+		assertEquals(1, round.getSplitPlayer().getSplitLeftCards().size());
+		assertEquals(1, round.getSplitPlayer().getSplitRightCards().size());
 	}
 
 	
@@ -162,9 +162,9 @@ public class BlackJackServiceImplTest {
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		blackJackService.playerSplits(round);
 		
-		assertEquals(1, round.getSplitPlayer().getSplitLeftPlayerCards().size());
+		assertEquals(1, round.getSplitPlayer().getSplitLeftCards().size());
 		blackJackService.splitLeftHitPlayer(round);
-		assertEquals(2, round.getSplitPlayer().getSplitLeftPlayerCards().size());
+		assertEquals(2, round.getSplitPlayer().getSplitLeftCards().size());
 		
 	}
 

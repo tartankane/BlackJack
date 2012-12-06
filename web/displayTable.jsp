@@ -80,17 +80,19 @@ p {
 	</p>
 	
 	<div class="wrap">
-  		<div id="splitcardsleft" class="left"></div>	
+		<!-- Holder for the player's cards split to the left -->
+  		<div id="splitcardsleft" class="left"></div>
+  		<!-- Holder for the player's cards split to the right -->	
   		<div id="splitcardsright" class="right"></div>
 	</div>
 	
-	<div class="wrap">
+	<div class="wrap2">
   		<div id="splitleftplayermessage" class="msg3">Holder for the left player message</div>
 
 		<div id="splitrightplayermessage" class="msg4">Holder for the right player message</div>
 	</div>
 	
-	<div class="wrap">
+	<div class="wrap2">
   		<div id="splitleftgamemessages" class="msg3">Holder for the left in-game messages</div>
 
 		<div id="splitrightgamemessages" class="msg4">Holder for the right in-game messages</div>
@@ -102,12 +104,12 @@ p {
 
 		<button id="leftplayerstandsbutton" type="button" class="btn3"
 			onclick="splitLeftPlayerStands();" title="Stick With These Cards">Stand</button>
+					
+		<button id="rightplayerstandsbutton" type="button" class="btn4"
+			onclick="splitRightPlayerStands();" title="Stick With These Cards">Stand</button>
 			
 		<button id="righthitplayerbutton" type="button" class="btn4"
 			onclick="splitRightHitPlayer();" title="Get Another Card">Hit Me</button>
-
-		<button id="rightplayerstandsbutton" type="button" class="btn4"
-			onclick="splitRightPlayerStands();" title="Stick With These Cards">Stand</button>
 	</div>
 
 

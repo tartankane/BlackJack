@@ -175,7 +175,7 @@ public class BlackJackController {
 	@RequestMapping("/splitRightPlayerStands")
 	public @ResponseBody
 	Round splitRightPlayerStands() {
-		System.out.println("I'm splitRightPlayerStands. I'm outa here");
+		System.out.println("I'm splitRightPlayerStands controller. I'm outa here");
 		blackJackService.splitRightPlayerStands(round);
 		return round;
 	}

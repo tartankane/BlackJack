@@ -56,12 +56,12 @@ public class Round {
 			numberOfPlayersAces = ifAceThenIncrementAceCount(
 					numberOfPlayersAces, card);
 		}
-		playerHandValue = String.valueOf(total);
+		this.playerHandValue = String.valueOf(total);
 		if ((total <= 11) && numberOfPlayersAces != 0) {
 			if (playerFinishedDrawingCards) {
-				playerHandValue = String.valueOf(total + 10);
+				this.playerHandValue = String.valueOf(total + 10);
 			} else {
-				playerHandValue = playerHandValue + " or "
+				this.playerHandValue = this.playerHandValue + " or "
 						+ String.valueOf(total + 10);
 			}
 		}
@@ -109,10 +109,10 @@ public class Round {
 	 *            - true if this is the player's hand
 	 * @return boolean - true if the cards are over 21
 	 */
-	public boolean checkBust(List<Card> cards, boolean isPlayer) {
+	public boolean checkBust(List<Card> cards, boolean isPlayer, boolean isSplit) {
 		// The total value of cards allowed in a hand of blackjack
 		// is 21.
-		int totalValueOfCardsAllowed = 21;
+		int totalValueOfCardsAllowed = Consts.TWENTY_ONE;
 		int total = 0;
 		for (Card card : cards) {
 			total = total + card.getRank().getCardValue();
@@ -128,7 +128,27 @@ public class Round {
 		} else {
 			if (total > totalValueOfCardsAllowed) {
 				this.gameMessage = Consts.DEALER_BUST;
-				this.playerCredits += this.playerBet;
+				if (isSplit){
+					if ( !this.splitPlayer.isSplitLeftBust() ) {
+						this.splitPlayer.setSplitLeftGameMessage(Consts.DEALER_BUST);
+					}
+					if ( !this.splitPlayer.isSplitRightBust() ) {
+						this.splitPlayer.setSplitRightGameMessage(Consts.DEALER_BUST);
+					}
+					
+					// The dealer is bust. If neither of the player's hands are bust, then increment 
+					// the player credits by both bets
+					if ( !this.splitPlayer.isSplitLeftBust() && !this.splitPlayer.isSplitRightBust() ) {
+						this.playerCredits += 2* this.playerBet;
+					} else {
+						//One of the split hands is bust. This code is not reached if both hands are bust
+						this.playerCredits += this.playerBet;
+					}
+				} else {
+					// Not a split hand
+					this.playerCredits += this.playerBet;
+				}
+
 				return true;
 			}
 		}
@@ -145,14 +165,14 @@ public class Round {
 
 		int totalPlayer = 0;
 		int numberOfPlayersAces = 0;
-		for (Card card : playerCards) {
+		for (Card card : this.playerCards) {
 			totalPlayer = totalPlayer + card.getRank().getCardValue();
 			numberOfPlayersAces = ifAceThenIncrementAceCount(
 					numberOfPlayersAces, card);
 		}
 		// An ace has a value of 1 in the enum "Rank". So a Blackjack will add
 		// up to a value of 11
-		if ((totalPlayer == 11) && (playerCards.size() == 2)
+		if ((totalPlayer == 11) && (this.playerCards.size() == 2)
 				&& (numberOfPlayersAces == 1)) {
 			this.playerHasBlackJack = true;
 			return true;
@@ -189,7 +209,6 @@ public class Round {
 	public boolean dealerMustStand() {
 		int total = 0;
 		int minValueToStand = 17;
-		int maxValueToStand = 21;
 		int numberOfDealersAces = 0;
 		for (Card card : dealerCards) {
 			total = total + card.getRank().getCardValue();
@@ -206,7 +225,7 @@ public class Round {
 			}
 		}
 
-		if ((total >= minValueToStand) && (total <= maxValueToStand)) {
+		if ((total >= minValueToStand) && (total <= Consts.TWENTY_ONE)) {
 			return true;
 		} else {
 			return false;
@@ -245,7 +264,7 @@ public class Round {
 		// 10).
 		// This is possible here because the player's hand value has been
 		// adjusted for aces
-		if ((totalPlayer == 21) && (playerCards.size() == 2)) {
+		if ((totalPlayer == Consts.TWENTY_ONE) && (playerCards.size() == 2)) {
 			this.playerHasBlackJack = true;
 		}
 
@@ -272,7 +291,7 @@ public class Round {
 				this.playerCredits += 1.5 * this.playerBet;
 				// Check to see if the dealer has BlackJack (an Ace and a card
 				// of value 10) but the player doesn't. If so, the dealer wins.
-			} else if ((totalDealer == 21) && (dealerCards.size() == 2)
+			} else if ((totalDealer == Consts.TWENTY_ONE) && (dealerCards.size() == 2)
 					&& (!this.playerHasBlackJack)) {
 				this.gameMessage = Consts.DEALER_WINS_WITH_BLACKJACK;
 				this.playerCredits -= this.playerBet;
@@ -297,7 +316,7 @@ public class Round {
 		}
 
 		if (totalPlayer < totalDealer) {
-			if ((totalDealer == 21) && (dealerCards.size() == 2)) {
+			if ((totalDealer == Consts.TWENTY_ONE) && (dealerCards.size() == 2)) {
 				this.gameMessage = Consts.DEALER_WINS_WITH_BLACKJACK;
 			} else {
 				this.gameMessage = Consts.PLAYER_LOSES;
@@ -313,9 +332,9 @@ public class Round {
 	 * Check whether the player is low on credits. If so, set playerLowOnCredits
 	 * to "true"
 	 */
-	private void checkIfPlayerLowOnCredits() {
-		if (playerCredits < Consts.LOW_CREDITS_VALUE) {
-			playerCredits = Consts.STARTING_CREDITS;
+	public void checkIfPlayerLowOnCredits() {
+		if (this.playerCredits < Consts.LOW_CREDITS_VALUE) {
+			this.playerCredits = Consts.STARTING_CREDITS;
 			gameMessage = Consts.LOW_CREDITS_MESSAGE;
 		}
 	}
@@ -326,10 +345,12 @@ public class Round {
 	 * and King all have the same card value in BlackJack.
 	 */
 	public void checkIfPlayerCanSplit() {
-		if (this.playerCards.get(0).getRank().getCardValue() == this.playerCards
-				.get(1).getRank().getCardValue()) {
-			this.setPlayerCanSplit(true);
-		}
+		//Only for testing!!!!!!!!!!!!!!!!!!!
+//		if (this.playerCards.get(0).getRank().getCardValue() == this.playerCards
+//				.get(1).getRank().getCardValue()) {
+//			this.setPlayerCanSplit(true);
+//		}
+		this.setPlayerCanSplit(true);
 	}
 
 	/**
@@ -339,8 +360,162 @@ public class Round {
 	 */
 	public void playerSplits() {
 		splitPlayer = new SplitPlayer();
-		this.splitPlayer.getSplitLeftPlayerCards().add(this.playerCards.get(0));
-		this.splitPlayer.getSplitRightPlayerCards().add(this.playerCards.get(1));
+		this.splitPlayer.getSplitLeftCards().add(this.playerCards.get(0));
+		this.splitPlayer.getSplitRightCards().add(this.playerCards.get(1));
+	}
+
+	
+	public void checkWhoWonAfterSplit() {
+		System.out.println("I got here. I am not crazy");
+		int totalPlayer = 0;
+		int totalDealer = 0;
+		int numberOfPlayersAces = 0;
+		int numberOfDealersAces = 0;
+
+		
+		//Compare left hand side first
+
+		
+
+		// Check to see if player has a BlackJack (an Ace and a card of value
+		// 10).
+		// This is possible here because the player's hand value has been
+		// adjusted for aces
+//		if ((totalPlayer == Consts.TWENTY_ONE) && (playerCards.size() == 2)) {
+//			this.playerHasBlackJack = true;
+//		}
+
+		if (!this.splitPlayer.isSplitLeftBust()) {
+			for (Card card : this.splitPlayer.getSplitLeftCards()) {
+				totalPlayer = totalPlayer + card.getRank().getCardValue();
+				numberOfPlayersAces = ifAceThenIncrementAceCount(
+						numberOfPlayersAces, card);
+			}
+			// Adjust player's hand value for any aces
+			for (int i = 0; i < numberOfPlayersAces; i++) {
+				if ((totalPlayer <= 11)) {
+					totalPlayer = totalPlayer + 10;
+				}
+			}
+			for (Card card : this.dealerCards) {
+				totalDealer = totalDealer + card.getRank().getCardValue();
+				numberOfDealersAces = ifAceThenIncrementAceCount(
+						numberOfDealersAces, card);
+			}
+			// Adjust dealer's hand value for any aces
+			for (int i = 0; i < numberOfDealersAces; i++) {
+				if ((totalDealer <= 11)) {
+					totalDealer = totalDealer + 10;
+				}
+			}
+			if (totalPlayer == totalDealer) {
+
+				// Check to see if the player has BlackJack (an Ace and a card of
+				// value
+				// 10) but the dealer doesn't. If so, the player wins.
+				//			if (this.playerHasBlackJack && (dealerCards.size() > 2)) {
+				//				this.gameMessage = Consts.PLAYER_WINS_WITH_BLACKJACK;
+				//				this.playerCredits += 1.5 * this.playerBet;
+				//				// Check to see if the dealer has BlackJack (an Ace and a card
+				//				// of value 10) but the player doesn't. If so, the dealer wins.
+				//			} else if ((totalDealer == Consts.TWENTY_ONE) && (dealerCards.size() == 2)
+				//					&& (!this.playerHasBlackJack)) {
+				//				this.gameMessage = Consts.DEALER_WINS_WITH_BLACKJACK;
+				//				this.playerCredits -= this.playerBet;
+				//				// If the player is now low on credits, set playerLowOnCredits
+				//				// to true.
+				//				checkIfPlayerLowOnCredits();
+				//			} else {
+				//				this.gameMessage = Consts.DRAW;
+				//			}
+				this.splitPlayer.setSplitLeftGameMessage(Consts.DRAW);
+			}
+			if (totalPlayer > totalDealer) {
+
+				//			if (this.playerHasBlackJack) {
+				//				this.gameMessage = Consts.PLAYER_WINS_WITH_BLACKJACK;
+				//				this.playerCredits += 1.5 * this.playerBet;
+				//			} else {
+				//				this.gameMessage = Consts.PLAYER_WINS;
+				//				this.playerCredits += this.playerBet;
+				//			}
+				this.splitPlayer.setSplitLeftGameMessage(Consts.PLAYER_WINS);
+
+
+					this.playerCredits += this.playerBet;
+
+			}
+			if (totalPlayer < totalDealer) {
+				//			if ((totalDealer == Consts.TWENTY_ONE) && (round.getDealerCards().size() == 2)) {
+				//				this.gameMessage = Consts.DEALER_WINS_WITH_BLACKJACK;
+				//			} else {
+				//				this.gameMessage = Consts.PLAYER_LOSES;
+				//			}
+				this.splitPlayer.setSplitLeftGameMessage(Consts.PLAYER_LOSES);
+
+					this.playerCredits -= this.playerBet;
+
+
+			}
+			System.out.println(this.splitPlayer.getSplitLeftGameMessage());
+		}
+		
+
+
+		if (!this.splitPlayer.isSplitRightBust()) {
+			
+			totalPlayer = 0;
+			totalDealer = 0;
+			numberOfPlayersAces = 0;
+			numberOfDealersAces = 0;
+			
+			
+			for (Card card : this.splitPlayer.getSplitRightCards()) {
+				totalPlayer = totalPlayer + card.getRank().getCardValue();
+				numberOfPlayersAces = ifAceThenIncrementAceCount(
+						numberOfPlayersAces, card);
+			}
+			// Adjust player's hand value for any aces
+			for (int i = 0; i < numberOfPlayersAces; i++) {
+				if ((totalPlayer <= 11)) {
+					totalPlayer = totalPlayer + 10;
+				}
+			}
+			for (Card card : this.dealerCards) {
+				totalDealer = totalDealer + card.getRank().getCardValue();
+				numberOfDealersAces = ifAceThenIncrementAceCount(
+						numberOfDealersAces, card);
+			}
+			// Adjust dealer's hand value for any aces
+			for (int i = 0; i < numberOfDealersAces; i++) {
+				if ((totalDealer <= 11)) {
+					totalDealer = totalDealer + 10;
+				}
+			}
+			if (totalPlayer == totalDealer) {
+
+				this.splitPlayer.setSplitRightGameMessage(Consts.DRAW);
+			}
+			if (totalPlayer > totalDealer) {
+				this.splitPlayer.setSplitRightGameMessage(Consts.PLAYER_WINS);
+
+					this.playerCredits += this.playerBet;
+
+			}
+			if (totalPlayer < totalDealer) {
+				this.splitPlayer.setSplitRightGameMessage(Consts.PLAYER_LOSES);
+
+
+					this.playerCredits -= this.playerBet;
+
+
+				// If the player is now low on credits, set playerLowOnCredits
+				// to true.
+				this.checkIfPlayerLowOnCredits();
+			}
+			System.out.println(this.splitPlayer.getSplitRightGameMessage());
+		}
+	
 	}
 
 	/**

@@ -122,7 +122,7 @@ h1 small {
 .msg3 {
 	float:left;
 	text-align: center;
-/*	visibility: hidden; */
+	visibility: hidden; 
 	height: 50px; 
 /*	height: 5%;*/
 	font-size: 150%;
@@ -131,29 +131,11 @@ h1 small {
 .msg4 {
 	float:right;
 	text-align: center;
-/*	visibility: hidden; */
+	visibility: hidden; 
 	height: 50px; 
 /*	height: 5%;*/
 	font-size: 150%;
 }
-
-/* Everything below her eis for test purposes */
-/* .wrapper {
-    margin: 0 auto;
-    width: 100%;
-}
-
-.column1 {
-	   align:left;
-       width: 50%;
-       font-size: 250%;
-}
-
-.column2 {
-	   align:right;
-       width: 50%;
-       font-size: 250%;
-} */
 
 .wrap {
   overflow:hidden;
@@ -187,7 +169,7 @@ h1 small {
 .btn3 {
 /*	text-align: left;*/
 	display: none;
-	  float:left;
+	float:left;
 	font-size: 150%;
 }
 

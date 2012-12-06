@@ -1,9 +1,8 @@
-// Clear the dealer's displayed cards. This is necessary to remove the 
-// image of the hidden card. Re-display the dealer's first card and append 
-// the dealer's other cards to the first card.
-// Declare an in-game message.
-// Change the buttons available to the player.
+
 function playerSplits() {
+	// Declare variables
+	var hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton;
+	
 	hitPlayerButton = document.getElementById('hitplayerbutton');
 	hitPlayerButton.style.display = 'none';
 
@@ -16,6 +15,13 @@ function playerSplits() {
 	playerSplitsButton = document.getElementById('playersplitsbutton');
 	playerSplitsButton.style.display = 'none';
 
+	splitCardsLeft = document.getElementById('splitcardsleft');
+	splitCardsLeft.style.display = 'inline';
+	
+	splitCardsRight = document.getElementById('splitcardsright');
+	splitCardsRight.style.display = 'inline';
+
+
 	// jQuery.getJSON loads JSON-encoded data from the server using a GET HTTP
 	// request.
 	$.getJSON(
@@ -26,22 +32,33 @@ function playerSplits() {
 			},
 			// data is the JSON object returned from the server
 			function(data) {
-
+				// Declare variables
 				var leftHitPlayerButton, leftPlayerStandsButton;
-				// display the split cards to the placeholders
-				// "playercards"
+		
+				//Hide the existing player cards and messages
+				playerCards = document.getElementById('playercards');
+				playerCards.style.display = 'none';
+
+				playerMessage = document.getElementById('playermessage');
+				playerMessage.style.display = 'none';
+
+				gameMessages = document.getElementById('gamemessages');
+//				gameMessages.style.display = 'none';
+				gameMessages.style.display = 'hidden';
+				
+				
 				console.log(data);
 				cardImage = "images/"
-						+ data.splitPlayer.splitLeftPlayerCards[0].rank
-						+ data.splitPlayer.splitLeftPlayerCards[0].suit + ".png";
+						+ data.splitPlayer.splitLeftCards[0].rank
+						+ data.splitPlayer.splitLeftCards[0].suit + ".png";
 				$('#splitcardsleft').append(
 						$('<img src= ' + cardImage + '>').fadeIn(
 								2000));
 								
 
 				cardImage = "images/"
-					+ data.splitPlayer.splitRightPlayerCards[0].rank
-					+ data.splitPlayer.splitRightPlayerCards[0].suit + ".png";
+					+ data.splitPlayer.splitRightCards[0].rank
+					+ data.splitPlayer.splitRightCards[0].suit + ".png";
 				$('#splitcardsright').append(
 						$('<img src= ' + cardImage + '>').fadeIn(
 								2000));
@@ -55,6 +72,12 @@ function playerSplits() {
 					.getElementById('leftplayerstandsbutton');
 				leftPlayerStandsButton.style.display = 'inline';
 				leftPlayerStandsButton.disabled = false;
+				
+				//Display the value of the player's credits and current bet size
+				document.getElementById('credits').innerHTML = "Your Credits: "
+					+ data.playerCredits;
+				document.getElementById('bet').innerHTML = "Your Bet: "
+					+ data.playerBet;
 
 			});
 			

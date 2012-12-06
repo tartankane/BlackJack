@@ -4,7 +4,8 @@
 // Display the values of the player's and dealer's hands.
 // Change the buttons available to the player.
 function startGame() {
-
+	//LIST ALL THE VARS
+	
 	// On a very slow connection, prevent the player from pressing the 
 	// start button or changing the bet drop down menu repeatedly
 	document.getElementById('startgamebutton').disabled = true;
@@ -15,7 +16,25 @@ function startGame() {
 	document.getElementById('dealercards').innerHTML = '';
 	document.getElementById('playercards').innerHTML = '';
 	document.getElementById('gamemessages').innerHTML = '';
-
+	document.getElementById('splitleftplayermessage').innerHTML = '';
+	document.getElementById('splitrightplayermessage').innerHTML = '';
+	document.getElementById('splitleftgamemessages').innerHTML = '';
+	document.getElementById('splitrightgamemessages').innerHTML = '';
+	document.getElementById('splitcardsleft').innerHTML = '';
+	document.getElementById('splitcardsright').innerHTML = '';
+	
+	//Hide the split cards, if any.
+	splitCardsLeft = document.getElementById('splitcardsleft');
+	splitCardsLeft.style.display = 'none';
+	
+	splitCardsRight = document.getElementById('splitcardsright');
+	splitCardsRight.style.display = 'none';
+	
+	//Make the regular player cards visible
+	//Necessary to set the display to block so that the cards are centered.
+	playerCards = document.getElementById('playercards');
+	playerCards.style.display = 'block';
+	
 	// jQuery.getJSON loads JSON-encoded data from the server using a GET HTTP
 	// request.
 	$.getJSON(

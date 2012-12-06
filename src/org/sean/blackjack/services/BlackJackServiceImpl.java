@@ -45,16 +45,16 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 */
 	public void startRound(Round round) {
 		boolean playerFinishedDrawingCards = false;
-//		Card card;
-	
+		// Card card;
+
 		round.setBustPlayer(false);
 		round.setPlayerHasBlackJack(false);
 		round.setPlayerCanSplit(false);
 		round.setGameMessage(Consts.BLANK_MESSAGE);
-		// If the player doubled the bet the previous round, set it 
+		// If the player doubled the bet the previous round, set it
 		// back to the correct value.
 		if (this.playerDoubledBet) {
-			round.setPlayerBet(round.getPlayerBet()/2);
+			round.setPlayerBet(round.getPlayerBet() / 2);
 			this.playerDoubledBet = false;
 		}
 		round.getDealerCards().clear();
@@ -91,11 +91,9 @@ public class BlackJackServiceImpl implements BlackJackService {
 	public void hitPlayer(Round round) {
 		boolean isPlayer = true;
 		boolean playerFinishedDrawingCards = false;
-//		Card card = deck.dealRandomCard();
-//		round.getPlayerCards().add(card);
+		boolean isSplit = false;
 		round.getPlayerCards().add(deck.dealRandomCard());
-//		round.checkBustPlayer();
-		round.checkBust(round.getPlayerCards(), isPlayer);
+		round.checkBust(round.getPlayerCards(), isPlayer, isSplit);
 		round.calculateHandValues(playerFinishedDrawingCards);
 	}
 
@@ -112,17 +110,17 @@ public class BlackJackServiceImpl implements BlackJackService {
 	public void playerDoubles(Round round) {
 		boolean isPlayer = true;
 		boolean playerFinishedDrawingCards = false;
-		
-		//Double the player's bet
+		boolean isSplit = false;
+		// Double the player's bet
 		round.setPlayerBet(2 * round.getPlayerBet());
 		this.playerDoubledBet = true;
-//		Card card;
-//		card = deck.dealRandomCard();
-//		round.getPlayerCards().add(card);
+		// Card card;
+		// card = deck.dealRandomCard();
+		// round.getPlayerCards().add(card);
 		round.getPlayerCards().add(deck.dealRandomCard());
 		playerFinishedDrawingCards = true;
-//		if (round.checkBustPlayer()) {
-		if (round.checkBust(round.getPlayerCards(), isPlayer)) {
+		// if (round.checkBustPlayer()) {
+		if (round.checkBust(round.getPlayerCards(), isPlayer, isSplit)) {
 			round.calculateHandValues(playerFinishedDrawingCards);
 			return;
 		}
@@ -141,7 +139,7 @@ public class BlackJackServiceImpl implements BlackJackService {
 	public void playerStands(Round round) {
 		boolean isPlayer = false;
 		boolean playerFinishedDrawingCards = true;
-
+		boolean isSplit = false;
 		// Check if the player has blackjack and that the dealer's visible card
 		// excludes the possibility of making a jackpot (visible card has value
 		// of 2 to 9).
@@ -155,8 +153,8 @@ public class BlackJackServiceImpl implements BlackJackService {
 
 		// Deal cards to the dealer until the dealer either goes bust or stands
 		while (!round.dealerMustStand()) {
-//			Card card = deck.dealRandomCard();
-//			round.getDealerCards().add(card);
+			// Card card = deck.dealRandomCard();
+			// round.getDealerCards().add(card);
 			round.getDealerCards().add(deck.dealRandomCard());
 			/*
 			 * If the player has a BlackJack, then the dealer should not be
@@ -168,8 +166,8 @@ public class BlackJackServiceImpl implements BlackJackService {
 				round.calculateHandValues(playerFinishedDrawingCards);
 				return;
 			}
-//			if (round.checkBustDealer()) {
-			if (round.checkBust(round.getDealerCards(), isPlayer)) {
+			// if (round.checkBustDealer()) {
+			if (round.checkBust(round.getDealerCards(), isPlayer, isSplit)) {
 				round.calculateHandValues(playerFinishedDrawingCards);
 				return;
 			}
@@ -185,31 +183,31 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 * @param round
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
-	 * @param betSize - a String received from the client and set by a 
-	 * 					drop down list
+	 * @param betSize
+	 *            - a String received from the client and set by a drop down
+	 *            list
 	 */
 	public void changeBet(Round round, String betSize) {
 		round.setPlayerBet(Integer.valueOf(betSize));
 		// In case the player just doubled the bet, set playerDoubledBet
-		// to false so that the new bet value set by the client will not be 
+		// to false so that the new bet value set by the client will not be
 		// modified by this.startRound().
-		playerDoubledBet=false;
+		playerDoubledBet = false;
 	}
 
 	/**
-	 * Splits the player's beginning two cards into two different hands of one card
-	 * each. This will enable the player to play out each hand separately.
+	 * Splits the player's beginning two cards into two different hands of one
+	 * card each. This will enable the player to play out each hand separately.
 	 * 
 	 * @param round
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
 	public void playerSplits(Round round) {
-		
+
 		round.playerSplits();
 	}
 
-	
 	/**
 	 * Deal a single card to the player's hand on the left of the client screen.
 	 * Check to see if the player has gone bust.
@@ -221,25 +219,40 @@ public class BlackJackServiceImpl implements BlackJackService {
 	public void splitLeftHitPlayer(Round round) {
 		boolean isSplitLeft = true;
 		boolean splitLeftFinishedDrawingCards = false;
-		round.getSplitPlayer().getSplitLeftPlayerCards().add(deck.dealRandomCard());
-		round.getSplitPlayer().checkSplitBust(round.getSplitPlayer().getSplitLeftPlayerCards(), isSplitLeft);
-//		round.calculateHandValues(playerFinishedDrawingCards);
+		boolean bust = false;
+		round.getSplitPlayer().getSplitLeftCards().add(deck.dealRandomCard());
+		// Peter, is it ok to pass the instance of round to the method here? It 
+		// looks odd. I don't know any other way to access the fields of round in 
+		// splitPlayer. I could move the method to Round but I want it to live in 
+		// SplitPlayer.
+		bust = round.getSplitPlayer().checkSplitBust(
+				round.getSplitPlayer().getSplitLeftCards(), isSplitLeft);
+		if (bust) {
+			round.setPlayerCredits(round.getPlayerCredits()
+					- round.getPlayerBet());
+		}
+		round.getSplitPlayer().calculateSplitHandValues(
+				round.getSplitPlayer().getSplitLeftCards(),
+				splitLeftFinishedDrawingCards , isSplitLeft);
 	}
 
 	/**
-	 * Change the player's bet
+	 *
 	 * 
 	 * @param round
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
 	public void splitLeftPlayerStands(Round round) {
-		// TODO Auto-generated method stub
-		
+		boolean isSplitLeft = true;
+		boolean splitLeftFinishedDrawingCards = true;
+		round.getSplitPlayer().calculateSplitHandValues(
+				round.getSplitPlayer().getSplitLeftCards(),
+				splitLeftFinishedDrawingCards , isSplitLeft);
 	}
 
 	/**
-	 * Change the player's bet
+	 * 
 	 * 
 	 * @param round
 	 *            - The round object represents the current state of the
@@ -248,19 +261,58 @@ public class BlackJackServiceImpl implements BlackJackService {
 	public void splitRightHitPlayer(Round round) {
 		boolean isSplitLeft = false;
 		boolean splitRightFinishedDrawingCards = false;
-		
+		boolean bust = false;
+		round.getSplitPlayer().getSplitRightCards().add(deck.dealRandomCard());
+		bust = round.getSplitPlayer().checkSplitBust(
+				round.getSplitPlayer().getSplitRightCards(), isSplitLeft);
+		if (bust) {
+			round.setPlayerCredits(round.getPlayerCredits()
+					- round.getPlayerBet());
+		}
+		round.getSplitPlayer().calculateSplitHandValues(
+				round.getSplitPlayer().getSplitRightCards(),
+				splitRightFinishedDrawingCards , isSplitLeft);
 	}
 
 	/**
-	 * Change the player's bet
+	 * 
 	 * 
 	 * @param round
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
 	public void splitRightPlayerStands(Round round) {
-		// TODO Auto-generated method stub
+		boolean isSplit = true;
+		boolean isSplitLeft = false;
+		boolean splitRightFinishedDrawingCards = true;
+		round.getSplitPlayer().calculateSplitHandValues(
+				round.getSplitPlayer().getSplitRightCards(),
+				splitRightFinishedDrawingCards , isSplitLeft);
 		
+		
+		// Deal cards to the dealer until the dealer either goes bust or stands
+		while (!round.dealerMustStand()) {
+			// Card card = deck.dealRandomCard();
+			// round.getDealerCards().add(card);
+			round.getDealerCards().add(deck.dealRandomCard());
+
+			if (round.checkBust(round.getDealerCards(), false, isSplit)) {
+				// This will calculate the dealer's hand value for display to the screen
+				// Note that it will also calculate the value of the original player's hand but
+				// this is ignored.
+				round.calculateHandValues(true);
+				
+				return;
+			}
+		}
+
+		// This will calculate the dealer's hand value for display to the screen
+		// Note that it will also calculate the value of the original player's hand but
+		// this is ignored.
+		round.calculateHandValues(true);
+		
+		// The dealer stands. Check who won.
+		round.checkWhoWonAfterSplit();
 	}
 
 }
