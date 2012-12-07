@@ -1,4 +1,14 @@
+<!-- the footer has been temporarily commented out.
+
+I need to add what is called a Sticky Footer as described in:
+
+http://stackoverflow.com/questions/8815784/how-to-keep-footer-at-the-bottom-even-with-dynamic-height-website
+
+
 <div id="footer">
-	<p>No rights reserved. Please visit our <a href="tc.jsp">Terms and Conditions</a> 
-	page to find out why you probably don't want to supply your credit card to this site.</p>
-</div>
+	No rights reserved. You probably don't want to supply your credit card to this site.
+</div>  -->
+
+
+
+

@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BlackJackServiceImpl implements BlackJackService {
-
-	// Note to self: I have no getters and setters for following fields. Is this
-	// a problem?
-	// I guess I am not injecting into these fields.
+	
 	private Deck deck;
 	private boolean playerDoubledBet = false;
 
@@ -221,10 +218,6 @@ public class BlackJackServiceImpl implements BlackJackService {
 		boolean splitLeftFinishedDrawingCards = false;
 		boolean bust = false;
 		round.getSplitPlayer().getSplitLeftCards().add(deck.dealRandomCard());
-		// Peter, is it ok to pass the instance of round to the method here? It 
-		// looks odd. I don't know any other way to access the fields of round in 
-		// splitPlayer. I could move the method to Round but I want it to live in 
-		// SplitPlayer.
 		bust = round.getSplitPlayer().checkSplitBust(
 				round.getSplitPlayer().getSplitLeftCards(), isSplitLeft);
 		if (bust) {
@@ -237,7 +230,9 @@ public class BlackJackServiceImpl implements BlackJackService {
 	}
 
 	/**
-	 *
+	 * The player has finished adding cards to the hand on the left of the client 
+	 * screen. Calculate the hand value for this hand converting aces to 11 if that
+	 * does not cause the hand to go bust.
 	 * 
 	 * @param round
 	 *            - The round object represents the current state of the
@@ -252,7 +247,8 @@ public class BlackJackServiceImpl implements BlackJackService {
 	}
 
 	/**
-	 * 
+	 * Deal a single card to the player's hand on the right of the client screen.
+	 * Check to see if the player has gone bust.
 	 * 
 	 * @param round
 	 *            - The round object represents the current state of the
@@ -268,6 +264,7 @@ public class BlackJackServiceImpl implements BlackJackService {
 		if (bust) {
 			round.setPlayerCredits(round.getPlayerCredits()
 					- round.getPlayerBet());
+			round.checkIfPlayerLowOnCredits();
 		}
 		round.getSplitPlayer().calculateSplitHandValues(
 				round.getSplitPlayer().getSplitRightCards(),
@@ -275,7 +272,11 @@ public class BlackJackServiceImpl implements BlackJackService {
 	}
 
 	/**
-	 * 
+	 * The player has finished adding cards to the hand on the right of the client 
+	 * screen. Calculate the hand value for this hand converting aces to 11 if that
+	 * does not cause the hand to go bust. Deal cards to the dealer until the dealer 
+	 * either goes bust or reaches a hand value between 17 and 21 (inclusive).
+	 * Check if the player's active hands win against the dealer's hand. 
 	 * 
 	 * @param round
 	 *            - The round object represents the current state of the

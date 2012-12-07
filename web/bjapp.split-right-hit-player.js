@@ -47,6 +47,19 @@ function splitRightHitPlayer() {
 					rightPlayerStandsButton = document.getElementById('rightplayerstandsbutton');
 					rightPlayerStandsButton.style.display = 'none';
 					
+					
+					//Make the starting buttons visible
+					startGameButton = document.getElementById('startgamebutton');
+					startGameButton.style.display = 'inline';
+
+					betDropDown = document
+					.getElementById('betdropdown');
+					betDropDown.style.display = 'inline';
+					
+					// Make the in-game game message visible and display it.
+					document.getElementById('gamemessages').style.visibility = 'visible';
+					document.getElementById('gamemessages').innerHTML = data.gameMessage;
+					
 					// If the right hand has gone bust, but the left hand is still in play,
 					// then need to proceed to deal the dealer's cards. Calling the
 					// splitRightPlayerStands() will cause this to happen
@@ -86,6 +99,7 @@ function splitRightHitPlayer() {
 					+ data.playerCredits;
 				document.getElementById('bet').innerHTML = "Your Bet: "
 					+ data.playerBet;
+
 
 			});	
 }

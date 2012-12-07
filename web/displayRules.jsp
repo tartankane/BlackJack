@@ -8,7 +8,7 @@
 	<style>
 	p
 	{
-	font-size:200%;
+	font-size:175%;
 	text-align:center;
 	} 
 	</style>
@@ -24,27 +24,33 @@
 	<jsp:include page="/header.jsp"/>
 	
 
-	<p>
- <br>Basic BlackJack Rules </br>
-	<br></br>
-
-	<br>CACHE BUSTER</br>
+	
+ <div class="header">Basic BlackJack Rules</div>
+ <p>
 	<br>BlackJack is a variant of Pontoon and "21"</br>
-	<br>Only one deck is used. Take advantage of this. In casinos, multiple decks are used.</br>
-	<br>A new deck is used for each game</br>
-	<br>After the opening cards have been dealt, the player can double down to double the bet, but only receives one card</br>
-	<br>Stand is also known as stick</br>
-	<br>Hit is also known as twist</br>
+	<br>Whoever is closest to 21 wins</br>
+	<br>If you go over 21, you are "Bust" and you lose</br>
 	<br>An ace has a value of 1 or 11</br>
-	<br>Unlike in Pontoon, there are no 5 card tricks in Blackjack</br>
 	<br>The dealer has to stand on a hand of 17 to 21</br>
 	<br>The dealer has to hit on a hand of 16 or less</br>
 	<br>A normal win pays 1:1</br>
-	<br>A win with a blackjack pays 3:2</br>
-	<br>A draw (called a push in BlackJack) results in the player's bet being returned</br>
-	<br>The dealer must stand if the dealer has an ace that, when treated as 11, brings the dealer's hand to between 17 and 21, e.g. a 6 and an ace</br>
+	<br>A win with a blackjack (Ace and 10 or royal) pays 3:2</br>
+	<br>A draw (called a push in BlackJack) results in no loss or gain for the player</br>
+</p>
+
 	<br></br>
-	 <br>Advanced BlackJack Rules </br>
+	   <div class="header">Advanced BlackJack Rules</div>
+	 <p>
+	<br>After the opening cards have been dealt, the player can double down to double the bet, but only receives one card</br>
+	<br>The dealer must stand if the dealer has an ace that, when treated as 11, brings the dealer's hand to between 17 and 21, e.g. a 6 and an ace</br>
+	<br>If the player has matching cards, the player can split the cards and play them as two separate hands</br>
+	<br>10, Jack, Queen and King are all considered matching cards for the purposes of a split</br>
+	<br>Winning with a BlackJack only pays 1:1 after the player has split</br>		
+	<br>Unlike in casinos, a single new deck is used for each game</br>
+	<br>Stand is known as stick in Pontoon</br>
+	<br>Hit is known as twist in Pontoon</br>	
+	<br>Unlike in Pontoon, there are no 5 card tricks in Blackjack</br>
+	<br>There are many variations to these rules in actual casinos.</br>
 	</p>
 
 	

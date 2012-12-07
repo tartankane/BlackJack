@@ -14,8 +14,6 @@ public class SplitPlayer {
 	private String splitRightGameMessage = "";
 	private boolean splitLeftBust = false;
 	private boolean splitRightBust = false;
-	private boolean splitLeftHasBlackJack;
-	private boolean splitRightHasBlackJack;
 	private String splitLeftHandValue;
 	private String splitRightHandValue;
 
@@ -57,6 +55,19 @@ public class SplitPlayer {
 		return false;
 	}
 
+	/**
+	 * 
+	 * Calculate the value of the cards passed to the method. Adjust for aces.
+	 * 
+	 * @param cards
+	 *            - the list of cards to be checked
+	 * @param playerFinishedDrawingCards
+	 *            - true if the player has gone bust or has pressed the stand
+	 *            button, false otherwise.
+	 * @param isSplitLeft
+	 *            - true if this is the player's left hand split, false if it is
+	 *            the right hand split
+	 */
 	public void calculateSplitHandValues(List<Card> cards,
 			boolean playerFinishedDrawingCards, boolean isSplitLeft) {
 		// The boolean playerFinishedDrawingCards indicates that the player has
@@ -75,24 +86,36 @@ public class SplitPlayer {
 		}
 
 		if (isSplitLeft) {
-			this.splitLeftHandValue = calculateHandValue(playerFinishedDrawingCards,
-					total, numberOfPlayersAces);
-			System.out.println("Can we even get here?");
+			this.splitLeftHandValue = calculateHandValue(
+					playerFinishedDrawingCards, total, numberOfPlayersAces);
 		} else {
 			this.splitRightHandValue = calculateHandValue(
 					playerFinishedDrawingCards, total, numberOfPlayersAces);
 		}
 	}
 
+	/**
+	 * 
+	 * Calculate the string representation, adjusted for aces, of the value of
+	 * the cards passed to the method.
+	 * 
+	 * @param playerFinishedDrawingCards
+	 *            - true if the player has gone bust or has pressed the stand
+	 *            button, false otherwise.
+	 * @param total
+	 *            - the value of the hand before adjusting for aces
+	 * @param numberOfAces
+	 *            - the number of aces
+	 * @return handValue - the String representation of the value of the hand,
+	 *         allowing for aces
+	 */
 	private String calculateHandValue(boolean playerFinishedDrawingCards,
-			int total, int numberOfPlayersAces) {
+			int total, int numberOfAces) {
 		String handValue;
 		handValue = String.valueOf(total);
-		if ((total <= 11) && numberOfPlayersAces != 0) {
-			System.out.println("What about here? and playerFinishedDrawingCards is " + playerFinishedDrawingCards);
+		if ((total <= 11) && numberOfAces != 0) {
 			if (playerFinishedDrawingCards) {
 				handValue = String.valueOf(total + 10);
-				System.out.println("cant get here at all" );
 			} else {
 				handValue = handValue + " or " + String.valueOf(total + 10);
 			}
@@ -114,370 +137,63 @@ public class SplitPlayer {
 		if ((card.getRank().getCardValue() == 1)) {
 			numberOfAces++;
 		}
-		System.out.println("Number of aces in spltplayer ifAceThenIncrementAceCount is " + numberOfAces);
 		return numberOfAces;
 	}
 
-//	public void checkWhoWon(Round round) {
-//		System.out.println("I got here. I am not crazy");
-//		int totalPlayer = 0;
-//		int totalDealer = 0;
-//		int numberOfPlayersAces = 0;
-//		int numberOfDealersAces = 0;
-//
-//		
-//		//Compare left hand side first
-//
-//		
-//
-//		// Check to see if player has a BlackJack (an Ace and a card of value
-//		// 10).
-//		// This is possible here because the player's hand value has been
-//		// adjusted for aces
-////		if ((totalPlayer == Consts.TWENTY_ONE) && (playerCards.size() == 2)) {
-////			this.playerHasBlackJack = true;
-////		}
-//
-//		if (!this.splitLeftBust) {
-//			for (Card card : this.splitLeftCards) {
-//				totalPlayer = totalPlayer + card.getRank().getCardValue();
-//				numberOfPlayersAces = ifAceThenIncrementAceCount(
-//						numberOfPlayersAces, card);
-//			}
-//			// Adjust player's hand value for any aces
-//			for (int i = 0; i < numberOfPlayersAces; i++) {
-//				if ((totalPlayer <= 11)) {
-//					totalPlayer = totalPlayer + 10;
-//				}
-//			}
-//			for (Card card : round.getDealerCards()) {
-//				totalDealer = totalDealer + card.getRank().getCardValue();
-//				numberOfDealersAces = ifAceThenIncrementAceCount(
-//						numberOfDealersAces, card);
-//			}
-//			// Adjust dealer's hand value for any aces
-//			for (int i = 0; i < numberOfDealersAces; i++) {
-//				if ((totalDealer <= 11)) {
-//					totalDealer = totalDealer + 10;
-//				}
-//			}
-//			if (totalPlayer == totalDealer) {
-//
-//				// Check to see if the player has BlackJack (an Ace and a card of
-//				// value
-//				// 10) but the dealer doesn't. If so, the player wins.
-//				//			if (this.playerHasBlackJack && (dealerCards.size() > 2)) {
-//				//				this.gameMessage = Consts.PLAYER_WINS_WITH_BLACKJACK;
-//				//				this.playerCredits += 1.5 * this.playerBet;
-//				//				// Check to see if the dealer has BlackJack (an Ace and a card
-//				//				// of value 10) but the player doesn't. If so, the dealer wins.
-//				//			} else if ((totalDealer == Consts.TWENTY_ONE) && (dealerCards.size() == 2)
-//				//					&& (!this.playerHasBlackJack)) {
-//				//				this.gameMessage = Consts.DEALER_WINS_WITH_BLACKJACK;
-//				//				this.playerCredits -= this.playerBet;
-//				//				// If the player is now low on credits, set playerLowOnCredits
-//				//				// to true.
-//				//				checkIfPlayerLowOnCredits();
-//				//			} else {
-//				//				this.gameMessage = Consts.DRAW;
-//				//			}
-//				this.splitLeftGameMessage = Consts.DRAW;
-//			}
-//			if (totalPlayer > totalDealer) {
-//
-//				//			if (this.playerHasBlackJack) {
-//				//				this.gameMessage = Consts.PLAYER_WINS_WITH_BLACKJACK;
-//				//				this.playerCredits += 1.5 * this.playerBet;
-//				//			} else {
-//				//				this.gameMessage = Consts.PLAYER_WINS;
-//				//				this.playerCredits += this.playerBet;
-//				//			}
-//				this.splitLeftGameMessage = Consts.PLAYER_WINS;
-//				if (splitRightBust) {
-//					//All of the remaining player's bet is on this hand
-//					round.setPlayerCredits(round.getPlayerCredits()
-//							+ round.getPlayerBet());
-//
-//				} else {
-//					//Half the player's total bet is on this hand
-//					round.setPlayerCredits(round.getPlayerCredits()
-//							+ (round.getPlayerBet() / 2));
-//				}
-//			}
-//			if (totalPlayer < totalDealer) {
-//				//			if ((totalDealer == Consts.TWENTY_ONE) && (round.getDealerCards().size() == 2)) {
-//				//				this.gameMessage = Consts.DEALER_WINS_WITH_BLACKJACK;
-//				//			} else {
-//				//				this.gameMessage = Consts.PLAYER_LOSES;
-//				//			}
-//				this.splitLeftGameMessage = Consts.PLAYER_LOSES;
-//
-//				if (splitRightBust) {
-//					//All of the remaining player's bet is on this hand
-//					round.setPlayerCredits(round.getPlayerCredits()
-//							- round.getPlayerBet());
-//
-//				} else {
-//					//Half the player's total bet is on this hand
-//					round.setPlayerCredits(round.getPlayerCredits()
-//							- (round.getPlayerBet() / 2));
-//				}
-//
-//				// If the player is now low on credits, set playerLowOnCredits
-//				// to true.
-//				round.checkIfPlayerLowOnCredits();
-//			}
-//			System.out.println(this.splitLeftGameMessage);
-//		}
-//		
-//		if (!this.splitRightBust) {
-//			
-//			totalPlayer = 0;
-//			totalDealer = 0;
-//			numberOfPlayersAces = 0;
-//			numberOfDealersAces = 0;
-//			
-//			for (Card card : this.splitRightCards) {
-//				totalPlayer = totalPlayer + card.getRank().getCardValue();
-//				numberOfPlayersAces = ifAceThenIncrementAceCount(
-//						numberOfPlayersAces, card);
-//			}
-//			// Adjust player's hand value for any aces
-//			for (int i = 0; i < numberOfPlayersAces; i++) {
-//				if ((totalPlayer <= 11)) {
-//					totalPlayer = totalPlayer + 10;
-//				}
-//			}
-//			for (Card card : round.getDealerCards()) {
-//				totalDealer = totalDealer + card.getRank().getCardValue();
-//				numberOfDealersAces = ifAceThenIncrementAceCount(
-//						numberOfDealersAces, card);
-//			}
-//			// Adjust dealer's hand value for any aces
-//			for (int i = 0; i < numberOfDealersAces; i++) {
-//				if ((totalDealer <= 11)) {
-//					totalDealer = totalDealer + 10;
-//				}
-//			}
-//			if (totalPlayer == totalDealer) {
-//
-//				// Check to see if the player has BlackJack (an Ace and a card of
-//				// value
-//				// 10) but the dealer doesn't. If so, the player wins.
-//				//			if (this.playerHasBlackJack && (dealerCards.size() > 2)) {
-//				//				this.gameMessage = Consts.PLAYER_WINS_WITH_BLACKJACK;
-//				//				this.playerCredits += 1.5 * this.playerBet;
-//				//				// Check to see if the dealer has BlackJack (an Ace and a card
-//				//				// of value 10) but the player doesn't. If so, the dealer wins.
-//				//			} else if ((totalDealer == Consts.TWENTY_ONE) && (dealerCards.size() == 2)
-//				//					&& (!this.playerHasBlackJack)) {
-//				//				this.gameMessage = Consts.DEALER_WINS_WITH_BLACKJACK;
-//				//				this.playerCredits -= this.playerBet;
-//				//				// If the player is now low on credits, set playerLowOnCredits
-//				//				// to true.
-//				//				checkIfPlayerLowOnCredits();
-//				//			} else {
-//				//				this.gameMessage = Consts.DRAW;
-//				//			}
-//				this.splitRightGameMessage = Consts.DRAW;
-//			}
-//			if (totalPlayer > totalDealer) {
-//
-//				//			if (this.playerHasBlackJack) {
-//				//				this.gameMessage = Consts.PLAYER_WINS_WITH_BLACKJACK;
-//				//				this.playerCredits += 1.5 * this.playerBet;
-//				//			} else {
-//				//				this.gameMessage = Consts.PLAYER_WINS;
-//				//				this.playerCredits += this.playerBet;
-//				//			}
-//				this.splitRightGameMessage = Consts.PLAYER_WINS;
-//				if (splitLeftBust) {
-//					//All of the remaining player's bet is on this hand
-//					round.setPlayerCredits(round.getPlayerCredits()
-//							+ round.getPlayerBet());
-//
-//				} else {
-//					//Half the player's total bet is on this hand
-//					round.setPlayerCredits(round.getPlayerCredits()
-//							+ (round.getPlayerBet() / 2));
-//				}
-//			}
-//			if (totalPlayer < totalDealer) {
-//				//			if ((totalDealer == Consts.TWENTY_ONE) && (round.getDealerCards().size() == 2)) {
-//				//				this.gameMessage = Consts.DEALER_WINS_WITH_BLACKJACK;
-//				//			} else {
-//				//				this.gameMessage = Consts.PLAYER_LOSES;
-//				//			}
-//				this.splitRightGameMessage = Consts.PLAYER_LOSES;
-//
-//				if (splitLeftBust) {
-//					//All of the remaining player's bet is on this hand
-//					round.setPlayerCredits(round.getPlayerCredits()
-//							- round.getPlayerBet());
-//
-//				} else {
-//					//Half the player's total bet is on this hand
-//					round.setPlayerCredits(round.getPlayerCredits()
-//							- (round.getPlayerBet() / 2));
-//				}
-//
-//				// If the player is now low on credits, set playerLowOnCredits
-//				// to true.
-//				round.checkIfPlayerLowOnCredits();
-//			}
-//			System.out.println(this.splitRightGameMessage);
-//		}
-//		
-//	}
-
-	/**
-	 * @return the splitLeftGameMessage
-	 */
 	public String getSplitLeftGameMessage() {
 		return splitLeftGameMessage;
 	}
 
-	/**
-	 * @param splitLeftGameMessage
-	 *            the splitLeftGameMessage to set
-	 */
 	public void setSplitLeftGameMessage(String splitLeftGameMessage) {
 		this.splitLeftGameMessage = splitLeftGameMessage;
 	}
 
-	/**
-	 * @return the splitRightGameMessage
-	 */
 	public String getSplitRightGameMessage() {
 		return splitRightGameMessage;
 	}
 
-	/**
-	 * @param splitRightGameMessage
-	 *            the splitRightGameMessage to set
-	 */
 	public void setSplitRightGameMessage(String splitRightGameMessage) {
 		this.splitRightGameMessage = splitRightGameMessage;
 	}
 
-	/**
-	 * @return the splitLeftBust
-	 */
 	public boolean isSplitLeftBust() {
 		return splitLeftBust;
 	}
 
-	/**
-	 * @param splitLeftBust
-	 *            the splitLeftBust to set
-	 */
 	public void setSplitLeftBust(boolean splitLeftBust) {
 		this.splitLeftBust = splitLeftBust;
 	}
 
-	/**
-	 * @return the splitRightBust
-	 */
 	public boolean isSplitRightBust() {
 		return splitRightBust;
 	}
 
-	/**
-	 * @param splitRightBust
-	 *            the splitRightBust to set
-	 */
 	public void setSplitRightBust(boolean splitRightBust) {
 		this.splitRightBust = splitRightBust;
 	}
 
-	/**
-	 * @return the splitLeftHasBlackJack
-	 */
-	public boolean isSplitLeftHasBlackJack() {
-		return splitLeftHasBlackJack;
-	}
-
-	/**
-	 * @param splitLeftHasBlackJack
-	 *            the splitLeftHasBlackJack to set
-	 */
-	public void setSplitLeftHasBlackJack(boolean splitLeftHasBlackJack) {
-		this.splitLeftHasBlackJack = splitLeftHasBlackJack;
-	}
-
-	/**
-	 * @return the splitRightHasBlackJack
-	 */
-	public boolean isSplitRightHasBlackJack() {
-		return splitRightHasBlackJack;
-	}
-
-	/**
-	 * @param splitRightHasBlackJack
-	 *            the splitRightHasBlackJack to set
-	 */
-	public void setSplitRightHasBlackJack(boolean splitRightHasBlackJack) {
-		this.splitRightHasBlackJack = splitRightHasBlackJack;
-	}
-
-	/**
-	 * @return the splitLeftHandValue
-	 */
 	public String getSplitLeftHandValue() {
 		return splitLeftHandValue;
 	}
 
-	/**
-	 * @param splitLeftHandValue
-	 *            the splitLeftHandValue to set
-	 */
 	public void setSplitLeftHandValue(String splitLeftHandValue) {
 		this.splitLeftHandValue = splitLeftHandValue;
 	}
 
-	/**
-	 * @return the splitRightHandValue
-	 */
 	public String getSplitRightHandValue() {
 		return splitRightHandValue;
 	}
 
-	/**
-	 * @param splitRightHandValue
-	 *            the splitRightHandValue to set
-	 */
 	public void setSplitRightHandValue(String splitRightHandValue) {
 		this.splitRightHandValue = splitRightHandValue;
 	}
 
-	/**
-	 * @return the splitLeftCards
-	 */
 	public List<Card> getSplitLeftCards() {
 		return splitLeftCards;
 	}
 
-	/**
-	 * @param splitLeftCards
-	 *            the splitLeftCards to set
-	 */
-	public void setSplitLeftCards(List<Card> splitLeftCards) {
-		this.splitLeftCards = splitLeftCards;
-	}
-
-	/**
-	 * @return the splitRightCards
-	 */
 	public List<Card> getSplitRightCards() {
 		return splitRightCards;
-	}
-
-	/**
-	 * @param splitRightCards
-	 *            the splitRightCards to set
-	 */
-	public void setSplitRightCards(List<Card> splitRightCards) {
-		this.splitRightCards = splitRightCards;
 	}
 
 }

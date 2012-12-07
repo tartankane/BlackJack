@@ -42,9 +42,11 @@ function playerSplits() {
 				playerMessage = document.getElementById('playermessage');
 				playerMessage.style.display = 'none';
 
-				gameMessages = document.getElementById('gamemessages');
-//				gameMessages.style.display = 'none';
-				gameMessages.style.display = 'hidden';
+//				gameMessages = document.getElementById('gamemessages');
+//				gameMessages.style.display = 'hidden';
+				
+				document.getElementById('gamemessages').style.visibility = 'visible';
+				document.getElementById('gamemessages').innerHTML = data.gameMessage;
 				
 				
 				console.log(data);

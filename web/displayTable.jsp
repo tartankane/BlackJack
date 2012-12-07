@@ -21,10 +21,17 @@ p {
 
 	<jsp:include page="/header.jsp" />
 
+	<div class="wrap">
+		<!-- Holder for the player's cards split to the left -->
+  		<div id="credits" class="msg5" title="This is your credit total" >Holder for player credits</div>
+  		<!-- Holder for the player's cards split to the right -->	
+  		<div id="bet" class="msg6" title="This is the total you have bet for this game">Holder for player bet</div>
+	</div>
 
-	<div id="credits" class="msg1" title="This is your credit total" >Holder for player credits</div>
+<!--  	<div id="credits" class="left" title="This is your credit total" >Holder for player credits</div>
 	
-	<div id="bet" class="msg1" style="text-align: right" title="This is the total you have bet for this game">Holder for player bet</div>
+	<div id="bet" class="right" style="text-align: right" title="This is the total you have bet for this game">Holder for player bet</div>
+-->
 
 	<!-- Holder for the dealer's cards -->
 	<div id="dealercards" class="card"></div>
@@ -65,7 +72,7 @@ p {
 			
 		<button id="playersplitsbutton" type="button" class="btn2"
 			onclick="playerSplits();"
-			title="Do the Splitz">Split Cards</button>
+			title="Split your cards into two hands. Your bet applies to each hand so, in effect, you double your bet">Split Cards</button>
 	</p>
 	
 	<p>
@@ -126,6 +133,7 @@ p {
 	<script src="bjapp.player-doubles.js"></script>
 	<script src="bjapp.player-splits.js"></script>
 	<script src="bjapp.player-changes-bet.js"></script>
+	
 	<jsp:include page="/footer.jsp" />
 	
 

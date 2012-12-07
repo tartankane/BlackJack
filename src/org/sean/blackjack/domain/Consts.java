@@ -23,6 +23,7 @@ public final class Consts  {
 	  public static final String PLAYER_BUST = "You lost because you went bust (over 21). The Dealer has taken your bet.";
 	  public static final String DEALER_BUST = "The Dealer went bust! You won.";
 	  public static final String LOW_CREDITS_MESSAGE = "You lost! Because your credits were low, they have been topped up.";
+	  public static final String PLAYER_SPLITS = "When you split, your bet applies to each hand and all BlackJacks are simply treated as 21.";
 
 	  /**
 	 * The constructor is private as it is not supposed

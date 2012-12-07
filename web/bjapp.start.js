@@ -30,10 +30,27 @@ function startGame() {
 	splitCardsRight = document.getElementById('splitcardsright');
 	splitCardsRight.style.display = 'none';
 	
-	//Make the regular player cards visible
-	//Necessary to set the display to block so that the cards are centered.
+//	splitLeftPlayerMessage = document.getElementById('splitleftplayermessage');
+//	splitLeftPlayerMessage.style.display = 'none';
+//	
+//	splitRightPlayerMessage = document.getElementById('splitrightplayermessage');
+//	splitRightPlayerMessage.style.display = 'none';
+//	
+//	splitLeftGameMessages = document.getElementById('splitleftgamemessages');
+//	splitLeftGameMessages.style.display = 'none';
+//	
+//	splitRightGameMessages = document.getElementById('splitrightgamemessages');
+//	splitRightGameMessages.style.display = 'none';
+	
+	// Make the regular player cards visible.
+	// It is necessary to set the display to block so that the cards are centered.
 	playerCards = document.getElementById('playercards');
 	playerCards.style.display = 'block';
+	
+	// Make the regular player message visible.
+	// It is necessary to set the display to block so that the message is centered.
+	playerMessage = document.getElementById('playermessage');
+	playerMessage.style.display = 'block';
 	
 	// jQuery.getJSON loads JSON-encoded data from the server using a GET HTTP
 	// request.
