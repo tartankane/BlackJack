@@ -4,7 +4,8 @@
 // Display the values of the player's and dealer's hands.
 // Change the buttons available to the player.
 function startGame() {
-	//LIST ALL THE VARS
+	// declare variables
+	var splitCardsLeft, splitCardsRight;
 	
 	// On a very slow connection, prevent the player from pressing the 
 	// start button or changing the bet drop down menu repeatedly
@@ -29,19 +30,7 @@ function startGame() {
 	
 	splitCardsRight = document.getElementById('splitcardsright');
 	splitCardsRight.style.display = 'none';
-	
-//	splitLeftPlayerMessage = document.getElementById('splitleftplayermessage');
-//	splitLeftPlayerMessage.style.display = 'none';
-//	
-//	splitRightPlayerMessage = document.getElementById('splitrightplayermessage');
-//	splitRightPlayerMessage.style.display = 'none';
-//	
-//	splitLeftGameMessages = document.getElementById('splitleftgamemessages');
-//	splitLeftGameMessages.style.display = 'none';
-//	
-//	splitRightGameMessages = document.getElementById('splitrightgamemessages');
-//	splitRightGameMessages.style.display = 'none';
-	
+
 	// Make the regular player cards visible.
 	// It is necessary to set the display to block so that the cards are centered.
 	playerCards = document.getElementById('playercards');
@@ -126,7 +115,8 @@ function startGame() {
 				
 				betDropDown = document
 						.getElementById('betdropdown');
-				betDropDown.style.display = 'none';
+//				betDropDown.style.display = 'none';
+				betDropDown.style.visibility="hidden"
 
 				hitPlayerButton = document
 						.getElementById('hitplayerbutton');

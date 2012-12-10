@@ -9,7 +9,7 @@ import java.util.List;
  * available when the player is dealt two cards of equal hand value.
  * 
  */
-public class SplitPlayer {
+public class SplitHand {
 	private String splitLeftGameMessage = "";
 	private String splitRightGameMessage = "";
 	private boolean splitLeftBust = false;

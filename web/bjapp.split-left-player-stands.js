@@ -1,5 +1,9 @@
 
 function splitLeftPlayerStands() {
+	
+	// declare variables
+	var hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton;
+	
 	hitPlayerButton = document.getElementById('hitplayerbutton');
 	hitPlayerButton.style.display = 'none';
 
@@ -23,6 +27,7 @@ function splitLeftPlayerStands() {
 			// data is the JSON object returned from the server
 			function(data) {
 
+				// declare variables
 				var leftHitPlayerButton, leftPlayerStandsButton, rightHitPlayerButton, rightPlayerStandsButton;
 				console.log(data);
 
@@ -45,7 +50,7 @@ function splitLeftPlayerStands() {
 				
 				// Make the value of the player's hand visible and display it.
 				document.getElementById('splitleftplayermessage').style.visibility = 'visible';
-				document.getElementById('splitleftplayermessage').innerHTML="The Player's Cards. Total equals " + data.splitPlayer.splitLeftHandValue;
+				document.getElementById('splitleftplayermessage').innerHTML="The Player's Cards. Total equals " + data.splitHand.splitLeftHandValue;
 				
 
 

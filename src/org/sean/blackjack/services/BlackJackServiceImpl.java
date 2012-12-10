@@ -217,15 +217,15 @@ public class BlackJackServiceImpl implements BlackJackService {
 		boolean isSplitLeft = true;
 		boolean splitLeftFinishedDrawingCards = false;
 		boolean bust = false;
-		round.getSplitPlayer().getSplitLeftCards().add(deck.dealRandomCard());
-		bust = round.getSplitPlayer().checkSplitBust(
-				round.getSplitPlayer().getSplitLeftCards(), isSplitLeft);
+		round.getSplitHand().getSplitLeftCards().add(deck.dealRandomCard());
+		bust = round.getSplitHand().checkSplitBust(
+				round.getSplitHand().getSplitLeftCards(), isSplitLeft);
 		if (bust) {
 			round.setPlayerCredits(round.getPlayerCredits()
 					- round.getPlayerBet());
 		}
-		round.getSplitPlayer().calculateSplitHandValues(
-				round.getSplitPlayer().getSplitLeftCards(),
+		round.getSplitHand().calculateSplitHandValues(
+				round.getSplitHand().getSplitLeftCards(),
 				splitLeftFinishedDrawingCards , isSplitLeft);
 	}
 
@@ -241,8 +241,8 @@ public class BlackJackServiceImpl implements BlackJackService {
 	public void splitLeftPlayerStands(Round round) {
 		boolean isSplitLeft = true;
 		boolean splitLeftFinishedDrawingCards = true;
-		round.getSplitPlayer().calculateSplitHandValues(
-				round.getSplitPlayer().getSplitLeftCards(),
+		round.getSplitHand().calculateSplitHandValues(
+				round.getSplitHand().getSplitLeftCards(),
 				splitLeftFinishedDrawingCards , isSplitLeft);
 	}
 
@@ -258,16 +258,16 @@ public class BlackJackServiceImpl implements BlackJackService {
 		boolean isSplitLeft = false;
 		boolean splitRightFinishedDrawingCards = false;
 		boolean bust = false;
-		round.getSplitPlayer().getSplitRightCards().add(deck.dealRandomCard());
-		bust = round.getSplitPlayer().checkSplitBust(
-				round.getSplitPlayer().getSplitRightCards(), isSplitLeft);
+		round.getSplitHand().getSplitRightCards().add(deck.dealRandomCard());
+		bust = round.getSplitHand().checkSplitBust(
+				round.getSplitHand().getSplitRightCards(), isSplitLeft);
 		if (bust) {
 			round.setPlayerCredits(round.getPlayerCredits()
 					- round.getPlayerBet());
 			round.checkIfPlayerLowOnCredits();
 		}
-		round.getSplitPlayer().calculateSplitHandValues(
-				round.getSplitPlayer().getSplitRightCards(),
+		round.getSplitHand().calculateSplitHandValues(
+				round.getSplitHand().getSplitRightCards(),
 				splitRightFinishedDrawingCards , isSplitLeft);
 	}
 
@@ -286,8 +286,8 @@ public class BlackJackServiceImpl implements BlackJackService {
 		boolean isSplit = true;
 		boolean isSplitLeft = false;
 		boolean splitRightFinishedDrawingCards = true;
-		round.getSplitPlayer().calculateSplitHandValues(
-				round.getSplitPlayer().getSplitRightCards(),
+		round.getSplitHand().calculateSplitHandValues(
+				round.getSplitHand().getSplitRightCards(),
 				splitRightFinishedDrawingCards , isSplitLeft);
 		
 		

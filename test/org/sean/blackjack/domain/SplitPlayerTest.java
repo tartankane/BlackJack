@@ -20,34 +20,34 @@ public class SplitPlayerTest {
 		blackJackServiceImpl.playerSplits(round);
 
 		round.getDealerCards().clear();
-		round.getSplitPlayer().getSplitLeftCards().clear();
-		round.getSplitPlayer().getSplitRightCards().clear();	
+		round.getSplitHand().getSplitLeftCards().clear();
+		round.getSplitHand().getSplitRightCards().clear();	
 
-		round.getSplitPlayer().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
-		round.getSplitPlayer().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.SIX));
+		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
+		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.SIX));
 		
-		cards = round.getSplitPlayer().getSplitLeftCards();
+		cards = round.getSplitHand().getSplitLeftCards();
 
-		round.getSplitPlayer().checkSplitBust(cards, isSplitLeft);
-		assertFalse(round.getSplitPlayer().isSplitLeftBust());
+		round.getSplitHand().checkSplitBust(cards, isSplitLeft);
+		assertFalse(round.getSplitHand().isSplitLeftBust());
 		
-		round.getSplitPlayer().getSplitLeftCards().add(new Card(Suit.HEARTS, Rank.SIX));
-		cards = round.getSplitPlayer().getSplitLeftCards();
+		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.HEARTS, Rank.SIX));
+		cards = round.getSplitHand().getSplitLeftCards();
 		
-		round.getSplitPlayer().checkSplitBust(cards, isSplitLeft);
-		assertTrue(round.getSplitPlayer().isSplitLeftBust());
+		round.getSplitHand().checkSplitBust(cards, isSplitLeft);
+		assertTrue(round.getSplitHand().isSplitLeftBust());
 		
-		assertFalse(round.getSplitPlayer().isSplitRightBust());
-		round.getSplitPlayer().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
-		round.getSplitPlayer().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.JACK));
-		round.getSplitPlayer().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.ACE));
-		round.getSplitPlayer().getSplitRightCards().add(new Card(Suit.HEARTS, Rank.ACE));
+		assertFalse(round.getSplitHand().isSplitRightBust());
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.JACK));
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.ACE));
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.HEARTS, Rank.ACE));
 		
 		isSplitLeft = false;
-		cards = round.getSplitPlayer().getSplitRightCards();
+		cards = round.getSplitHand().getSplitRightCards();
 
-		round.getSplitPlayer().checkSplitBust(cards, isSplitLeft);	
-		assertTrue(round.getSplitPlayer().isSplitRightBust());
+		round.getSplitHand().checkSplitBust(cards, isSplitLeft);	
+		assertTrue(round.getSplitHand().isSplitRightBust());
 		
 	}
 
@@ -62,28 +62,28 @@ public class SplitPlayerTest {
 		blackJackServiceImpl.playerSplits(round);
 
 		round.getDealerCards().clear();
-		round.getSplitPlayer().getSplitLeftCards().clear();
-		round.getSplitPlayer().getSplitRightCards().clear();	
+		round.getSplitHand().getSplitLeftCards().clear();
+		round.getSplitHand().getSplitRightCards().clear();	
 
-		round.getSplitPlayer().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
-		round.getSplitPlayer().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.SIX));
+		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
+		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.SIX));
 		
-		cards = round.getSplitPlayer().getSplitLeftCards();
-		round.getSplitPlayer().calculateSplitHandValues(cards, playerFinishedDrawingCards, isSplitLeft);
-		assertEquals( "16", round.getSplitPlayer().getSplitLeftHandValue() );
+		cards = round.getSplitHand().getSplitLeftCards();
+		round.getSplitHand().calculateSplitHandValues(cards, playerFinishedDrawingCards, isSplitLeft);
+		assertEquals( "16", round.getSplitHand().getSplitLeftHandValue() );
 		
 		isSplitLeft = false;
 		playerFinishedDrawingCards = false;
-		round.getSplitPlayer().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.TEN));
-		round.getSplitPlayer().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.ACE));
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.TEN));
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.ACE));
 		
-		cards = round.getSplitPlayer().getSplitRightCards();
-		round.getSplitPlayer().calculateSplitHandValues(cards, playerFinishedDrawingCards, isSplitLeft);
-		assertEquals( "11 or 21", round.getSplitPlayer().getSplitRightHandValue() );
+		cards = round.getSplitHand().getSplitRightCards();
+		round.getSplitHand().calculateSplitHandValues(cards, playerFinishedDrawingCards, isSplitLeft);
+		assertEquals( "11 or 21", round.getSplitHand().getSplitRightHandValue() );
 		
 		playerFinishedDrawingCards = true;
-		round.getSplitPlayer().calculateSplitHandValues(cards, playerFinishedDrawingCards, isSplitLeft);
-		assertEquals( "21", round.getSplitPlayer().getSplitRightHandValue() );
+		round.getSplitHand().calculateSplitHandValues(cards, playerFinishedDrawingCards, isSplitLeft);
+		assertEquals( "21", round.getSplitHand().getSplitRightHandValue() );
 	}
 
 	@Test
@@ -92,8 +92,8 @@ public class SplitPlayerTest {
 		Round round = new Round();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
-		round.getSplitPlayer().setSplitLeftGameMessage(Consts.DEALER_BUST);
-		assertEquals(Consts.DEALER_BUST, round.getSplitPlayer().getSplitLeftGameMessage());
+		round.getSplitHand().setSplitLeftGameMessage(Consts.DEALER_BUST);
+		assertEquals(Consts.DEALER_BUST, round.getSplitHand().getSplitLeftGameMessage());
 	}
 
 	@Test
@@ -102,8 +102,8 @@ public class SplitPlayerTest {
 		Round round = new Round();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
-		round.getSplitPlayer().setSplitLeftGameMessage(Consts.DEALER_BUST);
-		assertEquals(Consts.DEALER_BUST, round.getSplitPlayer().getSplitLeftGameMessage());
+		round.getSplitHand().setSplitLeftGameMessage(Consts.DEALER_BUST);
+		assertEquals(Consts.DEALER_BUST, round.getSplitHand().getSplitLeftGameMessage());
 	}
 
 	@Test
@@ -112,8 +112,8 @@ public class SplitPlayerTest {
 		Round round = new Round();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
-		round.getSplitPlayer().setSplitRightGameMessage(Consts.DEALER_BUST);
-		assertEquals(Consts.DEALER_BUST, round.getSplitPlayer().getSplitRightGameMessage());
+		round.getSplitHand().setSplitRightGameMessage(Consts.DEALER_BUST);
+		assertEquals(Consts.DEALER_BUST, round.getSplitHand().getSplitRightGameMessage());
 	}
 
 	@Test
@@ -122,8 +122,8 @@ public class SplitPlayerTest {
 		Round round = new Round();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
-		round.getSplitPlayer().setSplitRightGameMessage(Consts.DEALER_BUST);
-		assertEquals(Consts.DEALER_BUST, round.getSplitPlayer().getSplitRightGameMessage());		
+		round.getSplitHand().setSplitRightGameMessage(Consts.DEALER_BUST);
+		assertEquals(Consts.DEALER_BUST, round.getSplitHand().getSplitRightGameMessage());		
 	}
 
 	@Test
@@ -132,8 +132,8 @@ public class SplitPlayerTest {
 		Round round = new Round();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
-		round.getSplitPlayer().setSplitLeftBust(true);
-		assertTrue(round.getSplitPlayer().isSplitLeftBust());
+		round.getSplitHand().setSplitLeftBust(true);
+		assertTrue(round.getSplitHand().isSplitLeftBust());
 	}
 
 	@Test
@@ -142,8 +142,8 @@ public class SplitPlayerTest {
 		Round round = new Round();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
-		round.getSplitPlayer().setSplitLeftBust(true);
-		assertTrue(round.getSplitPlayer().isSplitLeftBust());
+		round.getSplitHand().setSplitLeftBust(true);
+		assertTrue(round.getSplitHand().isSplitLeftBust());
 	}
 
 	@Test
@@ -152,8 +152,8 @@ public class SplitPlayerTest {
 		Round round = new Round();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
-		round.getSplitPlayer().setSplitRightBust(true);
-		assertTrue(round.getSplitPlayer().isSplitRightBust());
+		round.getSplitHand().setSplitRightBust(true);
+		assertTrue(round.getSplitHand().isSplitRightBust());
 	}
 
 	@Test
@@ -162,8 +162,8 @@ public class SplitPlayerTest {
 		Round round = new Round();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
-		round.getSplitPlayer().setSplitRightBust(true);
-		assertTrue(round.getSplitPlayer().isSplitRightBust());
+		round.getSplitHand().setSplitRightBust(true);
+		assertTrue(round.getSplitHand().isSplitRightBust());
 	}
 
 	@Test
@@ -173,8 +173,8 @@ public class SplitPlayerTest {
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
 		
-		round.getSplitPlayer().setSplitLeftHandValue("1 or 11");
-		assertEquals("1 or 11", round.getSplitPlayer().getSplitLeftHandValue());
+		round.getSplitHand().setSplitLeftHandValue("1 or 11");
+		assertEquals("1 or 11", round.getSplitHand().getSplitLeftHandValue());
 	}
 
 	@Test
@@ -184,8 +184,8 @@ public class SplitPlayerTest {
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
 		
-		round.getSplitPlayer().setSplitLeftHandValue("1 or 11");
-		assertEquals("1 or 11", round.getSplitPlayer().getSplitLeftHandValue());
+		round.getSplitHand().setSplitLeftHandValue("1 or 11");
+		assertEquals("1 or 11", round.getSplitHand().getSplitLeftHandValue());
 	}
 
 	@Test
@@ -195,8 +195,8 @@ public class SplitPlayerTest {
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
 		
-		round.getSplitPlayer().setSplitRightHandValue("1 or 11");
-		assertEquals("1 or 11", round.getSplitPlayer().getSplitRightHandValue());
+		round.getSplitHand().setSplitRightHandValue("1 or 11");
+		assertEquals("1 or 11", round.getSplitHand().getSplitRightHandValue());
 	}
 
 	@Test
@@ -206,8 +206,8 @@ public class SplitPlayerTest {
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
 		
-		round.getSplitPlayer().setSplitRightHandValue("1 or 11");
-		assertEquals("1 or 11", round.getSplitPlayer().getSplitRightHandValue());
+		round.getSplitHand().setSplitRightHandValue("1 or 11");
+		assertEquals("1 or 11", round.getSplitHand().getSplitRightHandValue());
 	}
 
 	@Test
@@ -216,7 +216,7 @@ public class SplitPlayerTest {
 		Round round = new Round();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
-		assertEquals( 1, round.getSplitPlayer().getSplitLeftCards().size() );
+		assertEquals( 1, round.getSplitHand().getSplitLeftCards().size() );
 	}
 
 	@Test
@@ -225,7 +225,7 @@ public class SplitPlayerTest {
 		Round round = new Round();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
-		assertEquals( 1, round.getSplitPlayer().getSplitRightCards().size() );
+		assertEquals( 1, round.getSplitHand().getSplitRightCards().size() );
 	}
 
 }

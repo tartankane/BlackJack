@@ -1,10 +1,30 @@
+html {
+	height: 100%;
+}
+
 body {
 	margin: 0;
 	padding: 0px;
 	font: 10px normal Verdana, Arial, Helvetica, sans-serif;
 	background: #1d1d1d;
 	color: #fff;
+	height: 100%;
 }
+
+.bodywrapper {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -60px;
+	/* the bottom margin is the negative value of the footer's height */
+}
+
+.footer,.push {
+	height: 60px; /* .push must be the same height as .footer */
+	text-align: center;
+}
+
+
 
 h1 {
 	font: 5em normal Georgia, 'Times New Roman', Times, serif;
@@ -40,8 +60,8 @@ h1 small {
 	padding: 0px;
 	font-size: 110%;
 	color: #ffffff;
-	line-height: 30px; 
-/*	line-height: 5%;*/
+	line-height: 30px;
+	/*	line-height: 5%;*/
 }
 
 #links li {
@@ -61,49 +81,10 @@ h1 small {
 	text-decoration: none;
 }
 
-/*#links li a:visited {
-	color: #ffffff;
-	text-decoration: none;
-}*/
-
 #links li a:hover {
 	color: #000000;
 	background-color: #cbff78;
 	text-decoration: none;
-}
-
-/*
-#footer {
-	margin-left: 0px;
-	margin-top: 50px;
-	border-top: 1px solid;
-	text-align: center;
-	background: #111111 none repeat scroll 0 0;
-	float: left;
-	width: 100%;
-}
-*/
-
-#footer
-{
-    width: 100%;
-    height: 30px;
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    text-align: center;
-    /*text-align, background-color, and other specific styles can be applied here. You can change the height from 30px to anything which suits your needs. You can even comment Left: 0px & Right: 0px, but to make sure that it works in all browsers, lets leave them there.*/
-}
-
-.btn1 {
-	font-size: 165%;
-}
-
-/* Invisible Button Occupying No Space*/
-.btn2 {
-	display: none;
-	font-size: 150%;
 }
 
 .error {
@@ -114,13 +95,13 @@ h1 small {
 	margin-top: 0px;
 }
 
+/* cards, buttons and game messages */
 .card {
 	text-align: center;
-/*	height: 10%;*/
-	height: 100px; 
+	/*	height: 10%;*/
+	height: 100px;
 }
 
-/*  Override the default display:inline to allow text alignment in a span  */
 .msg1 {
 	font-size: 175%;
 }
@@ -128,89 +109,104 @@ h1 small {
 .msg2 {
 	text-align: center;
 	visibility: hidden;
-/*	height: 5%;*/
-	height: 50px; 
+	/*	height: 5%;*/
+	height: 50px;
 	font-size: 150%;
 }
 
 .msg3 {
-	float:left;
+	float: left;
 	text-align: center;
-	visibility: hidden; 
-	height: 50px; 
-/*	height: 5%;*/
+	visibility: hidden;
+	height: 50px;
+	/*	height: 5%;*/
 	font-size: 150%;
 }
 
 .msg4 {
-	float:right;
+	float: right;
 	text-align: center;
-	visibility: hidden; 
-	height: 50px; 
-/*	height: 5%;*/
+	visibility: hidden;
+	height: 50px;
+	/*	height: 5%;*/
 	font-size: 150%;
 }
 
 .msg5 {
-	float:left;
+	float: left;
 	text-align: center;
-	height: 50px; 
+	height: 50px;
 	font-size: 175%;
 }
 
 .msg6 {
-	float:right;
-	text-align: center; 
-	height: 50px; 
+	float: right;
+	text-align: center;
+	height: 50px;
 	font-size: 175%;
 }
 
-.wrap {
-  overflow:hidden;
-  /*	height: 10%; */
-   /*	height: 100;*/
-/*  width:1200px;  Optional */
+.wrap1 {
+	height: 100px;
+	overflow: hidden;
+	position: related;
+	/*	height: 10%; */
+	/*	height: 100;*/
+	/*  width:1200px;  Optional */
 }
 
 .wrap2 {
-  overflow:hidden;
-/*  	height: 5%; */
- /* 	height: 50;*/
-/*  width:1200px;  Optional */
+	height: 25px;
+	overflow: hidden;
+	position: related;
+	/*  	height: 5%; */
+	/* 	height: 50;*/
+	/*  width:1200px;  Optional */
 }
 
 .left {
-  float:left;
- /*  width:150px; */
-}
-
-.middle {
- /* float:left;
-   min-width:800px; */
+	float: left;
+	/*  width:150px; */
 }
 
 .right {
-  float:right;
- /*  width:150px; */
+	float: right;
+	/*  width:150px; */
 }
 
-.btn3 {
-/*	text-align: left;*/
+.btn1 {
+	font-size: 165%;
+}
+
+.btn2 {
 	display: none;
-	float:left;
+	font-size: 165%;
+}
+
+.btn3 { /*	text-align: left;*/
+	display: none;
+	float: left;
 	font-size: 150%;
 }
 
-.btn4 {
-	/* text-align: right; */
+.btn4 { /* text-align: right; */
 	display: none;
-	float:right;
+	float: right;
 	font-size: 150%;
 }
 
-.header {
+.bigtext {
 	text-align: center;
 	/* height: 50px;  */
 	font-size: 225%;
-	text-decoration:underline;
+	text-decoration: underline;
+}
+
+.paragraph1 {
+	text-align: center;
+}
+
+.paragraph2 {
+	font-size: 150%;
+	text-align: center;
 }

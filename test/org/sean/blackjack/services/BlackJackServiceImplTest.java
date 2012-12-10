@@ -140,8 +140,8 @@ public class BlackJackServiceImplTest {
 		BlackJackService blackJackService = new BlackJackServiceImpl();
 		blackJackService.playerSplits(round);
 
-		assertEquals(1, round.getSplitPlayer().getSplitLeftCards().size());
-		assertEquals(1, round.getSplitPlayer().getSplitRightCards().size());
+		assertEquals(1, round.getSplitHand().getSplitLeftCards().size());
+		assertEquals(1, round.getSplitHand().getSplitRightCards().size());
 	}
 
 	@Test
@@ -156,9 +156,9 @@ public class BlackJackServiceImplTest {
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		blackJackService.playerSplits(round);
 
-		assertEquals(1, round.getSplitPlayer().getSplitLeftCards().size());
+		assertEquals(1, round.getSplitHand().getSplitLeftCards().size());
 		blackJackService.splitLeftHitPlayer(round);
-		assertEquals(2, round.getSplitPlayer().getSplitLeftCards().size());
+		assertEquals(2, round.getSplitHand().getSplitLeftCards().size());
 
 	}
 
@@ -170,14 +170,14 @@ public class BlackJackServiceImplTest {
 		blackJackService.startRound(round);
 		blackJackService.playerSplits(round);
 
-		round.getSplitPlayer().getSplitLeftCards().clear();
-		round.getSplitPlayer().getSplitLeftCards()
+		round.getSplitHand().getSplitLeftCards().clear();
+		round.getSplitHand().getSplitLeftCards()
 				.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
-		round.getSplitPlayer().getSplitLeftCards()
+		round.getSplitHand().getSplitLeftCards()
 				.add(new Card(Suit.HEARTS, Rank.ACE));
 
 		blackJackService.splitLeftPlayerStands(round);
-		assertEquals("21", round.getSplitPlayer().getSplitLeftHandValue());
+		assertEquals("21", round.getSplitHand().getSplitLeftHandValue());
 	}
 
 	@Test
@@ -194,14 +194,14 @@ public class BlackJackServiceImplTest {
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		blackJackService.playerSplits(round);
 
-		assertEquals(1, round.getSplitPlayer().getSplitRightCards().size());
+		assertEquals(1, round.getSplitHand().getSplitRightCards().size());
 		blackJackService.splitRightHitPlayer(round);
-		assertEquals(2, round.getSplitPlayer().getSplitRightCards().size());
+		assertEquals(2, round.getSplitHand().getSplitRightCards().size());
 
 		assertTrue(round.getPlayerCredits() < Consts.STARTING_CREDITS);
-		round.getSplitPlayer().getSplitRightCards()
+		round.getSplitHand().getSplitRightCards()
 				.add(new Card(Suit.HEARTS, Rank.JACK));
-		round.getSplitPlayer().getSplitRightCards()
+		round.getSplitHand().getSplitRightCards()
 				.add(new Card(Suit.HEARTS, Rank.ACE));
 		// splitRightCards now has 4 cards with a value of at least 22. So it
 		// will always be bust
@@ -217,16 +217,16 @@ public class BlackJackServiceImplTest {
 		blackJackService.startRound(round);
 		blackJackService.playerSplits(round);
 
-		round.getSplitPlayer().getSplitRightCards().clear();
-		round.getSplitPlayer().getSplitRightCards()
+		round.getSplitHand().getSplitRightCards().clear();
+		round.getSplitHand().getSplitRightCards()
 				.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
-		round.getSplitPlayer().getSplitRightCards()
+		round.getSplitHand().getSplitRightCards()
 				.add(new Card(Suit.HEARTS, Rank.ACE));
 
 		assertEquals(1, round.getDealerCards().size());
 		blackJackService.splitRightPlayerStands(round);
 		assertTrue(round.getDealerCards().size() > 1);
-		assertEquals("21", round.getSplitPlayer().getSplitRightHandValue());
+		assertEquals("21", round.getSplitHand().getSplitRightHandValue());
 		
 		// It is not possible to unit test the method calls	round.calculateHandValues(true);
 		// and round.checkWhoWonAfterSplit();

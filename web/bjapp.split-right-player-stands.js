@@ -1,5 +1,9 @@
 
 function splitRightPlayerStands() {
+	
+	// declare variables
+	var hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton;
+	
 	hitPlayerButton = document.getElementById('hitplayerbutton');
 	hitPlayerButton.style.display = 'none';
 
@@ -23,6 +27,8 @@ function splitRightPlayerStands() {
 			// data is the JSON object returned from the server
 			function(data) {
 
+				// declare variables
+				var index, cardImage, rightHitPlayerButton, rightPlayerStandsButton, startGameButton, betDropDown;
 				// clear the dealer's card and image of the hidden card
 				// from the screen
 				document.getElementById('dealercards').innerHTML = '';
@@ -59,13 +65,13 @@ function splitRightPlayerStands() {
 				
 				// Make the split in-game game messages visible and display them.
 				document.getElementById('splitleftgamemessages').style.visibility = 'visible';
-				document.getElementById('splitleftgamemessages').innerHTML = data.splitPlayer.splitLeftGameMessage;				
+				document.getElementById('splitleftgamemessages').innerHTML = data.splitHand.splitLeftGameMessage;				
 				document.getElementById('splitrightgamemessages').style.visibility = 'visible';
-				document.getElementById('splitrightgamemessages').innerHTML = data.splitPlayer.splitRightGameMessage;
+				document.getElementById('splitrightgamemessages').innerHTML = data.splitHand.splitRightGameMessage;
 				
 				// Make the value of the player's hand visible and display it.
 				document.getElementById('splitrightplayermessage').style.visibility = 'visible';
-				document.getElementById('splitrightplayermessage').innerHTML="The Player's Cards. Total equals " + data.splitPlayer.splitRightHandValue;
+				document.getElementById('splitrightplayermessage').innerHTML="The Player's Cards. Total equals " + data.splitHand.splitRightHandValue;
 				
 				// Make buttons clickable again that were earlier disabled. 
 				document.getElementById('playerstandsbutton').disabled = false;

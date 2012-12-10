@@ -139,8 +139,8 @@ public class RoundTest {
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		round.playerSplits();
 
-		assertEquals(1, round.getSplitPlayer().getSplitLeftCards().size());
-		assertEquals(1, round.getSplitPlayer().getSplitRightCards().size());
+		assertEquals(1, round.getSplitHand().getSplitLeftCards().size());
+		assertEquals(1, round.getSplitHand().getSplitRightCards().size());
 	}
 
 	@Test
@@ -152,19 +152,19 @@ public class RoundTest {
 		blackJackServiceImpl.playerSplits(round);
 
 		round.getDealerCards().clear();
-		round.getSplitPlayer().getSplitLeftCards().clear();
-		round.getSplitPlayer().getSplitRightCards().clear();	
+		round.getSplitHand().getSplitLeftCards().clear();
+		round.getSplitHand().getSplitRightCards().clear();	
 		
 		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.SEVEN));
-		round.getSplitPlayer().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
-		round.getSplitPlayer().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.SIX));
-		round.getSplitPlayer().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.TEN));
-		round.getSplitPlayer().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.EIGHT));
+		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
+		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.SIX));
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.TEN));
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.EIGHT));
 		
 		round.checkWhoWonAfterSplit();
-		assertEquals(Consts.PLAYER_LOSES, round.getSplitPlayer().getSplitLeftGameMessage());
-		assertEquals(Consts.PLAYER_WINS, round.getSplitPlayer().getSplitRightGameMessage());
+		assertEquals(Consts.PLAYER_LOSES, round.getSplitHand().getSplitLeftGameMessage());
+		assertEquals(Consts.PLAYER_WINS, round.getSplitHand().getSplitRightGameMessage());
 	}
 
 	@Test
@@ -339,7 +339,7 @@ public class RoundTest {
 		Round round = new Round();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
-		assertEquals( 1, round.getSplitPlayer().getSplitLeftCards().size() );
+		assertEquals( 1, round.getSplitHand().getSplitLeftCards().size() );
 	}
 
 

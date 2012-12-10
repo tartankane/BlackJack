@@ -20,15 +20,15 @@ function splitLeftHitPlayer() {
 			},
 			// data is the JSON object returned from the server
 			function(data) {
-				console.log(data);
+				
 				// declare variables
-				var leftHitPlayerButton, leftPlayerStandsButton, rightHitPlayerButton, rightPlayerStandsButton, lastCardInArray, cardImage;
+				var lastCardInArray, cardImage, leftHitPlayerButton, leftPlayerStandsButton, rightHitPlayerButton, rightPlayerStandsButton;
 
 				// append a new player card to the placeholder "playercards"
-				lastCardInArray = data.splitPlayer.splitLeftCards.length - 1;
+				lastCardInArray = data.splitHand.splitLeftCards.length - 1;
 				cardImage = "images/"
-						+ data.splitPlayer.splitLeftCards[lastCardInArray].rank
-						+ data.splitPlayer.splitLeftCards[lastCardInArray].suit
+						+ data.splitHand.splitLeftCards[lastCardInArray].rank
+						+ data.splitHand.splitLeftCards[lastCardInArray].suit
 						+ ".png";
 				$('#splitcardsleft').append(
 						$('<img src= ' + cardImage + '>').fadeIn(2000));
@@ -36,13 +36,13 @@ function splitLeftHitPlayer() {
 
 				
 				
-				if (data.splitPlayer.splitLeftBust === true) {
+				if (data.splitHand.splitLeftBust === true) {
 					// If the player goes bust,  make the "start a new game" 
 					// button visible and make the "hit player", "player 
 					// stands" and "player doubles" buttons invisible.
 					// Make the in-game game message visible and display it.
 					document.getElementById('splitleftgamemessages').style.visibility = 'visible';
-					document.getElementById('splitleftgamemessages').innerHTML = data.splitPlayer.splitLeftGameMessage;
+					document.getElementById('splitleftgamemessages').innerHTML = data.splitHand.splitLeftGameMessage;
 					
 					leftHitPlayerButton = document.getElementById('lefthitplayerbutton');
 					leftHitPlayerButton.style.display = 'none';
@@ -61,18 +61,11 @@ function splitLeftHitPlayer() {
 					rightPlayerStandsButton.style.display = 'inline';
 					rightPlayerStandsButton.disabled = false;
 
-				} else {
-					// If the player doesn't go bust, make the playerStandsButton
-					// and the hitPlayerButton clickable again.
-					// The playerSplitsButton and playerDoublesButton will stay disabled as 
-					// they are only valid when the player has the starting two cards.
-//					document.getElementById('playerstandsbutton').disabled = false;
-//					document.getElementById('hitplayerbutton').disabled = false;
 				}
 				
 				// Make the value of the player's hand visible and display it.
 				document.getElementById('splitleftplayermessage').style.visibility = 'visible';
-				document.getElementById('splitleftplayermessage').innerHTML="The Player's Cards. Total equals " + data.splitPlayer.splitLeftHandValue;
+				document.getElementById('splitleftplayermessage').innerHTML="The Player's Cards. Total equals " + data.splitHand.splitLeftHandValue;
 	
 				//Display the value of the player's credits and current bet size
 				document.getElementById('credits').innerHTML = "Your Credits: "

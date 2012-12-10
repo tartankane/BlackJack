@@ -1,7 +1,7 @@
 
 function playerSplits() {
 	// Declare variables
-	var hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton;
+	var hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton, splitCardsLeft, splitCardsRight;
 	
 	hitPlayerButton = document.getElementById('hitplayerbutton');
 	hitPlayerButton.style.display = 'none';
@@ -33,7 +33,7 @@ function playerSplits() {
 			// data is the JSON object returned from the server
 			function(data) {
 				// Declare variables
-				var leftHitPlayerButton, leftPlayerStandsButton;
+				var playerCards, playerMessage, cardImage, leftHitPlayerButton, leftPlayerStandsButton;
 		
 				//Hide the existing player cards and messages
 				playerCards = document.getElementById('playercards');
@@ -42,25 +42,22 @@ function playerSplits() {
 				playerMessage = document.getElementById('playermessage');
 				playerMessage.style.display = 'none';
 
-//				gameMessages = document.getElementById('gamemessages');
-//				gameMessages.style.display = 'hidden';
 				
 				document.getElementById('gamemessages').style.visibility = 'visible';
 				document.getElementById('gamemessages').innerHTML = data.gameMessage;
 				
-				
-				console.log(data);
+
 				cardImage = "images/"
-						+ data.splitPlayer.splitLeftCards[0].rank
-						+ data.splitPlayer.splitLeftCards[0].suit + ".png";
+						+ data.splitHand.splitLeftCards[0].rank
+						+ data.splitHand.splitLeftCards[0].suit + ".png";
 				$('#splitcardsleft').append(
 						$('<img src= ' + cardImage + '>').fadeIn(
 								2000));
 								
 
 				cardImage = "images/"
-					+ data.splitPlayer.splitRightCards[0].rank
-					+ data.splitPlayer.splitRightCards[0].suit + ".png";
+					+ data.splitHand.splitRightCards[0].rank
+					+ data.splitHand.splitRightCards[0].suit + ".png";
 				$('#splitcardsright').append(
 						$('<img src= ' + cardImage + '>').fadeIn(
 								2000));

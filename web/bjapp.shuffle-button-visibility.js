@@ -1,24 +1,31 @@
-// This code is called by bjapp.hitplayer.js, 
+// This function is called by bjapp.hitplayer.js, 
 // bjapp.player-doubles.js and bjapp.player-stands.js
 //
 // Make the "start a new game" 
-// button visible and make the "hit player", "player 
+// button and drop down menu for changing the bet visible and make the "hit player", "player 
 // stands" and "player doubles" buttons invisible.
-startGameButton = document.getElementById('startgamebutton');
-startGameButton.style.display = 'inline';
 
-betDropDown = document
-.getElementById('betdropdown');
-betDropDown.style.display = 'inline';
+function shuffleButtonVisibility() {
+	// declare variables
+	var startGameButton, betDropDown, hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton;
 
-hitPlayerButton = document.getElementById('hitplayerbutton');
-hitPlayerButton.style.display = 'none';
+	startGameButton = document.getElementById('startgamebutton');
+	startGameButton.style.display = 'inline';
 
-playerStandsButton = document.getElementById('playerstandsbutton');
-playerStandsButton.style.display = 'none';
+	betDropDown = document.getElementById('betdropdown');
+	betDropDown.style.display = 'inline';
+	betDropDown.style.visibility = "visible";
 
-playerDoublesButton = document.getElementById('playerdoublesbutton');
-playerDoublesButton.style.display = 'none';
+	hitPlayerButton = document.getElementById('hitplayerbutton');
+	hitPlayerButton.style.display = 'none';
 
-playerSplitsButton = document.getElementById('playersplitsbutton');
-playerSplitsButton.style.display = 'none';
+	playerStandsButton = document.getElementById('playerstandsbutton');
+	playerStandsButton.style.display = 'none';
+
+	playerDoublesButton = document.getElementById('playerdoublesbutton');
+	playerDoublesButton.style.display = 'none';
+
+	playerSplitsButton = document.getElementById('playersplitsbutton');
+	playerSplitsButton.style.display = 'none';
+
+}

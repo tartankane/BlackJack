@@ -22,7 +22,7 @@ function hitPlayer() {
 			function(data) {
 
 				// declare variables
-				var startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton, lastCardInArray, cardImage;
+				var lastCardInArray, cardImage;
 
 				// append a new player card to the placeholder "playercards"
 				lastCardInArray = data.playerCards.length - 1;
@@ -41,7 +41,8 @@ function hitPlayer() {
 					// Make the in-game game message visible and display it.
 					document.getElementById('gamemessages').style.visibility = 'visible';
 					document.getElementById('gamemessages').innerHTML = data.gameMessage;
-					$.getScript("bjapp.shuffle-button-visibility.js");
+					shuffleButtonVisibility();
+//					$.getScript("bjapp.shuffle-button-visibility.js");
 
 				} else {
 					// If the player doesn't go bust, make the playerStandsButton

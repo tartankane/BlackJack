@@ -22,7 +22,7 @@ function playerStands() {
 			function(data) {
 				
 				// declare variables
-				var index, startGameButton, hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton, cardImage;
+				var index, cardImage;
 				
 				// Only update the display of dealer cards to the
 				// screen if the dealer has more than one card. This 
@@ -69,7 +69,8 @@ function playerStands() {
 				// Make the "start a new game" 
 				// button visible and make the "hit player", "player 
 				// stands" and "player doubles" buttons invisible.
-				$.getScript("bjapp.shuffle-button-visibility.js");
+				shuffleButtonVisibility();
+//				$.getScript("bjapp.shuffle-button-visibility.js");
 				
 				//Display the value of the player's credits and current bet size
 				document.getElementById('credits').innerHTML = "Your Credits: "

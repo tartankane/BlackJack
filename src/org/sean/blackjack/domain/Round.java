@@ -26,7 +26,7 @@ public class Round {
 	private int dealerHandValue;
 	private List<Card> dealerCards = new ArrayList<Card>();
 	private List<Card> playerCards = new ArrayList<Card>();
-	private SplitPlayer splitPlayer;
+	private SplitHand splitHand;
 
 	public Round() {
 		super();
@@ -129,20 +129,20 @@ public class Round {
 			if (total > totalValueOfCardsAllowed) {
 				this.gameMessage = Consts.DEALER_BUST;
 				if (isSplit) {
-					if (!this.splitPlayer.isSplitLeftBust()) {
-						this.splitPlayer
+					if (!this.splitHand.isSplitLeftBust()) {
+						this.splitHand
 								.setSplitLeftGameMessage(Consts.DEALER_BUST);
 					}
-					if (!this.splitPlayer.isSplitRightBust()) {
-						this.splitPlayer
+					if (!this.splitHand.isSplitRightBust()) {
+						this.splitHand
 								.setSplitRightGameMessage(Consts.DEALER_BUST);
 					}
 
 					// The dealer is bust. If neither of the player's hands are
 					// bust, then increment
 					// the player credits by both bets
-					if (!this.splitPlayer.isSplitLeftBust()
-							&& !this.splitPlayer.isSplitRightBust()) {
+					if (!this.splitHand.isSplitLeftBust()
+							&& !this.splitHand.isSplitRightBust()) {
 						this.playerCredits += 2 * this.playerBet;
 					} else {
 						// One of the split hands is bust. This code is not
@@ -366,9 +366,9 @@ public class Round {
 	 * card into the other new hand.
 	 */
 	public void playerSplits() {
-		this.splitPlayer = new SplitPlayer();
-		this.splitPlayer.getSplitLeftCards().add(this.playerCards.get(0));
-		this.splitPlayer.getSplitRightCards().add(this.playerCards.get(1));
+		this.splitHand = new SplitHand();
+		this.splitHand.getSplitLeftCards().add(this.playerCards.get(0));
+		this.splitHand.getSplitRightCards().add(this.playerCards.get(1));
 		this.gameMessage = Consts.PLAYER_SPLITS;
 	}
 
@@ -391,8 +391,8 @@ public class Round {
 		int numberOfDealersAces = 0;
 
 		// Compare left hand side first
-		if (!this.splitPlayer.isSplitLeftBust()) {
-			for (Card card : this.splitPlayer.getSplitLeftCards()) {
+		if (!this.splitHand.isSplitLeftBust()) {
+			for (Card card : this.splitHand.getSplitLeftCards()) {
 				totalPlayer = totalPlayer + card.getRank().getCardValue();
 				numberOfPlayersAces = ifAceThenIncrementAceCount(
 						numberOfPlayersAces, card);
@@ -415,16 +415,16 @@ public class Round {
 				}
 			}
 			if (totalPlayer == totalDealer) {
-				this.splitPlayer.setSplitLeftGameMessage(Consts.DRAW);
+				this.splitHand.setSplitLeftGameMessage(Consts.DRAW);
 			}
 			if (totalPlayer > totalDealer) {
-				this.splitPlayer.setSplitLeftGameMessage(Consts.PLAYER_WINS);
+				this.splitHand.setSplitLeftGameMessage(Consts.PLAYER_WINS);
 
 				this.playerCredits += this.playerBet;
 
 			}
 			if (totalPlayer < totalDealer) {
-				this.splitPlayer.setSplitLeftGameMessage(Consts.PLAYER_LOSES);
+				this.splitHand.setSplitLeftGameMessage(Consts.PLAYER_LOSES);
 
 				this.playerCredits -= this.playerBet;
 
@@ -432,14 +432,14 @@ public class Round {
 		}
 
 		// Compare right hand side
-		if (!this.splitPlayer.isSplitRightBust()) {
+		if (!this.splitHand.isSplitRightBust()) {
 
 			totalPlayer = 0;
 			totalDealer = 0;
 			numberOfPlayersAces = 0;
 			numberOfDealersAces = 0;
 
-			for (Card card : this.splitPlayer.getSplitRightCards()) {
+			for (Card card : this.splitHand.getSplitRightCards()) {
 				totalPlayer = totalPlayer + card.getRank().getCardValue();
 				numberOfPlayersAces = ifAceThenIncrementAceCount(
 						numberOfPlayersAces, card);
@@ -463,16 +463,16 @@ public class Round {
 			}
 			if (totalPlayer == totalDealer) {
 
-				this.splitPlayer.setSplitRightGameMessage(Consts.DRAW);
+				this.splitHand.setSplitRightGameMessage(Consts.DRAW);
 			}
 			if (totalPlayer > totalDealer) {
-				this.splitPlayer.setSplitRightGameMessage(Consts.PLAYER_WINS);
+				this.splitHand.setSplitRightGameMessage(Consts.PLAYER_WINS);
 
 				this.playerCredits += this.playerBet;
 
 			}
 			if (totalPlayer < totalDealer) {
-				this.splitPlayer.setSplitRightGameMessage(Consts.PLAYER_LOSES);
+				this.splitHand.setSplitRightGameMessage(Consts.PLAYER_LOSES);
 				this.playerCredits -= this.playerBet;
 
 				// If the player is now low on credits, set playerLowOnCredits
@@ -559,8 +559,8 @@ public class Round {
 		this.playerCanSplit = playerCanSplit;
 	}
 
-	public SplitPlayer getSplitPlayer() {
-		return splitPlayer;
+	public SplitHand getSplitHand() {
+		return splitHand;
 	}
 
 }
