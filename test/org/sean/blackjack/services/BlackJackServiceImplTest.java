@@ -1,13 +1,12 @@
 package org.sean.blackjack.services;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.sean.blackjack.domain.Card;
 import org.sean.blackjack.domain.Consts;
-//import org.sean.blackjack.domain.GameMessages;
 import org.sean.blackjack.domain.Rank;
 import org.sean.blackjack.domain.Round;
 import org.sean.blackjack.domain.Suit;
@@ -52,9 +51,9 @@ public class BlackJackServiceImplTest {
 		assertEquals(numberOfPlayerCards, round.getPlayerCards().size());
 
 		// Test that the objects in the dealerCards and playerCards are Cards
-		assertEquals((new Card()).getClass(),
+		assertEquals(new Card(Suit.SPADES, Rank.ACE).getClass(),
 				round.getDealerCards().get(indexOfFirstCardInList).getClass());
-		assertEquals((new Card()).getClass(),
+		assertEquals(new Card(Suit.SPADES, Rank.ACE).getClass(),
 				round.getPlayerCards().get(indexOfFirstCardInList).getClass());
 	}
 

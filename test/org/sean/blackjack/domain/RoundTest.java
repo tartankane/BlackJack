@@ -1,15 +1,10 @@
 package org.sean.blackjack.domain;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
-import org.sean.blackjack.services.BlackJackService;
 import org.sean.blackjack.services.BlackJackServiceImpl;
 
 public class RoundTest {
@@ -52,12 +47,12 @@ public class RoundTest {
 		Round round = new Round();
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
-		assertTrue(round.playerHasBlackJack());
+		assertTrue(round.hasPlayerABlackJack());
 
 		round = new Round();
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.NINE));
-		assertFalse(round.playerHasBlackJack());
+		assertFalse(round.hasPlayerABlackJack());
 
 	}
 

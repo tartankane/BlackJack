@@ -1,14 +1,16 @@
 // This function is called by bjapp.hitplayer.js, 
 // bjapp.player-doubles.js and bjapp.player-stands.js
 //
-// Make the "start a new game" 
-// button and drop down menu for changing the bet visible and make the "hit player", "player 
-// stands" and "player doubles" buttons invisible.
+// Make the "start a new game" button and drop down menu for changing the 
+// bet visible. Make the "hit player", "player stands", "player doubles" 
+// and "split player" buttons invisible.
 
-function shuffleButtonVisibility() {
-	// declare variables
+function toggleButtonVisibility() {
+	// Declare variables.
 	var startGameButton, betDropDown, hitPlayerButton, playerStandsButton, playerDoublesButton, playerSplitsButton;
 
+	// Make the "start a new game" button and drop down menu for changing the 
+	// bet visible.
 	startGameButton = document.getElementById('startgamebutton');
 	startGameButton.style.display = 'inline';
 
@@ -16,6 +18,8 @@ function shuffleButtonVisibility() {
 	betDropDown.style.display = 'inline';
 	betDropDown.style.visibility = "visible";
 
+	// Make the "hit player", "player stands", "player doubles" 
+	// and "split player" buttons invisible.
 	hitPlayerButton = document.getElementById('hitplayerbutton');
 	hitPlayerButton.style.display = 'none';
 

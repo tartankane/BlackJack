@@ -1,5 +1,6 @@
 // Clear the dealer's displayed cards. This is necessary to remove the 
-// image of the hidden card. Re-display the dealer's first card and append 
+// image of the hidden card. Get updated data from the server.
+// Re-display the dealer's first card and append 
 // the dealer's other cards to the first card.
 // Declare an in-game message.
 // Change the buttons available to the player.
@@ -37,7 +38,7 @@ function playerStands() {
 					// Instantly display the first dealer card. This is the
 					// card that was visible from the start of the round.
 					// Fade in the other dealer cards.
-					for (index = 0; index < data.dealerCards.length; index++) {
+					for (index = 0; index < data.dealerCards.length; index += 1 ) {
 						if (index === 0) {
 							cardImage = "images/"
 									+ data.dealerCards[index].rank
@@ -66,10 +67,10 @@ function playerStands() {
 				document.getElementById('gamemessages').style.visibility = 'visible';
 				document.getElementById('gamemessages').innerHTML = data.gameMessage;
 				
-				// Make the "start a new game" 
-				// button visible and make the "hit player", "player 
-				// stands" and "player doubles" buttons invisible.
-				shuffleButtonVisibility();
+				//Toggle visibility of the bet drop down menu and the "Start a New Game", 
+				// "Hit Me", "Stand" and "Double buttons 
+				//toggleButtonVisibility() function is in bjapp.toggle-button-visibility
+				toggleButtonVisibility();
 //				$.getScript("bjapp.shuffle-button-visibility.js");
 				
 				//Display the value of the player's credits and current bet size

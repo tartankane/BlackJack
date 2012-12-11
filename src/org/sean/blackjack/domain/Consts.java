@@ -9,10 +9,11 @@ public final class Consts  {
 	  public static final int STARTING_CREDITS = 1000;
 	  public static final int STARTING_BET = 10;
 	  public static final int LOW_CREDITS_VALUE = 320;
-	  // The maximum value of a valid hand in BlackJack. Any
-	  // more than this and the hand is "bust"
+	  // The maximum value of a valid hand in BlackJack is 21. 
+	  // Any more than this and the hand is "bust".
 	  public static final int  TWENTY_ONE = 21;
-	  //The following strings are in-game messages to be displayed 
+	  public static final int  MIN_VALUE_THAT_DEALER_STANDS = 17;
+	  // The following strings are in-game messages to be displayed 
 	  // to the client during a game of BlackJack.
 	  public static final String BLANK_MESSAGE = "";
 	  public static final String PLAYER_WINS = "You won!";

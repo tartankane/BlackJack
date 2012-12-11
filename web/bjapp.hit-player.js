@@ -1,6 +1,6 @@
-// Append a new card to the player card display. Display the updated values 
-// of the player's and dealer's hands. If the player goes bust, change the buttons
-// available to the player.
+// Append a new card to the player card display. Get updated data from the server.
+// Display the updated values of the player's and dealer's hands. If the player 
+//goes bust, change the buttons available to the player.
 function hitPlayer() {
 	
 	// On a very slow connection, prevent the player from pressing buttons
@@ -41,7 +41,11 @@ function hitPlayer() {
 					// Make the in-game game message visible and display it.
 					document.getElementById('gamemessages').style.visibility = 'visible';
 					document.getElementById('gamemessages').innerHTML = data.gameMessage;
-					shuffleButtonVisibility();
+					
+					//Toggle visibility of the bet drop down menu and the "Start a New Game", 
+					// "Hit Me", "Stand" and "Double buttons 
+					//toggleButtonVisibility() function is in bjapp.toggle-button-visibility
+					toggleButtonVisibility();
 //					$.getScript("bjapp.shuffle-button-visibility.js");
 
 				} else {

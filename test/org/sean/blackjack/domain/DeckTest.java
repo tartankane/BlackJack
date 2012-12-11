@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
@@ -27,7 +26,7 @@ public class DeckTest {
 	@Test
 	public void testGetInstance() {
 		int numberOfCardsInADeck=52;
-		int indexOfFirstCardInDeck = 0;
+//		int indexOfFirstCardInDeck = 0;
 		Set<Card> uniqueCardsInDeck = new HashSet<Card>();
 		Deck deck = Deck.getInstance();
 		//Demonstrate that there are 52 unique cards in a deck.
@@ -45,7 +44,7 @@ public class DeckTest {
 	@Test
 	public void testDealRandomCard() {
 		Deck deck = Deck.getInstance();
-		assertEquals( (new Card()).getClass(), deck.dealRandomCard().getClass() );
+		assertEquals( (new Card(Suit.SPADES, Rank.ACE)).getClass(), deck.dealRandomCard().getClass() );
 	}
 	
 	

@@ -10,15 +10,15 @@ import java.util.List;
  * 
  */
 public class SplitHand {
+	
+	private List<Card> splitLeftCards = new ArrayList<Card>();
+	private List<Card> splitRightCards = new ArrayList<Card>();
 	private String splitLeftGameMessage = "";
 	private String splitRightGameMessage = "";
 	private boolean splitLeftBust = false;
 	private boolean splitRightBust = false;
-	private String splitLeftHandValue;
-	private String splitRightHandValue;
-
-	private List<Card> splitLeftCards = new ArrayList<Card>();
-	private List<Card> splitRightCards = new ArrayList<Card>();
+	private String splitLeftHandValue = Consts.BLANK_MESSAGE;
+	private String splitRightHandValue = Consts.BLANK_MESSAGE;
 
 	/**
 	 * Check that the value of the hand has not gone above 21. For the purposes
@@ -32,7 +32,7 @@ public class SplitHand {
 	 *            the right hand split
 	 * @return boolean - true if the cards are over 21
 	 */
-	public boolean checkSplitBust(List<Card> cards, boolean isSplitLeft) {
+	public boolean checkIfSplitHandBust(List<Card> cards, boolean isSplitLeft) {
 		// The total value of cards allowed in a hand of blackjack
 		// is 21.
 		int total = 0;
@@ -86,10 +86,10 @@ public class SplitHand {
 		}
 
 		if (isSplitLeft) {
-			this.splitLeftHandValue = calculateHandValue(
+			this.splitLeftHandValue = this.calculateHandValue(
 					playerFinishedDrawingCards, total, numberOfPlayersAces);
 		} else {
-			this.splitRightHandValue = calculateHandValue(
+			this.splitRightHandValue = this.calculateHandValue(
 					playerFinishedDrawingCards, total, numberOfPlayersAces);
 		}
 	}
@@ -139,7 +139,7 @@ public class SplitHand {
 		}
 		return numberOfAces;
 	}
-
+	//Not referred to by any code. Candidate for removal.
 	public String getSplitLeftGameMessage() {
 		return splitLeftGameMessage;
 	}
@@ -147,7 +147,7 @@ public class SplitHand {
 	public void setSplitLeftGameMessage(String splitLeftGameMessage) {
 		this.splitLeftGameMessage = splitLeftGameMessage;
 	}
-
+	//Not referred to by any code. Candidate for removal.
 	public String getSplitRightGameMessage() {
 		return splitRightGameMessage;
 	}
@@ -159,7 +159,7 @@ public class SplitHand {
 	public boolean isSplitLeftBust() {
 		return splitLeftBust;
 	}
-
+	//Not referred to by any code. Candidate for removal.
 	public void setSplitLeftBust(boolean splitLeftBust) {
 		this.splitLeftBust = splitLeftBust;
 	}
@@ -167,23 +167,23 @@ public class SplitHand {
 	public boolean isSplitRightBust() {
 		return splitRightBust;
 	}
-
+	//Not referred to by any code. Candidate for removal.
 	public void setSplitRightBust(boolean splitRightBust) {
 		this.splitRightBust = splitRightBust;
 	}
-
+	//Not referred to by any code. Candidate for removal.
 	public String getSplitLeftHandValue() {
 		return splitLeftHandValue;
 	}
-
+	//Not referred to by any code. Candidate for removal.
 	public void setSplitLeftHandValue(String splitLeftHandValue) {
 		this.splitLeftHandValue = splitLeftHandValue;
 	}
-
+	//Not referred to by any code. Candidate for removal.
 	public String getSplitRightHandValue() {
 		return splitRightHandValue;
 	}
-
+	//Not referred to by any code. Candidate for removal.
 	public void setSplitRightHandValue(String splitRightHandValue) {
 		this.splitRightHandValue = splitRightHandValue;
 	}

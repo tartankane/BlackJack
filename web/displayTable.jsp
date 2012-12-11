@@ -71,7 +71,7 @@
 
 			<button id="playersplitsbutton" type="button" class="btn2"
 				onclick="playerSplits();"
-				title="Split your cards into two hands. Your bet applies to each hand so, in effect, you double your bet">Split
+				title="Split your cards into two hands. Your bet applies to each hand so, in effect, you double your bet. BlackJacks are treated as normal hands of 21 when you split.">Split
 				Cards</button>
 		</p>
 
@@ -141,7 +141,7 @@
 		<script src="bjapp.split-right-hit-player.js"></script>
 		<script src="bjapp.split-left-player-stands.js"></script>
 		<script src="bjapp.split-right-player-stands.js"></script>
-		<script src="bjapp.shuffle-button-visibility.js"></script>
+		<script src="bjapp.toggle-button-visibility.js"></script>
 
 		<div class="push"></div>
 	</div>

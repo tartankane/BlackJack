@@ -1,3 +1,6 @@
+// Clear all in-game messages from any previous game.
+// Clear all cards displayed from any previous game.
+// Get updated data from the server.
 // Display the dealer's initial card. Append the image of a hidden card
 // to the dealer's initial card.
 // Display the player's initial two cards.
@@ -5,7 +8,7 @@
 // Change the buttons available to the player.
 function startGame() {
 	// declare variables
-	var splitCardsLeft, splitCardsRight;
+	var splitCardsLeft, splitCardsRight, playerCards, playerMessage;
 	
 	// On a very slow connection, prevent the player from pressing the 
 	// start button or changing the bet drop down menu repeatedly
@@ -53,7 +56,7 @@ function startGame() {
 			function(data) {
 
 				// declare variables
-				var index, backOfCard, cardImage, startGameButton, hitPlayerButton, playerStandsButton, playerSplitsButton, dealerMessage, playerMessage, playerDoublesButton, betDropDown;
+				var index, backOfCard, cardImage, startGameButton, hitPlayerButton, playerStandsButton, playerSplitsButton, dealerMessage, playerDoublesButton, betDropDown;
 				
 				// Display the player credits and player bet to the
 				// placeholders "credits" and "bet"
@@ -82,7 +85,7 @@ function startGame() {
 
 				// display the initial player cards to the placeholder
 				// "playercards"
-				for (index = 0; index < data.playerCards.length; index++) {
+				for (index = 0; index < data.playerCards.length; index += 1) {
 					cardImage = "images/"
 							+ data.playerCards[index].rank
 							+ data.playerCards[index].suit + ".png";
@@ -106,17 +109,16 @@ function startGame() {
 						.getElementById('playermessage');
 				playerMessage.style.visibility = 'visible';
 
-				// make the "start a new game" button invisible and make
-				// the "hit player", "player stands" and "player doubles" 
-				// buttons visible and clickable.
+				// make the bet drop down menu and "start a new game" button invisible and make
+				// the "hit player", "player stands" and "player doubles"  buttons visible and 
+				// clickable.
 				startGameButton = document
 						.getElementById('startgamebutton');
 				startGameButton.style.display = 'none';
 				
 				betDropDown = document
 						.getElementById('betdropdown');
-//				betDropDown.style.display = 'none';
-				betDropDown.style.visibility="hidden"
+				betDropDown.style.visibility="hidden";
 
 				hitPlayerButton = document
 						.getElementById('hitplayerbutton');
@@ -133,6 +135,7 @@ function startGame() {
 				playerDoublesButton.style.display = 'inline';
 				playerDoublesButton.disabled = false;
 				
+				// If splitting the cards is allowed, make the "Split Cards" button visible
 				if (data.playerCanSplit) {
 					playerSplitsButton = document
 						.getElementById('playersplitsbutton');
@@ -140,8 +143,6 @@ function startGame() {
 					playerSplitsButton.disabled = false;
 				}
 				
-
-
 			});
 	
 	// Make the start button and the bet drop down menu usable again.

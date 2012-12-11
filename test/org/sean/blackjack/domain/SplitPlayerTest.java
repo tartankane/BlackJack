@@ -28,13 +28,13 @@ public class SplitPlayerTest {
 		
 		cards = round.getSplitHand().getSplitLeftCards();
 
-		round.getSplitHand().checkSplitBust(cards, isSplitLeft);
+		round.getSplitHand().checkIfSplitHandBust(cards, isSplitLeft);
 		assertFalse(round.getSplitHand().isSplitLeftBust());
 		
 		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.HEARTS, Rank.SIX));
 		cards = round.getSplitHand().getSplitLeftCards();
 		
-		round.getSplitHand().checkSplitBust(cards, isSplitLeft);
+		round.getSplitHand().checkIfSplitHandBust(cards, isSplitLeft);
 		assertTrue(round.getSplitHand().isSplitLeftBust());
 		
 		assertFalse(round.getSplitHand().isSplitRightBust());
@@ -46,7 +46,7 @@ public class SplitPlayerTest {
 		isSplitLeft = false;
 		cards = round.getSplitHand().getSplitRightCards();
 
-		round.getSplitHand().checkSplitBust(cards, isSplitLeft);	
+		round.getSplitHand().checkIfSplitHandBust(cards, isSplitLeft);	
 		assertTrue(round.getSplitHand().isSplitRightBust());
 		
 	}

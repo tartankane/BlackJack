@@ -2,8 +2,8 @@ html {
 	height: 100%;
 }
 
-body {
-	margin: 0;
+body { /*	margin: top, left, bottom, right; */
+	margin: 0 20px 0 20px;
 	padding: 0px;
 	font: 10px normal Verdana, Arial, Helvetica, sans-serif;
 	background: #1d1d1d;
@@ -23,8 +23,6 @@ body {
 	height: 60px; /* .push must be the same height as .footer */
 	text-align: center;
 }
-
-
 
 h1 {
 	font: 5em normal Georgia, 'Times New Roman', Times, serif;

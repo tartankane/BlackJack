@@ -28,6 +28,24 @@ public class BlackJackServiceImpl implements BlackJackService {
 	public void initializeTable(Round round) {
 		round.setPlayerCredits(Consts.STARTING_CREDITS);
 		round.setPlayerBet(Consts.STARTING_BET);
+	}	
+
+	/**
+	 * Change the player's bet
+	 * 
+	 * @param round
+	 *            - The round object represents the current state of the
+	 *            BlackJack game
+	 * @param betSize
+	 *            - a String received from the client and set by a drop down
+	 *            list
+	 */
+	public void changeBet(Round round, String betSize) {
+		round.setPlayerBet(Integer.valueOf(betSize));
+		// In case the player just doubled the bet, set playerDoubledBet
+		// to false so that the new bet value set by the client will not be
+		// modified by this.startRound().
+		playerDoubledBet = false;
 	}
 
 	/**
@@ -142,7 +160,7 @@ public class BlackJackServiceImpl implements BlackJackService {
 		// of 2 to 9).
 		// If so, immediately run the round.checkWhoWon() which will assign the
 		// win to the player
-		if (round.playerHasBlackJack() && round.dealerCanNotMakeBlackJack()) {
+		if (round.hasPlayerABlackJack() && round.dealerCanNotMakeBlackJack()) {
 			round.checkWhoWon();
 			round.calculateHandValues(playerFinishedDrawingCards);
 			return;
@@ -157,7 +175,7 @@ public class BlackJackServiceImpl implements BlackJackService {
 			 * If the player has a BlackJack, then the dealer should not be
 			 * dealt more than two cards in total
 			 */
-			if (round.playerHasBlackJack()
+			if (round.hasPlayerABlackJack()
 					&& round.getDealerCards().size() == 2) {
 				round.checkWhoWon();
 				round.calculateHandValues(playerFinishedDrawingCards);
@@ -172,24 +190,6 @@ public class BlackJackServiceImpl implements BlackJackService {
 		// The dealer stands. Check who won.
 		round.checkWhoWon();
 		round.calculateHandValues(playerFinishedDrawingCards);
-	}
-
-	/**
-	 * Change the player's bet
-	 * 
-	 * @param round
-	 *            - The round object represents the current state of the
-	 *            BlackJack game
-	 * @param betSize
-	 *            - a String received from the client and set by a drop down
-	 *            list
-	 */
-	public void changeBet(Round round, String betSize) {
-		round.setPlayerBet(Integer.valueOf(betSize));
-		// In case the player just doubled the bet, set playerDoubledBet
-		// to false so that the new bet value set by the client will not be
-		// modified by this.startRound().
-		playerDoubledBet = false;
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class BlackJackServiceImpl implements BlackJackService {
 		boolean splitLeftFinishedDrawingCards = false;
 		boolean bust = false;
 		round.getSplitHand().getSplitLeftCards().add(deck.dealRandomCard());
-		bust = round.getSplitHand().checkSplitBust(
+		bust = round.getSplitHand().checkIfSplitHandBust(
 				round.getSplitHand().getSplitLeftCards(), isSplitLeft);
 		if (bust) {
 			round.setPlayerCredits(round.getPlayerCredits()
@@ -259,7 +259,7 @@ public class BlackJackServiceImpl implements BlackJackService {
 		boolean splitRightFinishedDrawingCards = false;
 		boolean bust = false;
 		round.getSplitHand().getSplitRightCards().add(deck.dealRandomCard());
-		bust = round.getSplitHand().checkSplitBust(
+		bust = round.getSplitHand().checkIfSplitHandBust(
 				round.getSplitHand().getSplitRightCards(), isSplitLeft);
 		if (bust) {
 			round.setPlayerCredits(round.getPlayerCredits()
