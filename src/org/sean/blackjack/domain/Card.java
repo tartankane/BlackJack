@@ -5,7 +5,7 @@ package org.sean.blackjack.domain;
  * suit of Spades and a rank of Queen. There are no setters, which improves immutability.
  * 
  */
-public class Card {
+public final class Card {
  
 	private final Suit suit;
 	private final Rank rank;

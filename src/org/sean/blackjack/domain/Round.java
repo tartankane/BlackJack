@@ -10,25 +10,41 @@ import org.springframework.stereotype.Component;
  * the object that is passed to the client as a JSON object.
  * 
  */
-@Component
-public class Round {
-
-	private List<Card> dealerCards = new ArrayList<Card>();
-	private List<Card> playerCards = new ArrayList<Card>();
-	private boolean bustPlayer = false;
-	private boolean playerHasBlackJack = false;
-	private double playerCredits = 0.0;
-	private int playerBet = 0;
-	private String gameMessage = Consts.BLANK_MESSAGE;
+public final class Round {
+	private static Round instance = new Round();
+	private final List<Card> dealerCards = new ArrayList<Card>();
+	private final List<Card> playerCards = new ArrayList<Card>();
 	// playerHandValue is a String because Aces have a value of "1 or 11"
 	// and sometimes this fact needs to be displayed to the client.
 	private String playerHandValue = Consts.BLANK_MESSAGE;
-	private int dealerHandValue = 0;
-	private boolean playerCanSplit = false;
-	private SplitHand splitHand;
+	private String gameMessage = Consts.BLANK_MESSAGE;
+	private double playerCredits;
+	private int playerBet;
+	private int dealerHandValue;
+	private boolean bustPlayer;
+	private boolean playerHasBlackJack;
+	private boolean playerCanSplit;
+	// SplitHand is lazily initialized when the player splits the cards. This 
+	// reduces the size of the JSON object during normal "non-split hand" play.
+	private SplitHand splitHand = null;
 
-	public Round() {
+	
+	/**
+	 * The Constructor is private because Round is a Singleton
+	 */
+	private Round() {
 		super();
+	}
+	
+	
+	/**
+	 * Round is a Singleton and can only be accessed by other methods using
+	 * this method.
+	 * 
+	 * @return - the singleton instance of Round
+	 */
+	public static Round getInstance(){
+		return instance;
 	}
 
 	/**
@@ -108,7 +124,11 @@ public class Round {
 	 *            - true if this is the player's hand
 	 * @return boolean - true if the cards are over 21
 	 */
-	public boolean checkBust(List<Card> cards, boolean isPlayer, boolean isSplit) {		
+	public boolean checkBust(List<Card> cards, boolean isPlayer, boolean isSplit) {	
+		if (cards == null) {
+			throw new IllegalArgumentException("Invalid Hand of Cards " + cards);//fail fast			
+		}
+		
 		int maxHandValueAllowed = Consts.TWENTY_ONE;
 		int total = 0;
 		
@@ -450,11 +470,9 @@ public class Round {
 	 * @return total - the modified total hand value.
 	 */
 	private int adjustHandValueForAces(int total, int numberOfAces) {
-//		for (int i = 0; i < numberOfAces; i++) {
 			if ( (total <= 11) && (numberOfAces != 0) ) {
 				total = total + 10;
 			}
-//		}
 		return total;
 	}
 
@@ -471,6 +489,10 @@ public class Round {
 	}
 
 	public void setPlayerCredits(double playerCredits) {
+		if (playerCredits < 0) {
+			throw new IllegalArgumentException("Invalid Amount " + playerCredits);//fail fast			
+		}
+		
 		this.playerCredits = playerCredits;
 	}
 
@@ -479,6 +501,9 @@ public class Round {
 	}
 
 	public void setPlayerBet(int playerBet) {
+		if (playerBet <= 0) {
+			throw new IllegalArgumentException("Invalid Amount " + playerBet);//fail fast			
+		}
 		this.playerBet = playerBet;
 	}
 
@@ -495,6 +520,9 @@ public class Round {
 	}
 
 	public void setGameMessage(String gameMessage) {
+		if (gameMessage == null) {
+			throw new IllegalArgumentException("Invalid String " + gameMessage);//fail fast			
+		}
 		this.gameMessage = gameMessage;
 	}
 
@@ -506,23 +534,23 @@ public class Round {
 		this.playerHasBlackJack = playerHasBlackJack;
 	}
 
-	//Not referred to by any code. Candidate for removal.
+	//Not referred to by any code except JUnits. Candidate for removal.
 	public String getPlayerHandValue() {
 		return playerHandValue;
 	}
-	//Not referred to by any code. Candidate for removal.
+	//Not referred to by any code except JUnits. Candidate for removal.
 	public void setPlayerHandValue(String playerHandValue) {
 		this.playerHandValue = playerHandValue;
 	}
-	//Not referred to by any code. Candidate for removal.
+	//Not referred to by any code except JUnits. Candidate for removal.
 	public int getDealerHandValue() {
 		return dealerHandValue;
 	}
-	//Not referred to by any code. Candidate for removal.
+	//Not referred to by any code except JUnits. Candidate for removal.
 	public void setDealerHandValue(int dealerHandValue) {
 		this.dealerHandValue = dealerHandValue;
 	}
-	//Not referred to by any code. Candidate for removal.
+	//Not referred to by any code except JUnits. Candidate for removal.
 	public boolean isPlayerCanSplit() {
 		return playerCanSplit;
 	}
@@ -533,6 +561,13 @@ public class Round {
 
 	public SplitHand getSplitHand() {
 		return splitHand;
+	}
+
+	public void setSplitHand(SplitHand splitHand) {
+		// Do not fail fast test for splitHand equal to null here as setting splitHand to null
+		// is valid. splitHand is set to null at the start of each round to minimize the size 
+		// of the JSON object returned to the client.
+		this.splitHand = splitHand;
 	}
 
 }

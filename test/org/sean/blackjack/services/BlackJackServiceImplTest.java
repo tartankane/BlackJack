@@ -18,13 +18,17 @@ public class BlackJackServiceImplTest {
 		int betSize = 10;
 		int initialPlayerCredits = 1000;
 		BlackJackService blackJackService = new BlackJackServiceImpl();
-		Round round = new Round();
+		Round round = Round.getInstance();
 		blackJackService.initializeTable(round);
 		assertEquals(initialPlayerCredits, round.getPlayerCredits(), 0);
 		assertEquals(betSize, round.getPlayerBet());
-
 	}
 
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTestInitializeTable() {
+		new BlackJackServiceImpl().initializeTable(null);
+	}
+	
 	@Test
 	public void testStartRound() {
 		int betSize = 10;
@@ -33,7 +37,7 @@ public class BlackJackServiceImplTest {
 		int numberOfPlayerCards = 2;
 		int indexOfFirstCardInList = 0;
 		BlackJackService blackJackService = new BlackJackServiceImpl();
-		Round round = new Round();
+		Round round = Round.getInstance();
 		blackJackService.initializeTable(round);
 		blackJackService.startRound(round);
 
@@ -56,13 +60,18 @@ public class BlackJackServiceImplTest {
 		assertEquals(new Card(Suit.SPADES, Rank.ACE).getClass(),
 				round.getPlayerCards().get(indexOfFirstCardInList).getClass());
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTestStartRound() {
+		new BlackJackServiceImpl().startRound(null);
+	}
 
 	@Test
 	public void testHitPlayer() {
 		int numberOfPlayerCardsBeforeHit = 2;
 		int numberOfPlayerCardsPerHit = 1;
 		BlackJackService blackJackService = new BlackJackServiceImpl();
-		Round round = new Round();
+		Round round = Round.getInstance();
 		blackJackService.initializeTable(round);
 		blackJackService.startRound(round);
 		blackJackService.hitPlayer(round);
@@ -73,6 +82,11 @@ public class BlackJackServiceImplTest {
 				+ (2 * numberOfPlayerCardsPerHit), round.getPlayerCards()
 				.size());
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTestHitPlayer() {
+		new BlackJackServiceImpl().hitPlayer(null);
+	}
 
 	// This method has random cards internally which makes it impossible to test
 	// it completely.
@@ -80,7 +94,7 @@ public class BlackJackServiceImplTest {
 	public void testPlayerDoubles() {
 		int betBeforeDouble;
 		int betAfterDouble;
-		Round round = new Round();
+		Round round = Round.getInstance();
 		BlackJackService blackJackService = new BlackJackServiceImpl();
 		blackJackService.initializeTable(round);
 		blackJackService.startRound(round);
@@ -90,7 +104,11 @@ public class BlackJackServiceImplTest {
 
 		assertEquals(3, round.getPlayerCards().size());
 		assertEquals(betBeforeDouble * 2, betAfterDouble);
-
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTestPlayerDoubles() {
+		new BlackJackServiceImpl().playerDoubles(null);
 	}
 
 	// This method has random cards internally which makes it impossible to test
@@ -98,7 +116,7 @@ public class BlackJackServiceImplTest {
 	@Test
 	public void testPlayerStands() {
 		// Set up a new round with blank player and dealer hands
-		Round round = new Round();
+		Round round = Round.getInstance();
 		BlackJackService blackJackService = new BlackJackServiceImpl();
 		blackJackService.initializeTable(round);
 		blackJackService.startRound(round);
@@ -117,22 +135,38 @@ public class BlackJackServiceImplTest {
 		blackJackService.playerStands(round);
 		assertTrue(round.isPlayerHasBlackJack());
 		assertTrue(round.getDealerCards().size() != 1);
-
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTestPlayerStands() {
+		new BlackJackServiceImpl().playerStands(null);
 	}
 
 	@Test
 	public void testChangeBet() {
-		Round round = new Round();
+		Round round = Round.getInstance();
 		String betSize = "100";
 		BlackJackService blackJackService = new BlackJackServiceImpl();
 		blackJackService.changeBet(round, betSize);
 		assertEquals(100, round.getPlayerBet());
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTest1ChangeBet() {
+		String betSize = "100";
+		new BlackJackServiceImpl().changeBet(null, betSize);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTest2ChangeBet() {
+		String betSize = "0";
+		new BlackJackServiceImpl().changeBet(Round.getInstance(), betSize);
+	}
 
 	@Test
 	public void testPlayerSplits() {
 
-		Round round = new Round();
+		Round round = Round.getInstance();
 		round.getPlayerCards().add(new Card(Suit.DIAMONDS, Rank.QUEEN));
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 
@@ -142,10 +176,15 @@ public class BlackJackServiceImplTest {
 		assertEquals(1, round.getSplitHand().getSplitLeftCards().size());
 		assertEquals(1, round.getSplitHand().getSplitRightCards().size());
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTestPlayerSplits() {
+		new BlackJackServiceImpl().playerSplits(null);
+	}
 
 	@Test
 	public void testSplitLeftHitPlayer() {
-		Round round = new Round();
+		Round round = Round.getInstance();
 		BlackJackService blackJackService = new BlackJackServiceImpl();
 		// Necessary to call blackJackService.startRound to make a deck.
 		blackJackService.startRound(round);
@@ -160,10 +199,15 @@ public class BlackJackServiceImplTest {
 		assertEquals(2, round.getSplitHand().getSplitLeftCards().size());
 
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTestSplitLeftHitPlayer() {
+		new BlackJackServiceImpl().splitLeftHitPlayer(null);
+	}
 
 	@Test
 	public void testSplitLeftPlayerStands() {
-		Round round = new Round();
+		Round round = Round.getInstance();
 		BlackJackService blackJackService = new BlackJackServiceImpl();
 		// Necessary to call blackJackService.startRound to make a deck.
 		blackJackService.startRound(round);
@@ -178,10 +222,15 @@ public class BlackJackServiceImplTest {
 		blackJackService.splitLeftPlayerStands(round);
 		assertEquals("21", round.getSplitHand().getSplitLeftHandValue());
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTestSplitLeftPlayerStands() {
+		new BlackJackServiceImpl().splitLeftPlayerStands(null);
+	}
 
 	@Test
 	public void testSplitRightHitPlayer() {
-		Round round = new Round();
+		Round round = Round.getInstance();
 		BlackJackService blackJackService = new BlackJackServiceImpl();
 		// Necessary to call blackJackService.startRound to make a deck.
 		blackJackService.startRound(round);
@@ -207,10 +256,15 @@ public class BlackJackServiceImplTest {
 		blackJackService.splitRightHitPlayer(round);
 		assertEquals(Consts.STARTING_CREDITS, round.getPlayerCredits(), 0);
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTestSplitRightHitPlayer() {
+		new BlackJackServiceImpl().splitRightHitPlayer(null);
+	}
 
 	@Test
 	public void testSplitRightPlayerStands() {
-		Round round = new Round();
+		Round round = Round.getInstance();
 		BlackJackService blackJackService = new BlackJackServiceImpl();
 		// Necessary to call blackJackService.startRound to make a deck.
 		blackJackService.startRound(round);
@@ -226,10 +280,12 @@ public class BlackJackServiceImplTest {
 		blackJackService.splitRightPlayerStands(round);
 		assertTrue(round.getDealerCards().size() > 1);
 		assertEquals("21", round.getSplitHand().getSplitRightHandValue());
-		
-		// It is not possible to unit test the method calls	round.calculateHandValues(true);
-		// and round.checkWhoWonAfterSplit();
 
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void negativeTestSplitRightPlayerStands() {
+		new BlackJackServiceImpl().splitRightPlayerStands(null);
 	}
 
 }

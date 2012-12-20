@@ -9,16 +9,16 @@ import java.util.List;
  * available when the player is dealt two cards of equal hand value.
  * 
  */
-public class SplitHand {
+public final class SplitHand {
 	
-	private List<Card> splitLeftCards = new ArrayList<Card>();
-	private List<Card> splitRightCards = new ArrayList<Card>();
-	private String splitLeftGameMessage = "";
-	private String splitRightGameMessage = "";
-	private boolean splitLeftBust = false;
-	private boolean splitRightBust = false;
+	private final List<Card> splitLeftCards = new ArrayList<Card>();
+	private final List<Card> splitRightCards = new ArrayList<Card>();
+	private String splitLeftGameMessage = Consts.BLANK_MESSAGE;
+	private String splitRightGameMessage = Consts.BLANK_MESSAGE;
 	private String splitLeftHandValue = Consts.BLANK_MESSAGE;
 	private String splitRightHandValue = Consts.BLANK_MESSAGE;
+	private boolean splitLeftBust;
+	private boolean splitRightBust;
 
 	/**
 	 * Check that the value of the hand has not gone above 21. For the purposes
@@ -33,6 +33,10 @@ public class SplitHand {
 	 * @return boolean - true if the cards are over 21
 	 */
 	public boolean checkIfSplitHandBust(List<Card> cards, boolean isSplitLeft) {
+		if (cards == null) {
+			throw new IllegalArgumentException("Invalid Hand of Cards " + cards);//fail fast			
+		}
+		
 		// The total value of cards allowed in a hand of blackjack
 		// is 21.
 		int total = 0;
@@ -70,6 +74,10 @@ public class SplitHand {
 	 */
 	public void calculateSplitHandValues(List<Card> cards,
 			boolean playerFinishedDrawingCards, boolean isSplitLeft) {
+		if (cards == null) {
+			throw new IllegalArgumentException("Invalid Hand of Cards " + cards);//fail fast			
+		}
+		
 		// The boolean playerFinishedDrawingCards indicates that the player has
 		// received all
 		// their cards. In this case, the Ace will be set to a fixed value of
@@ -145,6 +153,10 @@ public class SplitHand {
 	}
 
 	public void setSplitLeftGameMessage(String splitLeftGameMessage) {
+		if (splitLeftGameMessage == null) {
+			throw new IllegalArgumentException("Invalid String " + splitLeftGameMessage);//fail fast			
+		}
+		
 		this.splitLeftGameMessage = splitLeftGameMessage;
 	}
 	//Not referred to by any code. Candidate for removal.
@@ -153,6 +165,10 @@ public class SplitHand {
 	}
 
 	public void setSplitRightGameMessage(String splitRightGameMessage) {
+		if (splitRightGameMessage == null) {
+			throw new IllegalArgumentException("Invalid String " + splitRightGameMessage);//fail fast			
+		}
+		
 		this.splitRightGameMessage = splitRightGameMessage;
 	}
 
@@ -177,6 +193,10 @@ public class SplitHand {
 	}
 	//Not referred to by any code. Candidate for removal.
 	public void setSplitLeftHandValue(String splitLeftHandValue) {
+		if (splitLeftHandValue == null) {
+			throw new IllegalArgumentException("Invalid String " + splitLeftHandValue);//fail fast			
+		}
+		
 		this.splitLeftHandValue = splitLeftHandValue;
 	}
 	//Not referred to by any code. Candidate for removal.
@@ -185,6 +205,10 @@ public class SplitHand {
 	}
 	//Not referred to by any code. Candidate for removal.
 	public void setSplitRightHandValue(String splitRightHandValue) {
+		if (splitRightHandValue == null) {
+			throw new IllegalArgumentException("Invalid String " + splitRightHandValue);//fail fast			
+		}
+		
 		this.splitRightHandValue = splitRightHandValue;
 	}
 

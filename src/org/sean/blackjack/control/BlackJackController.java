@@ -31,12 +31,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 //@Scope("session")
-public class BlackJackController {
+public final class BlackJackController {
 
 	@Autowired
 	private BlackJackService blackJackService;
 	
-	private Round round = new Round();
+	private final Round round = Round.getInstance();
 
 	/**
 	 * This method will be automatically run when a client sends a request to

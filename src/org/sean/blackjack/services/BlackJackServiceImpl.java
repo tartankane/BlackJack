@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service
-public class BlackJackServiceImpl implements BlackJackService {
+public final class BlackJackServiceImpl implements BlackJackService {
 	
 	private Deck deck;
-	private boolean playerDoubledBet = false;
+	private boolean playerDoubledBet;
 
 	/**
 	 * Initialize the Round object so that it has the values that need to be
@@ -25,7 +25,12 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
+	@Override
 	public void initializeTable(Round round) {
+		if (round == null) {
+			throw new IllegalArgumentException("Invalid Value " + round);//fail fast			
+		}
+		
 		round.setPlayerCredits(Consts.STARTING_CREDITS);
 		round.setPlayerBet(Consts.STARTING_BET);
 	}	
@@ -40,7 +45,15 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            - a String received from the client and set by a drop down
 	 *            list
 	 */
+	@Override
 	public void changeBet(Round round, String betSize) {
+		if (round == null) {
+			throw new IllegalArgumentException("Invalid Value " + round);//fail fast			
+		}		
+		if (Integer.valueOf(betSize) <= 0) {
+			throw new IllegalArgumentException("Invalid Value " + betSize);//fail fast			
+		}
+		
 		round.setPlayerBet(Integer.valueOf(betSize));
 		// In case the player just doubled the bet, set playerDoubledBet
 		// to false so that the new bet value set by the client will not be
@@ -58,10 +71,14 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
+	@Override
 	public void startRound(Round round) {
+		if (round == null) {
+			throw new IllegalArgumentException("Invalid Value " + round);//fail fast			
+		}
+		
 		boolean playerFinishedDrawingCards = false;
-		// Card card;
-
+		round.setSplitHand(null);
 		round.setBustPlayer(false);
 		round.setPlayerHasBlackJack(false);
 		round.setPlayerCanSplit(false);
@@ -76,7 +93,7 @@ public class BlackJackServiceImpl implements BlackJackService {
 		round.getPlayerCards().clear();
 
 		// Get a new 52 card deck
-		deck = Deck.getInstance();
+		deck = new Deck();
 
 		// Deal a single card to the dealer.
 		// The dealer's hidden card is added to the display in start.js
@@ -103,7 +120,12 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
+	@Override
 	public void hitPlayer(Round round) {
+		if (round == null) {
+			throw new IllegalArgumentException("Invalid Value " + round);//fail fast			
+		}
+		
 		boolean isPlayer = true;
 		boolean playerFinishedDrawingCards = false;
 		boolean isSplit = false;
@@ -122,7 +144,12 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
+	@Override
 	public void playerDoubles(Round round) {
+		if (round == null) {
+			throw new IllegalArgumentException("Invalid Value " + round);//fail fast			
+		}
+		
 		boolean isPlayer = true;
 		boolean playerFinishedDrawingCards = false;
 		boolean isSplit = false;
@@ -151,7 +178,12 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
+	@Override
 	public void playerStands(Round round) {
+		if (round == null) {
+			throw new IllegalArgumentException("Invalid Value " + round);//fail fast			
+		}
+		
 		boolean isPlayer = false;
 		boolean playerFinishedDrawingCards = true;
 		boolean isSplit = false;
@@ -200,8 +232,12 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
+	@Override
 	public void playerSplits(Round round) {
-
+		if (round == null) {
+			throw new IllegalArgumentException("Invalid Value " + round);//fail fast			
+		}
+		
 		round.playerSplits();
 	}
 
@@ -213,7 +249,12 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
+	@Override
 	public void splitLeftHitPlayer(Round round) {
+		if (round == null) {
+			throw new IllegalArgumentException("Invalid Value " + round);//fail fast			
+		}
+		
 		boolean isSplitLeft = true;
 		boolean splitLeftFinishedDrawingCards = false;
 		boolean bust = false;
@@ -238,7 +279,12 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
+	@Override
 	public void splitLeftPlayerStands(Round round) {
+		if (round == null) {
+			throw new IllegalArgumentException("Invalid Value " + round);//fail fast			
+		}
+		
 		boolean isSplitLeft = true;
 		boolean splitLeftFinishedDrawingCards = true;
 		round.getSplitHand().calculateSplitHandValues(
@@ -254,7 +300,12 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
+	@Override
 	public void splitRightHitPlayer(Round round) {
+		if (round == null) {
+			throw new IllegalArgumentException("Invalid Value " + round);//fail fast			
+		}
+		
 		boolean isSplitLeft = false;
 		boolean splitRightFinishedDrawingCards = false;
 		boolean bust = false;
@@ -282,7 +333,12 @@ public class BlackJackServiceImpl implements BlackJackService {
 	 *            - The round object represents the current state of the
 	 *            BlackJack game
 	 */
+	@Override
 	public void splitRightPlayerStands(Round round) {
+		if (round == null) {
+			throw new IllegalArgumentException("Invalid Value " + round);//fail fast			
+		}
+		
 		boolean isSplit = true;
 		boolean isSplitLeft = false;
 		boolean splitRightFinishedDrawingCards = true;

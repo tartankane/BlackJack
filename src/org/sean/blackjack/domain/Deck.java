@@ -10,14 +10,16 @@ import java.util.Random;
  * from the deck, then that card is removed from the Collection.
  * 
  */
-public class Deck {
+public final class Deck {
+	// Note that the Collection of cards, cardsInDeck is well encapsulated and cannot be accessed
+	// outside the Deck class. Only the "top card in the deck" can be accessed
+	// via the dealRandomCard() method.
 	private final List<Card> cardsInDeck = new ArrayList<Card>();
 
 	/**
-	 * Adds 52 cards to the List 'cardsInDeck'. This constructor is private to
-	 * prevent subclassing.
+	 * Add 52 cards to the new deck.
 	 */
-	private Deck() {
+	public Deck() {
 		for (Suit suit : Suit.values()) {
 			for (Rank rank : Rank.values()) {
 				cardsInDeck.add(new Card(suit, rank));
@@ -26,17 +28,7 @@ public class Deck {
 	}
 
 	/**
-	 * Static factory method creates decks so that the constructor can be set as
-	 * private. This prevents subclassing.
-	 * 
-	 * @return Deck - a new deck.
-	 */
-	public static Deck getInstance() {
-		return new Deck();
-	}
-
-	/**
-	 * Randomly selects a card from the remaining cards in the deck. This card
+	 * Randomly select a card from the remaining cards in the deck. This card
 	 * is removed from the deck and returned by the method.
 	 * 
 	 * @return card - a random card from the deck.
@@ -49,7 +41,7 @@ public class Deck {
 	}
 
 	/**
-	 * Generates a random integer between min (inclusive) and max (inclusive).
+	 * Generate a random integer between min (inclusive) and max (inclusive).
 	 * For the full deck of cards, set min = 0 and max = 51 to generate a random
 	 * int from 52 possible values.
 	 * 

@@ -1,5 +1,6 @@
 //// I need to investigate how to JUnit test Spring MVC Controllers
-//
+// See http://www.javacodegeeks.com/2012/10/spring-mvc-controller-junit-testing.html
+// and http://tshikatshikaaa.blogspot.nl/2012/09/junit-testing-spring-service-and-dao.html
 //
 //package org.sean.blackjack.control;
 //
