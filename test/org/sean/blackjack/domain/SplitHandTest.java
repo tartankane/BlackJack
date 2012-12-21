@@ -20,39 +20,61 @@ public class SplitHandTest {
 		round = Round.getInstance();
 		blackJackServiceImpl.startRound(round);
 		blackJackServiceImpl.playerSplits(round);
+		round.getDealerCards().clear();
+		round.getSplitHand().getSplitLeftCards().clear();
+		round.getSplitHand().getSplitRightCards().clear();
 	 }
 
 	@Test
-	public void testCheckSplitBust() {
+	public void test1CheckSplitBust() {
 		boolean isSplitLeft = true;
 		List<Card> cards = new ArrayList<Card>();
-
-		round.getDealerCards().clear();
-		round.getSplitHand().getSplitLeftCards().clear();
-		round.getSplitHand().getSplitRightCards().clear();	
 
 		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
 		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.SIX));		
 		cards = round.getSplitHand().getSplitLeftCards();
 		round.getSplitHand().checkIfSplitHandBust(cards, isSplitLeft);
-		assertFalse(round.getSplitHand().isSplitLeftBust());
-		
+		assertFalse(round.getSplitHand().isSplitLeftBust());		
+	}
+	
+	@Test
+	public void test2CheckSplitBust() {
+		boolean isSplitLeft = true;
+		List<Card> cards = new ArrayList<Card>();
+
+		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
+		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.SIX));		
 		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.HEARTS, Rank.SIX));
 		cards = round.getSplitHand().getSplitLeftCards();		
 		round.getSplitHand().checkIfSplitHandBust(cards, isSplitLeft);
-		assertTrue(round.getSplitHand().isSplitLeftBust());
-		
-		assertFalse(round.getSplitHand().isSplitRightBust());
+		assertTrue(round.getSplitHand().isSplitLeftBust());	
+	}
+	
+	@Test
+	public void test3CheckSplitBust() {
+		boolean isSplitLeft = false;
+		List<Card> cards = new ArrayList<Card>();
+
 		round.getSplitHand().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
-		round.getSplitHand().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.JACK));
-		round.getSplitHand().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.ACE));
-		round.getSplitHand().getSplitRightCards().add(new Card(Suit.HEARTS, Rank.ACE));		
-		isSplitLeft = false;
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.SIX));
 		cards = round.getSplitHand().getSplitRightCards();
 		round.getSplitHand().checkIfSplitHandBust(cards, isSplitLeft);	
-		assertTrue(round.getSplitHand().isSplitRightBust());
-		
+		assertFalse(round.getSplitHand().isSplitRightBust());		
 	}
+	
+	@Test
+	public void test4CheckSplitBust() {
+		boolean isSplitLeft = false;
+		List<Card> cards = new ArrayList<Card>();
+
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.DIAMONDS, Rank.SIX));
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.HEARTS, Rank.SIX));
+		cards = round.getSplitHand().getSplitRightCards();
+		round.getSplitHand().checkIfSplitHandBust(cards, isSplitLeft);	
+		assertTrue(round.getSplitHand().isSplitRightBust());		
+	}
+	
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void negativeTestCheckSplitBust() {
@@ -60,30 +82,40 @@ public class SplitHandTest {
 	}
 
 	@Test
-	public void testCalculateSplitHandValues() {
+	public void test1CalculateSplitHandValues() {
 		boolean playerFinishedDrawingCards = true;
 		boolean isSplitLeft = true;
 		List<Card> cards = new ArrayList<Card>();
-
-		round.getDealerCards().clear();
-		round.getSplitHand().getSplitLeftCards().clear();
-		round.getSplitHand().getSplitRightCards().clear();	
-
+		
 		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
 		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.SIX));		
 		cards = round.getSplitHand().getSplitLeftCards();
 		round.getSplitHand().calculateSplitHandValues(cards, playerFinishedDrawingCards, isSplitLeft);
 		assertEquals( "16", round.getSplitHand().getSplitLeftHandValue() );
+	}
+	
+	@Test
+	public void test2CalculateSplitHandValues() {
+		boolean playerFinishedDrawingCards = false;
+		boolean isSplitLeft = false;
+		List<Card> cards = new ArrayList<Card>();
 		
-		isSplitLeft = false;
-		playerFinishedDrawingCards = false;
 		round.getSplitHand().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.TEN));
 		round.getSplitHand().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.ACE));		
 		cards = round.getSplitHand().getSplitRightCards();
 		round.getSplitHand().calculateSplitHandValues(cards, playerFinishedDrawingCards, isSplitLeft);
 		assertEquals( "11 or 21", round.getSplitHand().getSplitRightHandValue() );
+	}
+	
+	@Test
+	public void test3CalculateSplitHandValues() {
+		boolean playerFinishedDrawingCards = true;
+		boolean isSplitLeft = false;
+		List<Card> cards = new ArrayList<Card>();
 		
-		playerFinishedDrawingCards = true;
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.TEN));
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.ACE));		
+		cards = round.getSplitHand().getSplitRightCards();
 		round.getSplitHand().calculateSplitHandValues(cards, playerFinishedDrawingCards, isSplitLeft);
 		assertEquals( "21", round.getSplitHand().getSplitRightHandValue() );
 	}
@@ -152,15 +184,13 @@ public class SplitHandTest {
 	}
 
 	@Test
-	public void testGetSplitLeftHandValue() {
-		
+	public void testGetSplitLeftHandValue() {	
 		round.getSplitHand().setSplitLeftHandValue("1 or 11");
 		assertEquals("1 or 11", round.getSplitHand().getSplitLeftHandValue());
 	}
 
 	@Test
-	public void testSetSplitLeftHandValue() {
-		
+	public void testSetSplitLeftHandValue() {	
 		round.getSplitHand().setSplitLeftHandValue("1 or 11");
 		assertEquals("1 or 11", round.getSplitHand().getSplitLeftHandValue());
 	}
@@ -171,15 +201,13 @@ public class SplitHandTest {
 	}
 
 	@Test
-	public void testGetSplitRightHandValue() {
-		
+	public void testGetSplitRightHandValue() {		
 		round.getSplitHand().setSplitRightHandValue("1 or 11");
 		assertEquals("1 or 11", round.getSplitHand().getSplitRightHandValue());
 	}
 
 	@Test
-	public void testSetSplitRightHandValue() {
-		
+	public void testSetSplitRightHandValue() {		
 		round.getSplitHand().setSplitRightHandValue("1 or 11");
 		assertEquals("1 or 11", round.getSplitHand().getSplitRightHandValue());
 	}
@@ -191,11 +219,15 @@ public class SplitHandTest {
 
 	@Test
 	public void testGetSplitLeftCards() {
+		blackJackServiceImpl.startRound(round);
+		blackJackServiceImpl.playerSplits(round);
 		assertEquals( 1, round.getSplitHand().getSplitLeftCards().size() );
 	}
 
 	@Test
 	public void testGetSplitRightCards() {
+		blackJackServiceImpl.startRound(round);
+		blackJackServiceImpl.playerSplits(round);
 		assertEquals( 1, round.getSplitHand().getSplitRightCards().size() );
 	}
 

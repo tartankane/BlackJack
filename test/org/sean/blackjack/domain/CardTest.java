@@ -19,9 +19,14 @@ public class CardTest {
 	}
 
 	@Test
-	public void testCardSuitRank() {
+	public void test1CardSuitRank() {
 		Card card = new Card(Suit.HEARTS, Rank.ACE);
 		assertEquals(Suit.HEARTS, card.getSuit());
+	}
+	
+	@Test
+	public void test2CardSuitRank() {
+		Card card = new Card(Suit.HEARTS, Rank.ACE);
 		assertEquals(Rank.ACE, card.getRank());
 	}
 

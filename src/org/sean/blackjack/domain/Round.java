@@ -3,8 +3,6 @@ package org.sean.blackjack.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 /**
  * The round object represents the current state of the BlackJack game. It is
  * the object that is passed to the client as a JSON object.

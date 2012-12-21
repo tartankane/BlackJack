@@ -20,22 +20,33 @@ public class RoundTest {
 	 }
 
 	@Test
-	public void testCalculateHandValues() {
+	public void test1CalculateHandValues() {
 		boolean playerFinishedDrawingCards = false;
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
-		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.ACE));
 		round.calculateHandValues(playerFinishedDrawingCards);
 		assertEquals("11 or 21", round.getPlayerHandValue());
-		assertEquals(11, round.getDealerHandValue());
-
-		playerFinishedDrawingCards = true;
+	}
+	
+	@Test
+	public void test2CalculateHandValues() {
+		boolean playerFinishedDrawingCards = true;
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		round.calculateHandValues(playerFinishedDrawingCards);
 		assertEquals("21", round.getPlayerHandValue());
 	}
+	
+	@Test
+	public void test3CalculateHandValues() {
+		boolean playerFinishedDrawingCards = false;
+		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.ACE));
+		round.calculateHandValues(playerFinishedDrawingCards);
+		assertEquals(11, round.getDealerHandValue());
+	}
 
 	@Test
-	public void testCheckBust() {
+	public void test1CheckBust() {
 		boolean isSplit = false;
 		boolean isPlayer = true;
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
@@ -43,68 +54,69 @@ public class RoundTest {
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.JACK));
 		round.checkBust(round.getPlayerCards(), isPlayer, isSplit);
 		assertFalse(round.isBustPlayer());
-
-		round.getPlayerCards().add(new Card(Suit.DIAMONDS, Rank.ACE));
+	}
+	
+	@Test
+	public void test2CheckBust() {
+		boolean isSplit = false;
+		boolean isPlayer = true;
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TWO));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.JACK));
 		round.checkBust(round.getPlayerCards(), isPlayer, isSplit);
 		assertTrue(round.isBustPlayer());
-
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void negativeTestCheckBust() {
 		boolean isSplit = false;
 		boolean isPlayer = true;
-
 		round.checkBust(null, isPlayer, isSplit);
 	}
 	
 	@Test
-	public void testPlayerHasBlackJack() {
+	public void test1PlayerHasBlackJack() {
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		assertTrue(round.hasPlayerABlackJack());
-
-		round = Round.getInstance();
-		round.getPlayerCards().clear();
-		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
-		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.NINE));
-		assertFalse(round.hasPlayerABlackJack());
-
 	}
 
 	@Test
-	public void testDealerCanNotMakeBlackJack() {
+	public void test2PlayerHasBlackJack() {
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.NINE));
+		assertFalse(round.hasPlayerABlackJack());
+	}
+	
+	@Test
+	public void test1DealerCanNotMakeBlackJack() {
 		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.SIX));
 		assertTrue(round.dealerCanNotMakeBlackJack());
-
-		round = Round.getInstance();
-		round.getDealerCards().clear();
+	}
+	
+	@Test
+	public void test2DealerCanNotMakeBlackJack() {
 		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.ACE));
 		assertFalse(round.dealerCanNotMakeBlackJack());
 	}
 
 	@Test
-	public void testDealerMustStand() {
+	public void test1DealerMustStand() {
 		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.SIX));
 		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		assertFalse(round.dealerMustStand());
-
+	}
+	
+	@Test
+	public void test2DealerMustStand() {
+		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.SIX));
+		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		round.getDealerCards().add(new Card(Suit.DIAMONDS, Rank.ACE));
 		assertTrue(round.dealerMustStand());
-
-		Round nextRound = Round.getInstance();
-		round.getDealerCards().clear();
-		nextRound.getDealerCards().add(new Card(Suit.HEARTS, Rank.ACE));
-		nextRound.getDealerCards().add(new Card(Suit.HEARTS, Rank.FIVE));
-		nextRound.getDealerCards().add(new Card(Suit.HEARTS, Rank.KING));
-		nextRound.getDealerCards().add(new Card(Suit.DIAMONDS, Rank.ACE));
-		assertTrue(nextRound.dealerMustStand());
 	}
 
 	@Test
 	public void testCheckWhoWon() {
-
-		// Do I need to test for all the specific cases like BlackJack here?
 		double playerCredits = 1000.0;
 		round.setPlayerCredits(playerCredits);
 		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.TEN));
@@ -119,52 +131,54 @@ public class RoundTest {
 	@Test
 	public void testCheckIfPlayerLowOnCredits() {
 		round.setPlayerCredits(Consts.LOW_CREDITS_VALUE - 1);
-		assertTrue (Consts.LOW_CREDITS_VALUE > round.getPlayerCredits());
 		round.checkIfPlayerLowOnCredits();
-		assertTrue (round.getPlayerCredits() > Consts.LOW_CREDITS_VALUE);
 		assertEquals (Consts.STARTING_CREDITS, round.getPlayerCredits(), 0);
 	}
 
+
 	@Test
-	public void testCheckIfPlayerCanSplit() {
+	public void test1CheckIfPlayerCanSplit() {
 		round.setPlayerCanSplit(false);
 		round.getPlayerCards().add(new Card(Suit.DIAMONDS, Rank.QUEEN));
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		round.checkIfPlayerCanSplit();
 		assertTrue(round.isPlayerCanSplit());
-
-		round = Round.getInstance();
-		round.getPlayerCards().clear();
+	}
+	
+	@Test
+	public void test2CheckIfPlayerCanSplit() {
 		round.setPlayerCanSplit(false);
 		round.getPlayerCards().add(new Card(Suit.DIAMONDS, Rank.QUEEN));
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.ACE));
 		round.checkIfPlayerCanSplit();
 		assertFalse(round.isPlayerCanSplit());
-
 	}
 
 	@Test
-	public void testPlayerSplits() {
+	public void test1PlayerSplits() {
 		round.getPlayerCards().add(new Card(Suit.DIAMONDS, Rank.QUEEN));
 		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		round.playerSplits();
-
 		assertEquals(1, round.getSplitHand().getSplitLeftCards().size());
+	}
+	
+	@Test
+	public void test2PlayerSplits() {
+		round.getPlayerCards().add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
+		round.playerSplits();
 		assertEquals(1, round.getSplitHand().getSplitRightCards().size());
 	}
 
 	@Test
-	public void testCheckWhoWonAfterSplit() {
-		round.getSplitHand().getSplitLeftCards().clear();
-		round.getSplitHand().getSplitRightCards().clear();	
-		
+	public void testCheckWhoWonAfterSplit() {		
 		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.TEN));
 		round.getDealerCards().add(new Card(Suit.HEARTS, Rank.SEVEN));
-		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
+		round.getPlayerCards().add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+		round.getPlayerCards().add(new Card(Suit.HEARTS, Rank.TEN));
+		round.playerSplits();
 		round.getSplitHand().getSplitLeftCards().add(new Card(Suit.DIAMONDS, Rank.SIX));
-		round.getSplitHand().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.TEN));
-		round.getSplitHand().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.EIGHT));
-		
+		round.getSplitHand().getSplitRightCards().add(new Card(Suit.CLUBS, Rank.EIGHT));		
 		round.checkWhoWonAfterSplit();
 		assertEquals(Consts.PLAYER_LOSES, round.getSplitHand().getSplitLeftGameMessage());
 		assertEquals(Consts.PLAYER_WINS, round.getSplitHand().getSplitRightGameMessage());
@@ -227,7 +241,6 @@ public class RoundTest {
 	public void testGetDealerCards() {
 		Card card = new Card(Suit.HEARTS, Rank.ACE);
 		round.getDealerCards().add(card);
-
 		assertEquals(Suit.HEARTS, round.getDealerCards().get(0).getSuit());
 		assertEquals(Rank.ACE, round.getDealerCards().get(0).getRank());
 
